@@ -490,7 +490,7 @@ dd($errors);
                                                     </span>
                                                     @enderror
                                                 </div>
-                                                <div class="col-sm-6 mb-3" id="playground_media" style="display : none;">
+                                                <!-- <div class="col-sm-6 mb-3" id="playground_media" style="display : none;">
                                                     <label class="form-label">Upload 3 Photographs of Playground/Hall/Court (Images to be uploaded duly signed with date by HOD /Principal) <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (300 KB total)</span></label> <span class='star'>*</span>
                                                     <input type="file" class="form-control" multiple name="playground_images[]" id="playground_images" accept=".jpg, .jpeg, .png">
                                                     @error('playground_images')
@@ -516,7 +516,7 @@ dd($errors);
                                                     </span>
                                                     @enderror
                                                     <div id="selectedEquipmentImages" class="image-row mt-4"></div>
-                                                </div>
+                                                </div> -->
                                                
                                                 <div class="col-sm-6 mb-3">
                                                     <label class="form-label">Whether qualified coach is available for the concerned game?</label> <span class='star'>*</span>
@@ -567,7 +567,7 @@ dd($errors);
                                                    
                                                 </div>
 
-                                                <div class="col-sm-6 mb-3 coach_certificate" style="display : none;">
+                                               <!--  <div class="col-sm-6 mb-3 coach_certificate" style="display : none;">
                                                     <label class="form-label">Coach Qualification Certificate <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
                                                     <input type="file" class="form-control" multiple name="coach_certificate[]" id="coach_certificate" accept=".jpg, .jpeg, .png">
                                                     @error('coach_certificate')
@@ -576,7 +576,7 @@ dd($errors);
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                     @enderror
-                                                </div>
+                                                </div> -->
                                                 <div class="col-sm-6 mt-2 gender" style="display : none;">
                                                     <label class="form-label">No. of students playing concerned
                                                         games</label> <span class='star'>*</span>
@@ -605,7 +605,7 @@ dd($errors);
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-6 mb-3 player_list" id="player_list" style="display : none;">
+                                              <!--   <div class="col-sm-6 mb-3 player_list" id="player_list" style="display : none;">
                                                     <label class="form-label">Attach list of players with achievement <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
                                                     <input type="file" class="form-control" multiple name="player_list[]" id="player_list" accept=".jpg, .jpeg, .png">
                                                     @error('player_list')
@@ -615,7 +615,7 @@ dd($errors);
                                                     </span>
                                                     @enderror
 
-                                                </div>
+                                                </div> -->
                                                 <div class="col-sm-6 mb-3">
                                                     <label class="form-label">Highest Achievement of Players</label> <span class='star'>*</span>
                                                     <select class="form-select" aria-label="Default select example" name="any_specific_achievements_of_the_institute_during_last" id="highest_achievement">
@@ -759,21 +759,88 @@ dd($errors);
                                                     </span>
                                                     @enderror
                                                 </div>
-                                            <div class="form-check mb-3">
-                                              <input class="form-check-input" type="checkbox" id="flexCheckChecked">
-                                              <label class="form-check-label fw-normal" for="flexCheckChecked">
-                                               I undertake that Sports Nursery allotted against the present application shall be operated as per terms and conditions issued by the Sports Department, Government of Haryana. In case our School/Institute/Academy is found violating any instructions, the Government shall be free to take any administrative/civil/criminal action against us.
-                                              </label>
-                                            </div>
+                                         
                                              
                                             
                                                 </div>
                                             <div class="col-sm-12 text-end mb-2">
                                                 <button type="button" class="btn btn-primary"
                                                     onclick="prevStep()">Previous</button>
-                                                <button type="button" class="btn btn-danger" id="final_submit"
-                                                    onclick="saveNurseryDetails('step3')">Submit</button>
+                                                <button type="button" class="btn btn-danger" id="game-detail"
+                                                    onclick="saveNurseryDetails('step3')">Next</button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="row step" id="step4" style="display: none;">
+                                        <div class="font-bold m-3">Note: All fields with * are mandatory
+                                        </div>
+                                        <div class="card card-primary">
+                                            <h5 class="text-center fs-5 mt-4">Upload Documents
+                                            </h5>
+                                            
+                                            <div class="row card-body">
+                                                <div class="col-sm-6 mb-3" id="playground_media" style="display : none;">
+                                                    <label class="form-label">Upload 3 Photographs of Playground/Hall/Court (Images to be uploaded duly signed with date by HOD /Principal) <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (300 KB total)</span></label> <span class='star'>*</span>
+                                                    <input type="file" class="form-control" multiple name="playground_images[]" id="playground_images" accept=".jpg, .jpeg, .png">
+                                                    @error('playground_images')
+
+                                                    <div class="alert alert-danger">
+                                                         <ul>
+                                                            @foreach ($errors->playground_images as $error)
+                                                            <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    @enderror
+
+                                                <div id="selectedPlaygroundImages" class="image-row mt-4"></div>
+                                                </div>
+                                                <div class="col-sm-6 mb-3" id="equipment_media" style="display : none;">
+                                                    <label class="form-label">Upload 3 Photographs of Equipment(Images to be uploaded duly signed with date by HOD /Principal) <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (300 KB total)</span></label> <span class='star'>*</span>
+                                                    <input type="file" class="form-control" multiple name="equipment_images[]" id="equipment_images" accept=".jpg, .jpeg, .png">
+                                                    @error('equipment_images')
+                                                    <span class="invalid-feedback" role="alert"
+                                                        style="display : block;">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                    <div id="selectedEquipmentImages" class="image-row mt-4"></div>
+                                                </div>
+                                                <div class="col-sm-6 mb-3 player_list" id="player_list" style="display : none;">
+                                                    <label class="form-label">Attach list of players with achievement <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
+                                                    <input type="file" class="form-control" multiple name="player_list[]" id="player_list" accept=".jpg, .jpeg, .png">
+                                                    @error('player_list')
+                                                    <span class="invalid-feedback" role="alert"
+                                                        style="display : block;">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+
+                                                </div>
+                                                <div class="col-sm-6 mb-3 coach_certificate" style="display : none;">
+                                                    <label class="form-label">Coach Qualification Certificate <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
+                                                    <input type="file" class="form-control" multiple name="coach_certificate[]" id="coach_certificate" accept=".jpg, .jpeg, .png">
+                                                    @error('coach_certificate')
+                                                    <span class="invaalid-feedback" role="alert"
+                                                        style="display : block;">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
+                                                </div>
+                                                <div class="form-check mb-3">
+                                                  <input class="form-check-input" type="checkbox" id="flexCheckChecked">
+                                                  <label class="form-check-label fw-normal" for="flexCheckChecked">
+                                                   I undertake that Sports Nursery allotted against the present application shall be operated as per terms and conditions issued by the Sports Department, Government of Haryana. In case our School/Institute/Academy is found violating any instructions, the Government shall be free to take any administrative/civil/criminal action against us.
+                                                  </label>
+                                                </div>
+                                                <div class="col-sm-12 text-end mb-2">
+                                                    <button type="button" class="btn btn-primary"
+                                                        onclick="prevStep()">Previous</button>
+                                                    <button type="button" class="btn btn-danger" id="final_submit"
+                                                        onclick="saveNurseryDetails('step3')">Next</button>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </form>
@@ -1244,39 +1311,39 @@ dd($errors);
                             Swal.fire('Select Playground available or not', '', 'error');
                             return false;
                         }
-                        if(playground_hall_court_available == 'yes'){
-                            if(! $("#playground_images").val()){
-                                Swal.fire('Select 3 Playground Images ', '', 'error');
-                                return false;
-                            }
-                             if($("#playground_images").val() > 3){
-                                Swal.fire('Select maximum 3 Playground Images ', '', 'error');
-                                return false;
-                            } 
-                            if($("#playground_images").val() < 3){
-                                Swal.fire('Select minimum 3 Playground Images ', '', 'error');
-                                return false;
-                            }
-                        }
+                        // if(playground_hall_court_available == 'yes'){
+                        //     if(! $("#playground_images").val()){
+                        //         Swal.fire('Select 3 Playground Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        //      if($("#playground_images").val() > 3){
+                        //         Swal.fire('Select maximum 3 Playground Images ', '', 'error');
+                        //         return false;
+                        //     } 
+                        //     if($("#playground_images").val() < 3){
+                        //         Swal.fire('Select minimum 3 Playground Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        // }
                         var equipment_related_to_selected_games_available = $("#equipment_related_to_selected_games_available").val();
                         if(! equipment_related_to_selected_games_available){
                             Swal.fire('Select Equipment available or not', '', 'error');
                             return false;
                         }
-                        if(equipment_related_to_selected_games_available == 'yes'){
-                            if(! $("#equipment_images").val()){
-                                Swal.fire('Select 3 Equipment Images ', '', 'error');
-                                return false;
-                            }
-                             if($("#equipment_images").val() > 3){
-                                Swal.fire('Select maximum 3 Equipment Images ', '', 'error');
-                                return false;
-                            } 
-                            if($("#equipment_images").val() < 3){
-                                Swal.fire('Select minimum 3 Equipment Images ', '', 'error');
-                                return false;
-                            }
-                        }
+                        // if(equipment_related_to_selected_games_available == 'yes'){
+                        //     if(! $("#equipment_images").val()){
+                        //         Swal.fire('Select 3 Equipment Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        //      if($("#equipment_images").val() > 3){
+                        //         Swal.fire('Select maximum 3 Equipment Images ', '', 'error');
+                        //         return false;
+                        //     } 
+                        //     if($("#equipment_images").val() < 3){
+                        //         Swal.fire('Select minimum 3 Equipment Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        // }
                         var coach_available = $("#coach_available").val();
                         if(! coach_available){
                             Swal.fire('Select Coach is available or not', '', 'error');
@@ -1291,10 +1358,10 @@ dd($errors);
                                 Swal.fire('Enter Coach Qualification', '', 'error');
                                 return false;
                             }
-                            if(! $("#coach_certificate").val()){
-                                Swal.fire('Enter Coach Qualification Certificate', '', 'error');
-                                return false;
-                            }
+                            // if(! $("#coach_certificate").val()){
+                            //     Swal.fire('Enter Coach Qualification Certificate', '', 'error');
+                            //     return false;
+                            // }
                         }
                         var highest_achievement = $("#highest_achievement").val();
                         if(! highest_achievement){
@@ -1343,10 +1410,10 @@ dd($errors);
                                 return false;
                             }
 
-                        if(! $("#flexCheckChecked").prop('checked')){
-                            Swal.fire('Accept Terms and Conditions ', '', 'error');
-                            return false;
-                        }
+                        // if(! $("#flexCheckChecked").prop('checked')){
+                        //     Swal.fire('Accept Terms and Conditions ', '', 'error');
+                        //     return false;
+                        // }
                     }
 
                         if(($("#boys").val() + $("#girls").val()) > 25){
@@ -1380,16 +1447,35 @@ dd($errors);
                         }
                     }else if(step == "step3") {
                         if(response.status == 'success'){
-                            Swal.fire({title: response.message,
-                                icon: 'success',
-                                customClass: {title: 'fs-5'}
-                            }).then((result) => {
+                            $("#step3").hide();
+                            $("#step4").show();
+                            // Swal.fire({title: response.message,
+                            //     icon: 'success',
+                            //     customClass: {title: 'fs-5'}
+                            // }).then((result) => {
 
-                                    if (result.isConfirmed) {
-                                       window.location.href = '{{ route('login')}}';
-                                    }
-                                });
-                                return false;
+                            //         if (result.isConfirmed) {
+                            //            window.location.href = '{{ route('login')}}';
+                            //         }
+                            //     });
+                            //     return false;
+                        }else{
+                            alert("statmenterrormessage")
+                            Swal.fire(response.message, '', 'error');
+                            return false;
+                        }
+                    }else if(step == "step4"){
+                        if(response.status == 'success'){
+                            Swal.fire({title: response.message,
+                                    icon: 'success',
+                                    customClass: {title: 'fs-5'}
+                                }).then((result) => {
+
+                                        if (result.isConfirmed) {
+                                           window.location.href = '{{ route('login')}}';
+                                        }
+                                    });
+                            return false;
                         }else{
                             alert("statmenterrormessage")
                             Swal.fire(response.message, '', 'error');
