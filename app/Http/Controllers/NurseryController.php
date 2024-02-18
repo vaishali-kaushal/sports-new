@@ -417,7 +417,7 @@ class NurseryController extends Controller
             $application_number = $current_year.$district_code->code.$random_number;
         }
         $data = $request->all();
-        $existingNursery = Nursery::where([['mobile_number', $request->mobile_number],['final_status', 0]])->first();
+        $isRecordExist = Nursery::where([['mobile_number', $request->mobile_number],['final_status', 0]])->first();
         if($request->step == "step2"){
             $this->validateSteps($data);
             try{
@@ -443,7 +443,7 @@ class NurseryController extends Controller
                     ]
                 );
                 if ($nursery) {
-                    return response()->json(['status' => 'success', 'message' => 'Nursery Information Saved Successfully. Please complete the Next Step','existingNursery' => $existingNursery]);
+                    return response()->json(['status' => 'success', 'message' => 'Nursery Information Saved Successfully. Please complete the Next Step','isRecordExist' => $isRecordExist]);
                 } else {
                     return response()->json(['status' => 'error','message' => 'Error saving Nursery Details: Unknown error']);
                 }
@@ -632,8 +632,37 @@ class NurseryController extends Controller
             }
 
         }else if($step == "step4"){
-            dd("here");   
+            dd("append file in hidden");   
+            /************** playground files **************/
+            $currentsavedNursery = Nursery::where('mobile_number', $request->mobile_number)->first();
+            if($request->playground_hall_court_available == 'yes'){
+                $playgroundfiles = $request->file('playground_images');
+                if (!empty($playgroundfiles) && count($playgroundfiles) < 3) {
+                    return response()->json(['status' => 'error','message' => 'PlaygroundFiles can not be less than 3']);
+                } else if(count($playgroundfiles) > 3) {
+                    return response()->json(['status' => 'error','message' => 'PlaygroundFiles can not be greater than 3']);
+                }
+                //  else{
+                //     return response()->json(['status' => 'error','message' => 'Upload PlaygroundFiles']);
 
+                // }
+                if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
+                    $playground_images = [];
+                    foreach ($playgroundfiles as $file) {
+                        $fileName = $file->getClientOriginalName();
+                        $file->storeAs('playground_images', $fileName, 'public');
+                        $filePath = 'storage/playground_images/' . $fileName;
+                        array_push($playground_images, $filePath);
+                    }
+                    $playground_images = json_encode($playground_images);
+                    NurseryMedia::create([
+                        'nursery_id'=> $currentsavedNursery->id,
+                        'type' => "playground",
+                        'media_path' => "$playground_images",
+                        'created_at'=>now()
+                    ]);
+                }
+            }
             $nurseryStatus = NurseryApplicationStatus::create([
                 'nursery_id'=>$currentsavedNursery->id,
                 'district_id'=>$currentsavedNursery->district_id,
@@ -776,7 +805,19 @@ class NurseryController extends Controller
         }
     }
 
-
+    public function getnurseryData(Request $request)
+    {
+        try{
+            $isRecordExist = Nursery::where('mobile_number', $request->mobile)->where('final_status',0)->first();
+            if ($isRecordExist) {
+                return response()->json(['status' => 'success', 'message' => 'Nursery Information get Successfully. Please complete the Next Step','isRecordExist' => $isRecordExist]);
+            } else {
+                return response()->json(['status' => 'success']);
+            }
+        }catch (\Exception $e) {
+                return response()->json(['status' => 'error', 'message' => 'Something went wrong: ' . $e->getMessage()]);
+        }
+    }
 
 
 

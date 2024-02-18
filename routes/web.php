@@ -132,3 +132,4 @@ Route::get('logout/', [LoginController::class, 'logout']);
 // Route::get('test', [TestController::class, 'index']);
 Route::get('player', [AtendanceController::class, 'index']);
 Route::get('general_instructions', [NurseryController::class, 'generalInstructions'])->name('general_instructions');
+Route::get('get-nursery-data', [NurseryController::class, 'getnurseryData'])->name('getnurseryData');

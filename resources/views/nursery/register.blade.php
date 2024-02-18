@@ -781,11 +781,16 @@ dd($errors);
                                             <div class="row card-body">
                                                 <div class="col-sm-6 mb-3" id="playground_media" style="display : none;">
                                                     <label class="form-label">Upload 3 Photographs of Playground/Hall/Court (Images to be uploaded duly signed with date by HOD /Principal) <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (300 KB total)</span></label> <span class='star'>*</span>
-                                                    <input type="file" class="form-control" multiple name="playground_images[]" id="playground_images" accept=".jpg, .jpeg, .png">
+                                                    <div id="playgroundDropzone" class="dropzone">
+                                                        <div class="dz-message" data-dz-message>
+                                                          <span>Drop files here or click to upload.</span>
+                                                        </div>
+                                                    </div><br>
+                                                    <input type="hidden" name="playground_images[]" id="playground_images">
+                                                    <span class="star" id="playgroundmessage"></span>
                                                     @error('playground_images')
-
                                                     <div class="alert alert-danger">
-                                                         <ul>
+                                                        <ul>
                                                             @foreach ($errors->playground_images as $error)
                                                             <li>{{ $error }}</li>
                                                             @endforeach
@@ -797,7 +802,14 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mb-3" id="equipment_media" style="display : none;">
                                                     <label class="form-label">Upload 3 Photographs of Equipment(Images to be uploaded duly signed with date by HOD /Principal) <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (300 KB total)</span></label> <span class='star'>*</span>
-                                                    <input type="file" class="form-control" multiple name="equipment_images[]" id="equipment_images" accept=".jpg, .jpeg, .png">
+                                                    <!-- <input type="file" class="form-control" multiple name="equipment_images[]" id="equipment_images" accept=".jpg, .jpeg, .png"> -->
+                                                    <div id="equipmentDropzone" class="dropzone">
+                                                        <div class="dz-message" data-dz-message>
+                                                          <span>Drop files here or click to upload.</span>
+                                                        </div>
+                                                    </div><br>
+                                                    <input type="hidden" name="equipment_images[]" id="equipment_images">
+                                                    <span class="star" id="equipmentmessage"></span>
                                                     @error('equipment_images')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -807,7 +819,7 @@ dd($errors);
                                                     <div id="selectedEquipmentImages" class="image-row mt-4"></div>
                                                 </div>
                                                 <div class="col-sm-6 mb-3 player_list" id="player_list" style="display : none;">
-                                                    <label class="form-label">Attach list of players with achievement <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
+                                                    <label class="form-label">Attach list of players with achievement <span class='star'>File Type (.jpg, .png, .jpeg, .csv only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
                                                     <input type="file" class="form-control" multiple name="player_list[]" id="player_list" accept=".jpg, .jpeg, .png">
                                                     @error('player_list')
                                                     <span class="invalid-feedback" role="alert"
@@ -837,7 +849,7 @@ dd($errors);
                                                     <button type="button" class="btn btn-primary"
                                                         onclick="prevStep()">Previous</button>
                                                     <button type="button" class="btn btn-danger" id="final_submit"
-                                                        onclick="saveNurseryDetails('step3')">Next</button>
+                                                        onclick="saveNurseryDetails('step4')">Next</button>
                                                 </div>
                                             </div>
 
@@ -922,7 +934,107 @@ dd($errors);
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+ 
+  <script>
+    var maxFilesizeVal = 1;
+    var maxFilesVal = 3;
+    // Initialize Dropzone
+    Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#playgroundDropzone", {
+        paramName:"playgroundfile",
+        url: "{{ route('nursery.fileUpload') }}",
+        headers: {
+              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        },
+        paramName:"playgroundfile",
+        maxFilesize: maxFilesizeVal, // MB
+        maxFiles: maxFilesVal,
+        resizeQuality: 1.0,
+        acceptedFiles: ".jpeg,.jpg,.png",
+        addRemoveLinks: true,
+        timeout: 60000,
+        dictDefaultMessage: "Drop your files here or click to upload",
+        dictFallbackMessage: "Your browser doesn't support drag and drop file uploads.",
+        dictFileTooBig: "File is too big. Max filesize: "+maxFilesizeVal+"MB.",
+        dictInvalidFileType: "Invalid file type. Only JPG, JPEG, PNG and GIF files are allowed.",
+        dictMaxFilesExceeded: "You can only upload up to "+maxFilesVal+" files.",
+        maxfilesexceeded: function(file) {
+            this.removeFile(file);
+            // this.removeAllFiles(); 
+        },
+        sending: function (file, xhr, formData) {
+            $('#playgroundmessage').text('Image Uploading...');
+        },
+        success: function (file, response) {
+            $('#playgroundmessage').text(response.success);
+            console.log(response.success);
+            console.log(response);
 
+            $('#playground_images').val(function (index, value) {
+                return value + (value ? ',' : '') + response.filename;
+            });
+        },
+        error: function (file, response) {
+            $('#playgroundmessage').text('Something Went Wrong! '+response);
+            console.log(response);
+            return false;
+        },
+        init: function() {
+            this.on("removedfile", function(file) {
+            });
+        }
+    
+    });
+
+    Dropzone.autoDiscover = false;
+        var myDropzone = new Dropzone("#equipmentDropzone", {
+        paramName:"equipmentfile",
+        url: "{{ route('nursery.fileUpload') }}",
+        headers: {
+              'X-CSRF-TOKEN': "{{ csrf_token() }}"
+        },
+        paramName:"playgroundfile",
+        maxFilesize: maxFilesizeVal, // MB
+        maxFiles: maxFilesVal,
+        resizeQuality: 1.0,
+        acceptedFiles: ".jpeg,.jpg,.png",
+        addRemoveLinks: true,
+        timeout: 60000,
+        dictDefaultMessage: "Drop your files here or click to upload",
+        dictFallbackMessage: "Your browser doesn't support drag and drop file uploads.",
+        dictFileTooBig: "File is too big. Max filesize: "+maxFilesizeVal+"MB.",
+        dictInvalidFileType: "Invalid file type. Only JPG, JPEG, PNG and GIF files are allowed.",
+        dictMaxFilesExceeded: "You can only upload up to "+maxFilesVal+" files.",
+        maxfilesexceeded: function(file) {
+            this.removeFile(file);
+            // this.removeAllFiles(); 
+        },
+        sending: function (file, xhr, formData) {
+            $('#equipmentmessage').text('Image Uploading...');
+        },
+        success: function (file, response) {
+            $('#equipmentmessage').text(response.success);
+            console.log(response.success);
+            console.log(response);
+
+            $('#playground_images').val(function (index, value) {
+                return value + (value ? ',' : '') + response.filename;
+            });
+        },
+        error: function (file, response) {
+            $('#equipmentmessage').text('Something Went Wrong! '+response);
+            console.log(response);
+            return false;
+        },
+        init: function() {
+            this.on("removedfile", function(file) {
+            });
+        }
+    
+    });
+  </script>
 <script>
         $(document).ready(function() {
 
@@ -1204,8 +1316,54 @@ dd($errors);
                 Swal.fire('Accept Terms and Conditions ', '', 'error');
                 return false;
             }else{
-                $("#step2").show();
-                $("#guidelines").hide();
+            var mobile = $.trim($("#mobile_number").val());
+            var url = "{{ route('getnurseryData') }}"
+            var csrfToken = $('input[name="_token"]').val();
+
+            $(".loader").hide();
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: url,
+                data: {
+                    _token: csrfToken, mobile: mobile
+                },
+                success: function (response) {
+                    $(".loader").hide();
+                    if (response.status == 'success') {
+                        // $("#step1, .btnDiv, .submit-mbtn ").hide();
+                        var nursery = response.isRecordExist;
+                        if (nursery != null) {
+                            $('select[name="district_id"]').val(nursery.district_id);
+                            $('select[name="cat_of_nursery"]').val(nursery.cat_of_nursery);
+                            $('select[name="type_of_nursery"]').val(nursery.type_of_nursery);
+                            $('input[name="name_of_nursery"]').val(nursery.name_of_nursery);
+                            $('textarea[name="address"]').val(nursery.address);
+                            // $('input[name="pan_private"]').val(nursery.pan_private);
+                            $('input[name="reg_no_running_nursery"]').val(nursery.reg_no_running_nursery);
+                            $('input[name="head_pricipal"]').val(nursery.head_pricipal);
+                            $('input[name="email"]').val(nursery.email);
+                            $('input[name="pin_code"]').val(nursery.pin_code);
+                        }
+                        $("#step2").show();
+                        $("#guidelines").hide();
+                        // $("#step2").show();
+                        // $("#guidelines").show();
+
+                        // Swal.fire({title: response.message,
+                        //     icon: 'success',
+                        //      customClass: {title: 'fs-5'}
+                        // });
+                    } else {
+                        Swal.fire(response.message, '', 'error');
+                        return false;
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+
+                }
+            })
             }
         }
 
@@ -1437,6 +1595,21 @@ dd($errors);
                     // $('input, select, textarea').removeClass('is-invalid is-valid').addClass('is-valid');
                     if(step == "step2") {
                         if (response.status == 'success') {
+                        var nursery = response.isRecordExist;
+                        if (nursery != null) {
+                            $('input[name="head_pricipal"]').val(nursery.head_pricipal);
+                            $('input[name="email"]').val(nursery.email);
+                            $('select[name="game_id"]').val(nursery.game_id);
+                            $('select[name="game_disp"]').val(nursery.game_disp);
+                            $('select[name="playground_hall_court_available"]').val(nursery.playground_hall_court_available);
+                            $('select[name="equipment_related_to_selected_games_available"]').val(nursery.equipment_related_to_selected_games_available);
+                            $('select[name="whether_nursery_will_provide_sports_kits_to_selected_players"]').val(nursery.whether_nursery_will_provide_sports_kits_to_selected_players);
+                            $('select[name="whether_nursery_will_provide_fee_concession_to_selected_players"]').val(nursery.whether_nursery_will_provide_fee_concession_to_selected_players);
+                            $('select[name="whether_qualified_coach_is_available_for_the_concerned_game"]').val(nursery.whether_qualified_coach_is_available_for_the_concerned_game);
+                            $('input[name=boys]').val(nursery.boys);
+                            $('input[name=girls]').val(nursery.girls);
+                            $('textarea[name=any_specific_achievements_of_the_institute_during_last]').val(nursery.any_specific_achievements_of_the_institute_during_last);
+                            }
                             $("#step2").hide();
                             $("#step3").show();
                         } else {
