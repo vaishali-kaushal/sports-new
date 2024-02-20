@@ -300,7 +300,7 @@ dd($errors);
                                                 <div class="col-sm-6 mt-2" >
                                                     <label class="form-label">District</label> <span class='star'>*</span>
                                                     <!-- <label for="exampleInputPassword1">District</label> <span class='star'>*</span> -->
-                                                    <select class="form-control" name="district_id" id="district_id">
+                                                    <select class="form-control" name="district_id" id="district_id" autocomplete="off">
                                                         <option value="">-----Select------</option>
                                                         <?php foreach ($districts as $district) { ?>
 
@@ -320,7 +320,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Category of Nursery</label> <span class='star'>*</span>
-                                                    <select class="form-select cat_of_nursery" aria-label="Default select example" name="cat_of_nursery" id="cat_of_nursery">
+                                                    <select class="form-select cat_of_nursery" aria-label="Default select example" name="cat_of_nursery" id="cat_of_nursery" autocomplete="off">
                                                         <option value="">-----Select-----</option>
                                                         <option value="govt">Government</option>
                                                         <option value="private">Private</option>
@@ -335,7 +335,7 @@ dd($errors);
 
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Type of Nursery</label> <span class='star'>*</span>
-                                                    <select class="form-select type_of_nursery" aria-label="Default select example" name="type_of_nursery" id="type_of_nursery">
+                                                    <select class="form-select type_of_nursery" aria-label="Default select example" name="type_of_nursery" id="type_of_nursery" autocomplete="off">
                                                         <option value="">-----Select-----</option>
                                                     </select>
 
@@ -348,7 +348,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Name of School/Institute/Academy</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="name_of_nursery">
+                                                    <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="name_of_nursery" autocomplete="off">
                                                     @error('name_of_nursery')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -358,7 +358,7 @@ dd($errors);
                                                 </div>
                                                     <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Name of Head/Principal</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="head_pricipal" id="head_pricipal">
+                                                    <input type="text" class="form-control" name="head_pricipal" id="head_pricipal" autocomplete="off">
                                                     @error('head_pricipal')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -368,7 +368,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Email</label> <span class='star'>*</span>
-                                                    <input type="email" class="form-control" name="email" id="email">
+                                                    <input type="email" class="form-control" name="email" id="email" autocomplete="off">
                                                     @error('email')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -388,7 +388,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Pin Code</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="pin_code" id="pin_code" pattern="[0-9]*" oninput="validateNumber(this)" maxlength="6" minlength="6">
+                                                    <input type="text" class="form-control" name="pin_code" id="pin_code" pattern="[0-9]*" oninput="validateNumber(this)" maxlength="6" minlength="6" autocomplete="off">
                                                     @error('pin_code')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -398,7 +398,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Registration No. of Society who will be running Nursery</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="15" id="reg_no_running_nursery">
+                                                    <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="15" id="reg_no_running_nursery" autocomplete="off">
                                                     @error('reg_no_running_nursery')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -509,7 +509,7 @@ dd($errors);
                                                
                                                 <div class="col-sm-6 mb-3 name_coach " style="display : none;">
                                                     <label class="form-label">Name of Coach</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="coach_name" id="coach_name">
+                                                    <input type="text" class="form-control" name="coach_name" id="coach_name" autocomplete="off">
 
                                                     @error('coach_name')
                                                     <span class="invalid-feedback" role="alert"
@@ -546,7 +546,7 @@ dd($errors);
                                                         <div class="col-sm-3 boys" style="display : none;"><label class="form-label">Number of Boys</label></div>
                                                         <div class="col-sm-3 boys" style="display : none;">
                                                             <!-- <label class="form-label">Boys</label> <span class='star'>*</span> -->
-                                                            <input type="number" class="form-control" name="boys" placeholder="Number of Boys" id="boys">
+                                                            <input type="number" class="form-control" name="boys" id="boys">
 
                                                             @error('boys')
                                                             <span class="invalid-feedback" role="alert"
@@ -558,7 +558,7 @@ dd($errors);
                                                          <div class="col-sm-3 girls" style="display : none;"><label class="form-label">Number of Girls</label></div>
                                                         <div class="col-sm-3 girls" style="display : none;">
                                                            <!--  <label class="form-label">Girls</label> <span class='star'>*</span> -->
-                                                            <input type="number" class="form-control" name="girls" placeholder="Number of Girls" id="girls">
+                                                            <input type="number" class="form-control" name="girls" id="girls">
 
                                                             @error('girls')
                                                             <span class="invalid-feedback" role="alert"
@@ -1519,7 +1519,7 @@ dd($errors);
                             $("#step3").show();
                         } else {
                             console.log(response,"errorMessage");
-                            alert("errstep2")
+                            // alert("errstep2")
                             Swal.fire(response.message, '', 'error');
                             return false;
                         }
@@ -1538,7 +1538,7 @@ dd($errors);
                             //     });
                             //     return false;
                         }else{
-                            alert("statmenterrormessage")
+                            // alert("statmenterrormessage")
                             Swal.fire(response.message, '', 'error');
                             return false;
                         }
@@ -1555,7 +1555,7 @@ dd($errors);
                                     });
                             return false;
                         }else{
-                            alert("statmenterrormessage")
+                            // alert("statmenterrormessage")
                             Swal.fire(response.message, '', 'error');
                             return false;
                         }
@@ -1563,7 +1563,7 @@ dd($errors);
                     
                 },
                 error: function(xhr, status, error) {
-                    alert("validationerrromessage")
+                    // alert("validationerrromessage")
 
                     console.error(status, error);
                     $('.invalid-feedback').remove();
