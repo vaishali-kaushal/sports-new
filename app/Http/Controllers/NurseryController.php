@@ -296,14 +296,14 @@ class NurseryController extends Controller
             $existingNursery = Nursery::where([['mobile_number', $request->mobile],['final_status', 1]])->first();
             // dd(!empty($existingNursery));
             if (!empty($existingNursery)) {
-                return response()->json(['success' => false, 'message' => 'You have already registered with this phone number']);
+                return response()->json(['success' => false, 'message' => 'You have already registered with this phone number. Please login to view/update your application']);
             }
             $user = User::where('mobile', $request->mobile)->first();
             if (!empty($user)) {
-                return response()->json(['success' => false, 'message' => 'You have already registered with this phone number']);
+                return response()->json(['success' => false, 'message' => 'You have already registered with this phone number.Please login to view/update your application']);
             }
             if(env('APP_ENV') == "local"){
-                $otp = '111111';
+                $otpp = '111111';
                 // $otp=$this->generateNumericOTP(6);
                 // Session::put('mobile_otp', $otp);
                 $secure_id = bin2hex(random_bytes(16));
@@ -311,30 +311,30 @@ class NurseryController extends Controller
                         'secure_id' => $secure_id,
                         'mobile' => $request->mobile,
                         'user_id'=> 'null',
-                        'otp'=> $otp,
+                        'otp'=> $otpp,
                         'status'=> 0,
                         'created_at' => now()
                     ]);
-                $sms_message   = "Dear User, ".$otp. "is OTP for User Registration, Nursery Management System, Sports Department Government of Haryana";
-                $tid           = "1407170557670346761";
-
-                // $this->sendSMS($request->mobile,$sms_message,$tid);
+                $sms_message   = "Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $tid           = "1407170557686704067";
+                // dd($this->sendSMS($request->mobile,$sms_message,$tid));
+                $this->sendSMS($request->mobile,$sms_message,$tid);
 
             }else{
-                // $otp=$this->generateNumericOTP(6);
-                $otp="111111";
+                $otpp=$this->generateNumericOTP(6);
+                // $otp="111111";
                 $secure_id = bin2hex(random_bytes(16));
-                $sms_message   = "Dear User, ".$otp. "is OTP for User Registration, Nursery Management System, Sports Department Government of Haryana";
-                $tid           = "1407170557670346761";
                 $otp = Otp::create([
                     'secure_id' => $secure_id,
                     'mobile' => $request->mobile,
                     'user_id'=> 'null',
-                    'otp'=> $otp,
+                    'otp'=> $otpp,
                     'status'=> 0,
                     'created_at' => now()
                 ]);
-                // $this->sendSMS($request->mobile,$sms_message,$tid);
+                $sms_message   = "Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $tid           = "1407170557686704067";
+                $this->sendSMS($request->mobile,$sms_message,$tid);
             }
             $html = "<button type='button' class='btn btn-success validateBtn me-3' onclick=validateMobileOTP()>Validate</button><button type='button' class='btn btn-danger validateBtn me-3' onclick=resendOTP()>Resend</button></div>";
             return response()->json(['success' => true,'message' => 'OTP sent on your mobile number','html'=> $html]);

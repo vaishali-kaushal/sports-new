@@ -103,9 +103,11 @@ class LoginController extends Controller
             if (!empty($user)) {
                 $secureId = bin2hex(random_bytes(16));
                 // $otpp=$this->generateNumericOTP(6);
-
-                $otpp='111111';
-
+                if(env('APP_ENV') == "local"){
+                    $otpp='111111';
+                }else{
+                    $otpp=$this->generateNumericOTP(6);
+                }
                 $otp = new Otp;
                 $otp->secure_id = $secureId;
                 $otp->mobile = $userr->mobile;
@@ -115,7 +117,7 @@ class LoginController extends Controller
                 $otp->save();
                 $message="Dear User,".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
                 $temp_id = "1407170557686704067";
-                // $this->sendSMS($userr->mobile,$message,$temp_id);
+                $this->sendSMS($userr->mobile,$message,$temp_id);
 
 
 
