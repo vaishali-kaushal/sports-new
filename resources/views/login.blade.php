@@ -29,7 +29,7 @@
                 @csrf
                 <div class="mt-5">
                   <label class="form-label ">Enter your mobile number</label>
-                  <input type="text" class="form-control" name="phone">
+                  <input type="text" class="form-control" name="phone" pattern="[0-9]*" oninput="validateNumber(this)" autocomplete="off"  maxlength="10">
                   @error('email')
                   <span class="invalid-feedback" role="alert" style="display : block;">
                     <strong>{{ $message }}</strong>
@@ -60,7 +60,13 @@
     </div>
   </div>
 
-  <script src="{{asset('forntend/js/bootstrap.bundle.min.js')}}></script>
+  <script src="{{asset('forntend/js/bootstrap.bundle.min.js')}}"></script>
 </body>
 
 </html>
+<script>
+  function validateNumber(input) {
+        // Remove non-numeric characters
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+</script>

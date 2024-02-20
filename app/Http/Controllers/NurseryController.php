@@ -9,6 +9,7 @@ use  App\Models\Game;
 use  App\Models\User;
 use App\Models\ApplicationRemark;
 use App\Models\NurseryApplicationStatus;
+use App\Models\NurseryApplicationTransaction;
 use Illuminate\Support\Facades\Auth;
 use Mail;
 use App\Mail\SendMail;
@@ -22,6 +23,7 @@ use App\Models\NurseryMedia;
 use App\Models\RoleType;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Illuminate\Support\Facades\Storage;
 
 class NurseryController extends Controller
 {
@@ -292,11 +294,11 @@ class NurseryController extends Controller
         try{
             $updatestatus = Otp::where('mobile',$request->mobile)->update(['status'=>1]);
             $existingNursery = Nursery::where([['mobile_number', $request->mobile],['final_status', 1]])->first();
-            $user = User::where('mobile', $request->mobile)->first();
             // dd(!empty($existingNursery));
             if (!empty($existingNursery)) {
                 return response()->json(['success' => false, 'message' => 'You have already registered with this phone number']);
             }
+            $user = User::where('mobile', $request->mobile)->first();
             if (!empty($user)) {
                 return response()->json(['success' => false, 'message' => 'You have already registered with this phone number']);
             }
@@ -458,7 +460,7 @@ class NurseryController extends Controller
             $this->validateSteps($data);
             try{
                 $updateThirdStep = Nursery::where('mobile_number', $request->mobile_number)->update([
-                    'final_status' =>1,
+                    'final_status' =>0,
                     'game_id' =>$request->game_id,
                     'game_disp' =>$request->game_disp,
                     'playground_hall_court_available' =>$request->playground_hall_court_available,
@@ -471,7 +473,7 @@ class NurseryController extends Controller
                     'whether_qualified_coach_is_available_for_the_concerned_game' =>$request->whether_qualified_coach_is_available_for_the_concerned_game,
                     'any_specific_achievements_of_the_institute_during_last' =>$request->any_specific_achievements_of_the_institute_during_last,
                     // 'facility_images' => json_encode($facility_images)
-                    // 'coach_available' => $request->coach_available,
+                    'year_allotment' => $request->year_allotment,
                     'coach_name' => $request->coach_name,
                     'coach_qualification' => $request->coach_qualification,
                     'percentage_fee' => $request->percentage_fee,
@@ -482,142 +484,9 @@ class NurseryController extends Controller
                 ]);
                 // dd($updateThirdStep);
                 if($updateThirdStep) {
-                    $currentsavedNursery = Nursery::where('mobile_number', $request->mobile_number)->first();
-                    /************** playground files **************/
-                    // if($request->playground_hall_court_available == 'yes'){
-                    //     $playgroundfiles = $request->file('playground_images');
-                    //     if (!empty($playgroundfiles) && count($playgroundfiles) < 3) {
-                    //         return response()->json(['status' => 'error','message' => 'PlaygroundFiles can not be less than 3']);
-                    //     } else if(count($playgroundfiles) > 3) {
-                    //         return response()->json(['status' => 'error','message' => 'PlaygroundFiles can not be greater than 3']);
-                    //     }
-                    //     //  else{
-                    //     //     return response()->json(['status' => 'error','message' => 'Upload PlaygroundFiles']);
-
-                    //     // }
-                    //     if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
-                    //         $playground_images = [];
-                    //         foreach ($playgroundfiles as $file) {
-                    //             $fileName = $file->getClientOriginalName();
-                    //             $file->storeAs('playground_images', $fileName, 'public');
-                    //             $filePath = 'storage/playground_images/' . $fileName;
-                    //             array_push($playground_images, $filePath);
-                    //         }
-                    //         $playground_images = json_encode($playground_images);
-                    //         NurseryMedia::create([
-                    //             'nursery_id'=> $currentsavedNursery->id,
-                    //             'type' => "playground",
-                    //             'media_path' => "$playground_images",
-                    //             'created_at'=>now()
-                    //         ]);
-                    //     }
-                    // }
-                    /************** equipment files **************/
-                    // if($request->equipment_related_to_selected_games_available == 'yes'){
-                    //     $equipmentfiles = $request->file('equipment_images');
-                    //     if (!empty($equipmentfiles) && count($equipmentfiles) < 3) {
-                    //             return response()->json(['status' => 'error','message' => 'Equipmentfiles can not be less than 3']);
-                    //         } elseif(count($equipmentfiles) > 3) {
-                    //             return response()->json(['status' => 'error','message' => 'Equipmentfiles can not be greater than 3']);
-                    //         } 
-                    //         // else{
-                    //         //     return response()->json(['status' => 'error','message' => 'Upload Equipmentfiles']);
-
-                    //         // }
-                    //     if(!empty($equipmentfiles) && count($equipmentfiles) === 3 && $request->equipment_related_to_selected_games_available == 'yes'){
-                    //         $equipment_images = [];
-                    //         foreach ($equipmentfiles as $file) {
-                    //             $fileName = $file->getClientOriginalName();
-                    //             $file->storeAs('equipment_images', $fileName, 'public');
-                    //             $filePath = 'storage/equipment_images/' . $fileName;
-                    //             array_push($equipment_images, $filePath);
-                    //         }
-                    //         $equipment_images = json_encode($equipment_images);
-                    //         NurseryMedia::create([
-                    //             'nursery_id'=> $currentsavedNursery->id,
-                    //             'type' => "equipment",
-                    //             'media_path' => $equipment_images,
-                    //             'created_at'=>now()
-                    //         ]);
-                           
-                    //     }
-                    // }
-                    /************** coach_certificate files **************/
-                    // if($request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
-                    //     $coach_certificate_files = $request->file('coach_certificate');
-                    //     if(!empty($coach_certificate_files)){
-                    //         $coach_certificate = [];
-                    //         foreach ($coach_certificate_files as $file) {
-                    //             $fileName = $file->getClientOriginalName();
-                    //             $file->storeAs('coach_certificate', $fileName, 'public');
-                    //             $filePath = 'storage/coach_certificate/' . $fileName;
-                    //             array_push($coach_certificate, $filePath);
-                    //         }
-                    //         $coach_certificate = json_encode($coach_certificate);
-                    //         NurseryMedia::create([
-                    //             'nursery_id'=> $currentsavedNursery->id,
-                    //             'type' => "coach_certificate",
-                    //             'media_path' => $coach_certificate,
-                    //             'created_at'=>now()
-                    //         ]);
-                    //         if(empty($coach_certificate_files)){
-                    //             return response()->json(['status' => 'error','message' => 'Upload coach certificate']);
-
-                    //         }
-                    //     }
-                    // }
-                    /************** player_list files **************/
-                    $player_list_files = $request->file('player_list');
-                    // if(!empty($player_list_files)){
-                    //     $player_list = [];
-                    //     foreach ($player_list_files as $file) {
-                    //         $fileName = $file->getClientOriginalName();
-                    //         $file->storeAs('player_list', $fileName, 'public');
-                    //         $filePath = 'storage/player_list/' . $fileName;
-                    //         array_push($player_list, $filePath);
-                    //     }
-                    //     $player_list = json_encode($player_list);
-                    //     NurseryMedia::create([
-                    //         'nursery_id'=> $currentsavedNursery->id,
-                    //         'type' => "player_list",
-                    //         'media_path' => $player_list,
-                    //         'created_at'=>now()
-                    //     ]);
-                    // }else{
-                    //     return response()->json(['status' => 'error','message' => 'Upload player list file']);
-                    // }
-                    // $nurseryStatus = NurseryApplicationStatus::create([
-                    //     'nursery_id'=>$currentsavedNursery->id,
-                    //     'district_id'=>$currentsavedNursery->district_id,
-                    //     'created_at'=>now()
-                    // ]);
-
-                    // if($nurseryStatus){
-                    //     $user = User::create([
-                    //         'secure_id'=> $secure_id,
-                    //         'name'=> $request->name_of_nursery,
-                    //         'email'=> $request->email,
-                    //         'mobile'=> $request->mobile_number,
-                    //         'district_id'=> $request->district_id,
-                    //         'password'=> bin2hex(random_bytes(16)),
-                    //         'created_at '=> now(),
-                    //     ]);
-                    //     if($user){
-                    //         RoleType::create(['user_id'=>$user->id,'role_id'=>'5']);
-                    //     }else{
-                    //         // die("f");
-                    //         return response()->json(['status' => 'error','message' => 'Error saving user Details: Unknown error']);
-                    //     }
-                    // }else{
-                    //     // die("ggg");
-                    //     return response()->json(['status' => 'error','message' => 'Error saving nursery status Details: Unknown error']);
-
-                    // }
-
                         return response()->json(['status' => 'success', 'message' => 'Your application is submitted successfully.     
                             You can edit your application till 10-02-2024, after which it will be considered final. To view your application or status, please login again.']);
                 }else {
-                    // die("here");
                     return response()->json(['status' => 'error','message' => 'Error saving gaming Details: Unknown error']);
                 }
 
@@ -631,38 +500,79 @@ class NurseryController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Error saving gaming Details: ' . $e->getMessage()]);
             }
 
-        }else if($step == "step4"){
-            dd("append file in hidden");   
-            /************** playground files **************/
+        }else if($request->step == "step4"){
             $currentsavedNursery = Nursery::where('mobile_number', $request->mobile_number)->first();
-            if($request->playground_hall_court_available == 'yes'){
-                $playgroundfiles = $request->file('playground_images');
-                if (!empty($playgroundfiles) && count($playgroundfiles) < 3) {
-                    return response()->json(['status' => 'error','message' => 'PlaygroundFiles can not be less than 3']);
-                } else if(count($playgroundfiles) > 3) {
-                    return response()->json(['status' => 'error','message' => 'PlaygroundFiles can not be greater than 3']);
-                }
-                //  else{
-                //     return response()->json(['status' => 'error','message' => 'Upload PlaygroundFiles']);
 
-                // }
-                if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
-                    $playground_images = [];
-                    foreach ($playgroundfiles as $file) {
-                        $fileName = $file->getClientOriginalName();
-                        $file->storeAs('playground_images', $fileName, 'public');
-                        $filePath = 'storage/playground_images/' . $fileName;
-                        array_push($playground_images, $filePath);
-                    }
-                    $playground_images = json_encode($playground_images);
-                    NurseryMedia::create([
-                        'nursery_id'=> $currentsavedNursery->id,
-                        'type' => "playground",
-                        'media_path' => "$playground_images",
-                        'created_at'=>now()
-                    ]);
+            /************** playground validation **************/
+            if($request->playground_hall_court_available == 'yes'){
+                $playgroundfiles = explode(',',$request->playground_images[0]);
+                if (count($playgroundfiles) < 3) {
+                    return response()->json(['status' => 'error','message' => 'Playground Files can not be less than 3']);
+                } else if(count($playgroundfiles) > 3) {
+                    return response()->json(['status' => 'error','message' => 'Playground Files can not be greater than 3']);
                 }
             }
+
+            /************** equipment validation **************/
+            if($request->equipment_related_to_selected_games_available == 'yes'){
+                $equipmentfiles = explode(',',$request->equipment_images[0]);
+                if (count($equipmentfiles) < 3) {
+                    return response()->json(['status' => 'error','message' => 'Equipment Files can not be less than 3']);
+                } elseif(count($equipmentfiles) > 3) {
+                    return response()->json(['status' => 'error','message' => 'Equipment Files can not be greater than 3']);
+                } 
+            }
+            /************** player_list validation **************/
+            if(empty($request->player_list)){
+                return response()->json(['status' => 'error','message' => 'Upload player list file']);
+            }
+
+            /************** coach_certificate validation **************/
+            if($request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
+                if(empty($request->coach_certificate)){
+                    return response()->json(['status' => 'error','message' => 'Upload coach certificate']);
+                }
+            }
+
+            if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
+                
+                NurseryMedia::create([
+                    'nursery_id'=> $currentsavedNursery->id,
+                    'type' => "playground",
+                    'media_path' => $request->playground_images[0],
+                    'created_at'=>now()
+                ]);
+            }
+            if(!empty($equipmentfiles) && count($equipmentfiles) === 3 && $request->equipment_related_to_selected_games_available == 'yes'){
+                NurseryMedia::create([
+                    'nursery_id'=> $currentsavedNursery->id,
+                    'type' => "equipment",
+                    'media_path' => $request->equipment_images[0],
+                    'created_at'=>now()
+                ]);
+                
+            }
+
+            if(!empty($request->player_list)){
+                NurseryMedia::create([
+                    'nursery_id'=> $currentsavedNursery->id,
+                    'type' => "player_list",
+                    'media_path' => $request->player_list,
+                    'created_at'=>now()
+                ]);
+            }
+
+            if(!empty($request->coach_certificate)  && $request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
+                NurseryMedia::create([
+                    'nursery_id'=> $currentsavedNursery->id,
+                    'type' => "coach_certificate",
+                    'media_path' => $request->coach_certificate,
+                    'created_at'=>now()
+                ]);
+            }
+            $nursery = Nursery::where(
+                'id', $currentsavedNursery->id)->update(['final_status'=>1]);
+                
             $nurseryStatus = NurseryApplicationStatus::create([
                 'nursery_id'=>$currentsavedNursery->id,
                 'district_id'=>$currentsavedNursery->district_id,
@@ -670,6 +580,11 @@ class NurseryController extends Controller
             ]);
 
             if($nurseryStatus){
+                    // $nurseryTransaction = NurseryApplicationTransaction::create([
+                    //     'nursery_id'=>$currentsavedNursery->id,
+                    //     'transaction_date'=>date('Y-m-d'),
+                    //     'action_by'=> $user->id
+                    // ]);
                 $user = User::create([
                     'secure_id'=> $secure_id,
                     'name'=> $request->name_of_nursery,
@@ -680,7 +595,12 @@ class NurseryController extends Controller
                     'created_at '=> now(),
                 ]);
                 if($user){
+                    
                     RoleType::create(['user_id'=>$user->id,'role_id'=>'5']);
+
+                    return response()->json(['status' => 'success','message' => 'Your application is submitted successfully.     
+                            You can edit your application till 10-02-2024, after which it will be considered final. To view your application or status, please login again.']);
+
                 }else{
                     // die("f");
                     return response()->json(['status' => 'error','message' => 'Error saving user Details: Unknown error']);
@@ -781,34 +701,46 @@ class NurseryController extends Controller
 
     public function NurseryFileUpload(Request $request)
     {
-        // dd($request->all());
-        $playground_images = [];
+        $filePath = '';
         if ($request->hasFile('playgroundfile')) {
-            foreach ($request->file('playgroundfile') as $file) {
-                $fileName = $file->getClientOriginalName();
-                $file->storeAs('playground_images', $fileName, 'public');
-                $filePath = 'storage/playground_images/' . $fileName;
-                array_push($playground_images, $filePath);
+            $file = $request->file('playgroundfile');
+            $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+            $file->storeAs('playground_images', $fileName, 'public');
+            $filePath = 'playground_images/'.$fileName;
+        }elseif($request->hasFile('equipmentfile')) {
+            $file = $request->file('equipmentfile');
+            $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+            $file->storeAs('equipment_images', $fileName, 'public');
+            $filePath = 'equipment_images/'.$fileName;
+        }elseif($request->hasFile('playerListFile')) {
+            $file = $request->file('playerListFile');
+            $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+            $file->storeAs('player_list_files', $fileName, 'public');
+            $filePath = 'player_list_files/'.$fileName;
+        }elseif($request->hasFile('coachCertificateFile')) {
+            $file = $request->file('coachCertificateFile');
+            $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+            $file->storeAs('coach_certificate_files', $fileName, 'public');
+            $filePath = 'coach_certificate_files/'.$fileName;
+        }
+        
+        return $filePath;
+    }
+
+    public function NurseryFileRemove(Request $request)
+    {        
+        if ($request->filePath) {
+            if (Storage::exists('public/'.$request->filePath)) {
+                Storage::delete('public/'.$request->filePath);
             }
-            $playground_images = json_encode($playground_images);
         }
 
-        $equipment_images = [];
-        if ($request->hasFile('equipmentfile')) {
-            foreach ($request->file('equipmentfile') as $file) {
-                $fileName = $file->getClientOriginalName();
-                $file->storeAs('equipment_images', $fileName, 'public');
-                $filePath = 'storage/equipment_images/' . $fileName;
-                array_push($equipment_images, $filePath);
-            }
-            $equipment_images = json_encode($equipment_images);
-        }
     }
 
     public function getnurseryData(Request $request)
     {
         try{
-            $isRecordExist = Nursery::where('mobile_number', $request->mobile)->where('final_status',0)->first();
+            $isRecordExist = Nursery::with(['nurseryMedias'])->where('mobile_number', $request->mobile)->where('final_status',0)->first();
             if ($isRecordExist) {
                 return response()->json(['status' => 'success', 'message' => 'Nursery Information get Successfully. Please complete the Next Step','isRecordExist' => $isRecordExist]);
             } else {

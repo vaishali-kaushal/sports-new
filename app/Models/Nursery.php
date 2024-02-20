@@ -26,4 +26,12 @@ class Nursery extends Model
     {
         return $this->belongsTo(NurseryApplicationStatus::class,'id','nursery_id');
     }
+    public function nurseryMedias()
+    {
+        return $this->hasMany(NurseryMedia::class,'nursery_id', 'id');
+    }
+    public function coachQualification()
+    {
+        return $this->belongsTo(CoachQualification::class,'coach_qualification', 'id');
+    }
 }

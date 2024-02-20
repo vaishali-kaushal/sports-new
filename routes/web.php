@@ -53,6 +53,7 @@ Route::post('nursery/resend-mobile-otp', [NurseryController::class, 'resendOTP']
 
 Route::post('nursery/save-nursery-details', [NurseryController::class, 'saveNurseryDetails'])->name('nursery.nurseryDetails');
 Route::post('nursery/file_upload', [NurseryController::class, 'NurseryFileUpload'])->name('nursery.fileUpload');
+Route::post('nursery/remove_file', [NurseryController::class, 'NurseryFileRemove'])->name('nursery.fileRemove');
 // ========================
 Route::get('coach/registration/{token}', [LoginController::class, 'coachRegistration']);
 Route::post('coach/store/{token}', [LoginController::class, 'coachStore']);
@@ -121,8 +122,9 @@ Route::prefix('nursery')->middleware(['IsNursery'])->group(function () {
     Route::get('dashboard', [NurseryUserController::class, 'index']);
     Route::get('user-nursery', [NurseryUserController::class, 'userNursery'])->name('user.nursery');
     Route::get('view-nursery', [NurseryUserController::class, 'viewNursery'])->name('view.userNursery');
-    Route::post('nursery/update-nursery-details', [NurseryUserController::class, 'updateNurseryDetails'])->name('update.nurseryDetails');
-
+    Route::post('update-nursery-details', [NurseryUserController::class, 'updateNurseryDetails'])->name('update.nurseryDetails');
+    Route::post('update-file-upload', [NurseryController::class, 'NurseryFileUpload'])->name('updatefileUpload');
+    Route::post('update-remove-file', [NurseryController::class, 'NurseryFileRemove'])->name('updatefileRemove');
 });
 
 // Route::get('test/', [LoginController::class, 'index']);

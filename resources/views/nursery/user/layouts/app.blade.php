@@ -267,12 +267,3 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
 </body>
 
 </html>
-<style>
-    .error-msg {
-        color: red;
-    }
-
-    .hide {
-        display: none;
-    }
-</style>

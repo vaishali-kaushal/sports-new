@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->biginteger('nursery_id');
             $table->string('type')->nullable();
-            $table->string('media_path')->nullable();
+            $table->longText('media_path')->nullable();
             $table->timestamps();
         });
     }

@@ -40,7 +40,7 @@
                                 <h3>Nursery details</h3>
                             </div>
                             <div class="row">
-                            <div class="col-sm-9">
+                            <div class="col-sm-12">
                             <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
@@ -166,16 +166,25 @@
                                 </div>
                             </div>
                             <div class="row mt-3">
-
                                 <div class="row col-sm-12">
                                     <div class="col-sm-6">
-                                        <label class="form-label">No. of students playing concerned
-                                            games</label>
+                                        <label class="form-label">Number of students playing concerned games</label>
                                     </div>
+                                    @if($nursery->game_disp == 'boys')
                                     <div class="col-sm-6">
-                                        <div>{{ $nursery->boys ?? '0' }} boys</div>
-                                        <div>{{ $nursery->girls ?? '' }} girls</div>
+                                        <div>{{ $nursery->boys ?? '0' }} Boys</div>
                                     </div>
+                                    @endif
+                                    @if($nursery->game_disp == 'girls')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->girls ?? '' }} Girls</div>
+                                    </div>
+                                    @endif
+                                    @if($nursery->game_disp == 'mix')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->girls ?? '' }} Girls and {{ $nursery->girls ?? '' }} Boys</div>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -185,6 +194,26 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div>{{ ucfirst($nursery->whether_qualified_coach_is_available_for_the_concerned_game)  ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Name of Coach</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->coach_name)  ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row mt-3" @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Highest Qualification of Coach</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->coachQualification->name  ?? ''}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -201,7 +230,7 @@
                             <div class="row mt-3">
                                 <div class="row col-sm-12" @if($nursery->whether_nursery_will_provide_fee_concession_to_selected_players == 'no') style="display:none;" @endif>
                                     <div class="col-sm-6">
-                                        <label class="form-label">Percentage</label>
+                                        <label class="form-label">Percentage of Fee Concession</label>
                                     </div>
                                     <div class="col-sm-6">
                                         <div>{{ $nursery->percentage_fee ?? ''}}</div>
@@ -215,20 +244,86 @@
                                         <label class="form-label">Highest Achievement of Players</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div>{{ $nursery->any_specific_achievements_of_the_institute_during_last ?? '' }}</div>
+                                        <div>{{ ucfirst($nursery->any_specific_achievements_of_the_institute_during_last) ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether sports nursery was allotted in earlier years?</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->already_running_nursery) ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->already_running_nursery == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Year of Allotment</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->year_allotment ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->already_running_nursery == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Game (Previous)</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->game_previous_id ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->already_running_nursery == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Sports Game Discipline (Previous)</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->game_descipline_previous ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether Nursery will provide Sports kits to selected players</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->whether_nursery_will_provide_sports_kits_to_selected_players ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether School/Institue/Academy will provide fee concession to selected players</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->whether_nursery_will_provide_fee_concession_to_selected_players ?? '' }}</div>
                                     </div>
                                 </div>
                             </div>
                             </div>
                             <div class="col-sm-3">
-                                <div class="timeline">
+                                <!-- <div class="timeline">
                                     <div class="time-label">
-                                        <span class="bg-red">10 Feb. 2014</span>
+                                        <span class="bg-red">{{ date('d M, Y', $nursery->created_at)}}</span>
                                     </div>
                                     <div>
+                                        @php
+                                            $createdAt = \Carbon\Carbon::parse($nursery->created_at);
+                                            $now = \Carbon\Carbon::now();
+                                            $diff = $createdAt->diff($now);
+                                        @endphp
                                         <i class="fas fa-user bg-green"></i>
                                         <div class="timeline-item">
-                                        <span class="time"><i class="fas fa-clock"></i> 5 mins ago</span>
+                                        <span class="time"><i class="fas fa-clock"></i> {{ $diff->days }} days {{ $diff->h }} hours {{ $diff->i }} minutes
+                                        </span>
                                         <h3 class="timeline-header no-border"><a href="#">You</a> created nursery</h3>
                                         </div>
                                     </div>
@@ -238,7 +333,7 @@
                                     <div>
                                         <i class="fas fa-clock bg-gray"></i>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         </div>

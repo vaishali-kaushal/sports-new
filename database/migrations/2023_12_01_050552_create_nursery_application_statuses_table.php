@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('nursery_application_statuses', function (Blueprint $table) {
             $table->id();
-            $table->string('nursery_id')->nullable();
-            $table->string('district_id')->nullable();
+            $table->integer('nursery_id');
+            $table->integer('district_id');
             $table->integer('approved_reject_by_dso')->default(0)->comment("if 1 it means report submit by dso if 2 it means reject");;
             $table->integer('approved_by_admin_or_reject_by_admin')->default(0)->comment("if status is 1 it means approved and 2 means reject by admin");
             // $table->integer('reject_by_admin')->default(0);
