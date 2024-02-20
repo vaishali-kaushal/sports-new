@@ -1257,7 +1257,6 @@ dd($errors);
             var name = $.trim($("#name").val());
             var formData = new FormData($('#nursery-registration-form')[0]);
             let images = ''
-            console.log(formData,'formDataformDataformData')
 
             formData.append('_token', csrfToken);
             formData.append('mobile_number', mobile);

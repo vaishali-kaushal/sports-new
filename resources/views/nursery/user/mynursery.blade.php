@@ -456,6 +456,7 @@
                                         <div class="row card-body">
                                             <div class="col-sm-6 mb-3" id="playground_media" @if($nursery->playground_hall_court_available == 'no') style="display: none;" @endif>
                                                 <label class="form-label">Upload 3 Photographs of Playground/Hall (Images to be uploaded duly signed with date by HOD /Principal) <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (300 KB total) *</span></label>
+
                                                 <div id="playgroundDropzone" class="dropzone">
                                                     <div class="dz-message" data-dz-message>
                                                       <span>Drop files here or click to upload.</span>
@@ -501,7 +502,7 @@
                                                 @enderror
                                                 <div id="selectedEquipmentImages" class="image-row mt-4"></div>
                                                 <div class="row">
-                                                @if(!empty($nurseryPhotos['playground']) && !is_null($nurseryPhotos['playground']))
+                                                @if(!empty($nurseryPhotos['equipment']) && !is_null($nurseryPhotos['equipment']))
                                                     @foreach ($nurseryPhotos['equipment'] as $p)
                                                         <div class="col-sm-2 pb-2">
                                                             <img src="{{ asset('storage/'.$p) }}" class="Equipment Image" style="width: 50px;">
@@ -593,6 +594,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
  
 <script>
+
     Dropzone.autoDiscover = false;
     // Common configuration options for Dropzone
     let commonOptions = {
@@ -606,6 +608,7 @@
         dictDefaultMessage: "Drop your files here or click to upload",
         dictFallbackMessage: "Your browser doesn't support drag and drop file uploads.",
     };
+    $(document).ready(function() {
     // Initialize Dropzone for playground
     let playgroundDropzone = initDropzone("#playgroundDropzone", "playgroundfile", "#playgroundmessage", "#playground_images", 3, 0.3,'jpg', 'jpeg', 'png');
 
@@ -621,6 +624,7 @@
 
     // Function to initialize Dropzone
     function initDropzone(dropzoneId, paramName, messageSelector, imagesInputSelector, maxFiles, maxFileSize, ...validFiles) {
+        console.log(dropzoneId,"sdad")
         let acceptedFiles = validFiles.map(element => '.'+element);
         let validationError = false
 
@@ -681,6 +685,7 @@
             }
         });
     }
+});
 </script>
 <script>
     $(document).ready(function() {
