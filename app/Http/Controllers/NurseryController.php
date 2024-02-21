@@ -304,7 +304,8 @@ class NurseryController extends Controller
             }
             if(env('APP_ENV') == "local"){
                 $otpp = '111111';
-                // $otp=$this->generateNumericOTP(6);
+                // $otpp=$this->generateNumericOTP(6);
+                // dd($otp);
                 // Session::put('mobile_otp', $otp);
                 $secure_id = bin2hex(random_bytes(16));
                     $otp = Otp::create([
@@ -315,10 +316,9 @@ class NurseryController extends Controller
                         'status'=> 0,
                         'created_at' => now()
                     ]);
-                $sms_message   = "Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $sms_message   = "Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
                 $tid           = "1407170557686704067";
-                // dd($this->sendSMS($request->mobile,$sms_message,$tid));
-                $this->sendSMS($request->mobile,$sms_message,$tid);
+                // $this->sendSMS($request->mobile,$sms_message,$tid);
 
             }else{
                 $otpp=$this->generateNumericOTP(6);
@@ -332,7 +332,7 @@ class NurseryController extends Controller
                     'status'=> 0,
                     'created_at' => now()
                 ]);
-                $sms_message   = "Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $sms_message   = "Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
                 $tid           = "1407170557686704067";
                 $this->sendSMS($request->mobile,$sms_message,$tid);
             }
@@ -368,7 +368,7 @@ class NurseryController extends Controller
         try{
               $updatestatus = Otp::where('mobile',$request->mobile)->update(['status'=>1]);
               if(env('APP_ENV') == "local"){
-                $otp=$this->generateNumericOTP(6);
+                $otpp=$this->generateNumericOTP(6);
                 $secure_id = bin2hex(random_bytes(16));
                 $otp = Otp::create([
                     'secure_id' => $secure_id,
@@ -378,16 +378,16 @@ class NurseryController extends Controller
                     'status'=> 0,
                     'created_at' => now()
                 ]);
-                $sms_message   = "Dear User, ".$otp. "is OTP for User Registration, Nursery Management System, Sports Department Government of Haryana";
-                $tid           = "1407170557670346761";
+                $sms_message   = "Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $tid           = "1407170557686704067";
 
                 $this->sendSMS($request->mobile,$sms_message,$tid);
 
             }else{
-                $otp=$this->generateNumericOTP(6);
+                $otpp=$this->generateNumericOTP(6);
                 $secure_id = bin2hex(random_bytes(16));
-                $sms_message   = "Dear User, ".$otp. "is OTP for User Registration, Nursery Management System, Sports Department Government of Haryana";
-                $tid           = "1407170557670346761";
+                $sms_message   = "Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $tid           = "1407170557686704067";
                     $otp = Otp::create([
                         'secure_id' => $secure_id,
                         'mobile' => $request->mobile,
@@ -570,6 +570,14 @@ class NurseryController extends Controller
                     'created_at'=>now()
                 ]);
             }
+            if(!empty($request->panchayat_certificate)  && $request->type_of_nursery == 'panchayat'){
+                NurseryMedia::create([
+                    'nursery_id'=> $currentsavedNursery->id,
+                    'type' => "panchayat_certificate",
+                    'media_path' => $request->panchayat_certificate,
+                    'created_at'=>now()
+                ]);
+            }
             $nursery = Nursery::where(
                 'id', $currentsavedNursery->id)->update(['final_status'=>1]);
                 
@@ -722,6 +730,11 @@ class NurseryController extends Controller
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
             $file->storeAs('coach_certificate_files', $fileName, 'public');
             $filePath = 'coach_certificate_files/'.$fileName;
+        }elseif($request->hasFile('panchayatCertificateFile')) {
+            $file = $request->file('panchayatCertificateFile');
+            $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+            $file->storeAs('panchayat_certificate_files', $fileName, 'public');
+            $filePath = 'panchayat_certificate_files/'.$fileName;
         }
         
         return $filePath;

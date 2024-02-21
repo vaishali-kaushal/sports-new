@@ -33,35 +33,47 @@ class NurseryUserController extends Controller
 
     public function userNursery()
     {
-    	$user_mobile = Auth::user()->mobile;
-        $nursery = Nursery::where('mobile_number', $user_mobile)->where('final_status',1)->first();
-    	// dd($nursery->nurseryMedias);
-    	$districts = District::get()->toArray();
-    	$games = Game::get()->toArray();
-    	$coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
-        $nurseryMedias = NurseryMedia::where('nursery_id', $nursery->id)->get();
+        $user_mobile = Auth::user()->mobile;
+        $nursery = Nursery::with('nurseryMedias')->where('mobile_number', $user_mobile)->where('final_status',1)->first();
+        $districts = District::get()->toArray();
+        $games = Game::get()->toArray();
+        $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
         $nurseryPhotos =[];
-        foreach ($nurseryMedias as $nurseryMedia) {
+        $playground_images = []; 
+        $equipment_images = []; 
+        $player_list_images = []; 
+        $coach_certificate_images = []; 
+        $panchayat_certificate_images = []; 
+        // dd($nursery['nurseryMedias']);
+        foreach ($nursery['nurseryMedias'] as $nurseryMedia) {
             switch ($nurseryMedia->type) {
                 case 'playground':
-                    $nurseryPhotos['playground'] =  explode(',', $nurseryMedia->media_path);
+                    foreach(explode(',', $nurseryMedia->media_path) as $path){
+                        $complete_path = asset('storage/'.$path);
+                        array_push( $playground_images, ["path"=> $path, "complete_path"=>$complete_path]);
+                    }
                     break;
                 case 'equipment':
-                    $nurseryPhotos['equipment'] = explode(',', $nurseryMedia->media_path);
+                    foreach(explode(',', $nurseryMedia->media_path) as $path){
+                        $complete_path = asset('storage/'.$path);
+                        array_push( $equipment_images, ["path"=> $path, "complete_path"=>$complete_path]);
+                    }
                     break;
                 case 'player_list':
-                    $nurseryPhotos['player_list'] =$nurseryMedia->media_path;
+                    $player_list_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
                     break;
                 case 'coach_certificate':
-                    $nurseryPhotos['coach_certificate'] = $nurseryMedia->media_path;
+                    $coach_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    break;
+                case 'panchayat_certificate':
+                    $panchayat_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
                     break;
                 default:
                     break;
             }
         }
 
-                    // dd(json_decode($nurseryPhotos['playground']));
-    	return view('nursery.user.mynursery',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification,'nurseryPhotos' => $nurseryPhotos ]);
+        return view('nursery.user.mynursery',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images]);
 
     }
 
@@ -69,11 +81,44 @@ class NurseryUserController extends Controller
     {
         $user_mobile = Auth::user()->mobile;
         $nursery = Nursery::with(['nurseryMedias','CoachQualification'])->where('mobile_number', $user_mobile)->where('final_status',1)->first();
-        // dd($nursery);
+        $playground_images = []; 
+        $equipment_images = []; 
+        $player_list_images = []; 
+        $coach_certificate_images = []; 
+        $panchayat_certificate_images = []; 
+        foreach ($nursery['nurseryMedias'] as $nurseryMedia) {
+            switch ($nurseryMedia->type) {
+                case 'playground':
+                    foreach(explode(',', $nurseryMedia->media_path) as $path){
+                        $complete_path = asset('storage/'.$path);
+                        array_push( $playground_images, ["path"=> $path, "complete_path"=>$complete_path]);
+                    }
+                    break;
+                case 'equipment':
+                    foreach(explode(',', $nurseryMedia->media_path) as $path){
+                        $complete_path = asset('storage/'.$path);
+                        array_push( $equipment_images, ["path"=> $path, "complete_path"=>$complete_path]);
+                    }
+                    break;
+                case 'player_list':
+                    $player_list_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    break;
+                case 'coach_certificate':
+                    $coach_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    break;
+                case 'panchayat_certificate':
+                    $panchayat_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // dd($coach_certificate_images);
         $districts = District::get()->toArray();
         $games = Game::get()->toArray();
         $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
-        return view('nursery.user.view',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification ]);
+        return view('nursery.user.view',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images ]);
 
     }
 
@@ -155,67 +200,101 @@ class NurseryUserController extends Controller
                 // dd($currentsavedNursery);
 
             /************** playground validation **************/
-            // if($request->playground_hall_court_available == 'yes'){
-            //     $playgroundfiles = explode(',',$request->playground_images[0]);
-            //     if (count($playgroundfiles) < 3) {
-            //         return response()->json(['status' => 'error','message' => 'Playground Files can not be less than 3']);
-            //     } else if(count($playgroundfiles) > 3) {
-            //         return response()->json(['status' => 'error','message' => 'Playground Files can not be greater than 3']);
-            //     }
-            // }
+            if($request->playground_hall_court_available == 'yes'){
+                $playgroundfiles = explode(',',$request->playground_images[0]);
+                // dd($playgroundfiles);
+                if (count($playgroundfiles) < 3) {
+                    return response()->json(['status' => 'error','message' => 'Playground Files can not be less than 3']);
+                } else if(count($playgroundfiles) > 3) {
+                    return response()->json(['status' => 'error','message' => 'Playground Files can not be greater than 3']);
+                }
+            }
 
             /************** equipment validation **************/
-            // if($request->equipment_related_to_selected_games_available == 'yes'){
-            //     $equipmentfiles = explode(',',$request->equipment_images[0]);
-            //     if (count($equipmentfiles) < 3) {
-            //         return response()->json(['status' => 'error','message' => 'Equipment Files can not be less than 3']);
-            //     } elseif(count($equipmentfiles) > 3) {
-            //         return response()->json(['status' => 'error','message' => 'Equipment Files can not be greater than 3']);
-            //     } 
-            // }
+            if($request->equipment_related_to_selected_games_available == 'yes'){
+                $equipmentfiles = explode(',',$request->equipment_images[0]);
+                if (count($equipmentfiles) < 3) {
+                    return response()->json(['status' => 'error','message' => 'Equipment Files can not be less than 3']);
+                } elseif(count($equipmentfiles) > 3) {
+                    return response()->json(['status' => 'error','message' => 'Equipment Files can not be greater than 3']);
+                } 
+            }
             /************** player_list validation **************/
-            // if(empty($request->player_list)){
-            //     return response()->json(['status' => 'error','message' => 'Upload player list file']);
-            // }
+            if(empty($request->player_list)){
+                return response()->json(['status' => 'error','message' => 'Upload player list file']);
+            }
 
             /************** coach_certificate validation **************/
-            // if($request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
-            //     if(empty($request->coach_certificate)){
-            //         return response()->json(['status' => 'error','message' => 'Upload coach certificate']);
-            //     }
-            // }
+            if($request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
+                if(empty($request->coach_certificate)){
+                    return response()->json(['status' => 'error','message' => 'Upload coach certificate']);
+                }
+            }
 
             if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
-                
-                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->update([
-                    'type' => "playground",
-                    'media_path' => $request->playground_images[0],
-                    'updated_at'=>now()
-                ]);
+                $nursery = NurseryMedia::updateOrInsert(
+                    [
+                        'nursery_id' => $currentsavedNursery->id,
+                    ],
+                    [
+                        'type' => "playground",
+                        'media_path' => $request->playground_images[0],
+                        'updated_at'=>now()
+                    ]
+                );
+                // dd($currentsavedNursery->id);
             }
             if(!empty($equipmentfiles) && count($equipmentfiles) === 3 && $request->equipment_related_to_selected_games_available == 'yes'){
-                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->update([
-                    'type' => "equipment",
-                    'media_path' => $request->equipment_images[0],
-                    'updated_at'=>now()
-                ]);
+                $nursery = NurseryMedia::updateOrInsert(
+                    [
+                        'nursery_id' => $currentsavedNursery->id,
+                    ],
+                    [
+                        'type' => "equipment",
+                        'media_path' => $request->equipment_images[0],
+                        'updated_at'=>now()
+                    ]
+                );
                 
             }
 
             if(!empty($request->player_list)){
-                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->update([
-                    'type' => "player_list",
-                    'media_path' => $request->player_list,
-                    'updated_at'=>now()
-                ]);
+                 $nursery = NurseryMedia::updateOrInsert(
+                    [
+                        'nursery_id' => $currentsavedNursery->id,
+                    ],
+                    [
+                        'type' => "player_list",
+                        'media_path' => $request->player_list,
+                        'updated_at'=>now()
+                    ]
+                );
+              
             }
 
             if(!empty($request->coach_certificate)  && $request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
-                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->update([
-                    'type' => "coach_certificate",
-                    'media_path' => $request->coach_certificate,
-                    'updated_at'=>now()
-                ]);
+                $nursery = NurseryMedia::updateOrInsert(
+                    [
+                        'nursery_id' => $currentsavedNursery->id,
+                    ],
+                    [
+                        'type' => "coach_certificate",
+                        'media_path' => $request->coach_certificate,
+                        'updated_at'=>now()
+                    ]
+                );
+            }
+            if(!empty($request->panchayat_certificate)  && $request->type_of_nursery == 'panchayat'){
+                $nursery = NurseryMedia::updateOrInsert(
+                    [
+                        'nursery_id' => $currentsavedNursery->id,
+                    ],
+                    [
+                        'type' => "panchayat_certificate",
+                        'media_path' => $request->panchayat_certificate,
+                        'updated_at'=>now()
+                    ]
+                );
             }
                 
             $nurseryStatus = NurseryApplicationStatus::where('nursery_id', $currentsavedNursery->id)->update([
@@ -327,6 +406,11 @@ class NurseryUserController extends Controller
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
             $file->storeAs('coach_certificate_files', $fileName, 'public');
             $filePath = 'coach_certificate_files/'.$fileName;
+        }elseif($request->hasFile('panchayatCertificateFile')) {
+            $file = $request->file('panchayatCertificateFile');
+            $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+            $file->storeAs('panchayat_certificate_files', $fileName, 'public');
+            $filePath = 'panchayat_certificate_files/'.$fileName;
         }
         
         return $filePath;

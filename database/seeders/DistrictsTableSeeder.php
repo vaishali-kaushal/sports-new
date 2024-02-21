@@ -187,6 +187,22 @@ class DistrictsTableSeeder extends Seeder
                 'created_at' => '2023-10-31 15:54:53',
                 'updated_at' => '2023-10-31 15:54:53',
             ),
+            21 => 
+            array (
+                'id' => 22,
+                'name' => 'Mewat',
+                'code' => 'HRME',
+                'created_at' => '2023-10-31 15:54:53',
+                'updated_at' => '2023-10-31 15:54:53',
+            ), 
+            22 => 
+            array (
+                'id' => 23,
+                'name' => 'Narnaul',
+                'code' => 'HRNN',
+                'created_at' => '2023-10-31 15:54:53',
+                'updated_at' => '2023-10-31 15:54:53',
+            ),
         ));
         
         

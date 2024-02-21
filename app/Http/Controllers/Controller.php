@@ -90,12 +90,19 @@ class Controller extends BaseController
       
         $result = ""; 
       
-        for ($i = 1; $i <= $n; $i++) { 
-            $result .= substr($generator, (rand()%(strlen($generator))), 1); 
-        } 
+        // for ($i = 1; $i <= $n; $i++) { 
+        //     $result .= substr($generator, (rand()%(strlen($generator))), 1); 
+        // } 
       
-        // Return result 
-        return $result; 
+        // // Return result 
+        // return $result; 
+
+
+        for ($i = 0; $i < $n; $i++) {
+            $randomIndex = rand(0, strlen($generator) - 1);
+            $result .= $generator[$randomIndex];
+        }
+        return $result;
     } 
       
 }

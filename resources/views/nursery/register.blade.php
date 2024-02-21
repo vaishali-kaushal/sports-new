@@ -347,7 +347,7 @@ dd($errors);
                                                     @enderror
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
-                                                    <label class="form-label">Name of School/Institute/Academy</label> <span class='star'>*</span>
+                                                    <label class="form-label">Name of School/Institute/Academy/Panchayat</label> <span class='star'>*</span>
                                                     <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="name_of_nursery" autocomplete="off">
                                                     @error('name_of_nursery')
                                                     <span class="invalid-feedback" role="alert"
@@ -797,6 +797,25 @@ dd($errors);
                                                     </div>
                                                     @enderror
                                                 </div>
+                                                <div class="col-sm-6 mb-3 panchayat_media" style="display : none;">
+                                                    <label class="form-label">Panchayat Certificate <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label> <span class='star'>*</span>
+                                                    <div id="panchayatDropzone" class="dropzone">
+                                                        <div class="dz-message" data-dz-message>
+                                                          <span>Drop file here or click to upload.</span>
+                                                        </div>
+                                                    </div><br>
+                                                    <input type="hidden" name="panchayat_certificate" id="panchayat_certificate">
+                                                    <span class="star" id="panchayatcertificatemessage"></span>
+                                                    @error('panchayat_certificate')
+                                                    <div class="alert alert-danger">
+                                                        <ul>
+                                                            @foreach ($errors->panchayat_certificate as $error)
+                                                            <li>{{ $error }}</li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </div>
+                                                    @enderror
+                                                </div>
                                                 <div class="form-check mb-3">
                                                   <input class="form-check-input" type="checkbox" id="flexCheckChecked">
                                                   <label class="form-check-label fw-normal" for="flexCheckChecked">
@@ -918,8 +937,11 @@ dd($errors);
     // Initialize Dropzone for player list
     let playerListDropzone = initDropzone("#playerListDropzone", "playerListFile", "#playerlistmessage", "#player_list_file", 1, 0.1, 'jpg', 'jpeg', 'png', 'csv');
     
-    // Initialize Dropzone for player list
+    // Initialize Dropzone for Coach list
     let coachCertificateDropzone = initDropzone("#coachCertificateDropzone", "coachCertificateFile", "#coachcertificatemessage", "#coach_certificate", 1, 0.1, 'jpg', 'jpeg', 'png');
+
+    // Initialize Dropzone for player list
+    let panchayatDropzone = initDropzone("#panchayatDropzone", "panchayatCertificateFile", "#panchayatcertificatemessage", "#panchayat_certificate", 1, 0.1, 'jpg', 'jpeg', 'png');
 
 
     // Function to initialize Dropzone
@@ -1064,6 +1086,15 @@ dd($errors);
                         $(".game_previous, .discipline_previous, .year_allotment").hide();
                     }
              });    
+
+              $('.type_of_nursery').change(function(){
+                    var selectedOption = $(this).val();
+                    if(selectedOption === 'panchayat'){
+                        $(".panchayat_media").show();
+                    }else{
+                        $(".panchayat_media").hide();
+                    }
+              })
   //              $('#type_of_nursery').on('blur', function() {
   //   var selectedValue = $(this).val();
   //   if (selectedValue === "") {
@@ -1471,9 +1502,10 @@ dd($errors);
                 data: formData,
                 beforeSend: function (request) {
                     request.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-                    $(".loader").hide();
+                    // $(".loader").hide();
                 },
                 success: function (response) {
+                    $(".loader").hide();
                     // $('input, select, textarea').removeClass('is-invalid is-valid').addClass('is-valid');
                     if(step == "step2") {
                         if (response.status == 'success') {

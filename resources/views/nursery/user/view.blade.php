@@ -308,6 +308,66 @@
                                     </div>
                                 </div>
                             </div>
+                             <hr>
+                            <div>
+                                <h3>Documents</h3>
+                            </div>
+                            <div>
+                                <div class="row mt-3">
+                                     @if(!empty($playground_images))
+                                    <h5>Playground Images</h5>
+
+                                       @foreach($playground_images as $p)
+                                            <div class="col-sm-2 pb-2">
+                                                <img src="{{ $p['complete_path'] }}" class="Playground Image" style="width: 100px;">
+
+                                            </div>
+                                        @endforeach
+                                      @endif
+                                </div>
+                                <div class="row mt-3">
+                                     @if(!empty($equipment_images))
+                                    <h5>Equipment Images</h5>
+
+                                       @foreach($equipment_images as $p)
+                                            <div class="col-sm-2 pb-2">
+                                                <img src="{{ $p['complete_path'] }}" class="Playground Image" style="width: 100px;">
+
+                                            </div>
+                                        @endforeach
+                                      @endif
+                                </div>
+                                <div class="row mt-3">
+                                     @if(!empty($player_list_images))
+                                        <h5>Player List Document</h5>
+
+                                            <div class="col-sm-2 pb-2">
+                                                <img src="{{ $player_list_images['complete_path'] }}" class="Playground Image" style="width: 100px;">
+
+                                            </div>
+                                      @endif
+                                </div>
+                                <div class="row mt-3">
+                                     @if(!empty($coach_certificate_images))
+                                        <h5>Coach Certificate</h5>
+
+                                            <div class="col-sm-2 pb-2">
+                                                <img src="{{ $coach_certificate_images['complete_path'] }}" class="Playground Image" style="width: 100px;">
+
+                                            </div>
+                                      @endif
+                                </div>
+                                <div class="row">
+                                     @if(!empty($panchayat_certificate_images))
+                                        <h5>Panchayat Certificate</h5>
+
+                                            <div class="col-sm-2 pb-2">
+                                                <img src="{{ $panchayat_certificate_images['complete_path'] }}" class="Playground Image" style="width: 100px;">
+
+                                            </div>
+                                      @endif
+                                </div>
+                            </div>
                             </div>
                             <div class="col-sm-3">
                                 <!-- <div class="timeline">

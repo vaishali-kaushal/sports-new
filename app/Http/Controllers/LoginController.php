@@ -73,7 +73,7 @@ class LoginController extends Controller
         $otp->otp = $otpp;
         $otp->save();
 
-        $message="Dear User,".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+        $message="Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
         $temp_id = "1407170557686704067";
         $this->sendSMS($otp->mobile,$message,$temp_id);
 
@@ -115,7 +115,7 @@ class LoginController extends Controller
                 $otp->status = 0;
                 $otp->otp = $otpp;
                 $otp->save();
-                $message="Dear User,".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $message="Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
                 $temp_id = "1407170557686704067";
                 $this->sendSMS($userr->mobile,$message,$temp_id);
 

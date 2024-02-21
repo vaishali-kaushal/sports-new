@@ -9,9 +9,17 @@
         color: red;
         padding: 5px;
     }
+    .dropzone .dz-preview .dz-image {
+        width: 100px; 
+        height: auto; 
+    }
+
+    .dropzone .dz-preview .dz-image img {
+        width: 100%;
+        height: 150px;
+    }
 </style>
 <div class="content-wrapper">
-
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
@@ -297,7 +305,7 @@
                                                             </span>
                                                             @enderror
                                                         </div>
-                                                         <div class="col-sm-2 boys">
+                                                         <div class="col-sm-2 girls">
                                                             <label>Number of Girls</label>
                                                         </div>
                                                         <div class="col-sm-4 girls">
@@ -414,7 +422,7 @@
                                                     </span>
                                                     @enderror
                                                 </div>
-                                                 <div class="col-sm-6 mb-3">
+                                                <div class="col-sm-6 mb-3">
                                                     <label class="form-label">Whether School/Institue/Academy will provide fee concession to selected players?</label> <span class='star'>*</span>
                                                     <select class="form-control fee_concession" aria-label="Default select example" name="whether_nursery_will_provide_fee_concession_to_selected_players" id="fee_concession">
                                                         <option value=""> -----Select----- </option>
@@ -462,7 +470,18 @@
                                                       <span>Drop files here or click to upload.</span>
                                                     </div>
                                                 </div><br>
-                                                <input type="hidden" name="playground_images[]" id="playground_images">
+                                                @php
+                                                $paths = [];
+
+                                                if(!empty($playground_images)){
+                                                    foreach ($playground_images as $image) {
+                                                        $paths[] = $image['path'];
+                                                    }
+                                                    $pathsString = implode(',', $paths);
+                                                }
+
+                                                @endphp
+                                                <input type="hidden" name="playground_images[]" id="playground_images" value="{{$pathsString ?? ''}}" data-default="{{json_encode($playground_images) ?? ''}}">
                                                 <span class="star" id="playgroundmessage"></span>
                                                 @error('playground_images')
                                                 <span class="invalid-feedback" role="alert"
@@ -470,18 +489,6 @@
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
-
-                                                <div id="selectedPlaygroundImages" class="image-row mt-4"></div>
-                                                <div class="row">
-                                                    @if(!empty($nurseryPhotos['playground']) && !is_null($nurseryPhotos['playground']))
-                                                        @foreach ($nurseryPhotos['playground'] as $p)
-                                                            <div class="col-sm-2 pb-2">
-                                                                <img src="{{ asset('storage/'.$p) }}" class="Playground Image" style="width: 50px;">
-
-                                                            </div>
-                                                        @endforeach
-                                                    @endif
-                                                </div>
                                             </div>
                                                 <!-- show selected images -->
 
@@ -492,7 +499,17 @@
                                                       <span>Drop files here or click to upload.</span>
                                                     </div>
                                                 </div><br>
-                                                <input type="hidden" name="equipment_images[]" id="equipment_images">
+                                                @php
+                                                $paths = [];
+                                                if(!empty($equipment_images)){
+                                                foreach ($equipment_images as $image) {
+                                                    $paths[] = $image['path'];
+                                                }
+
+                                                $pathsString = implode(',', $paths);
+                                                }
+                                                @endphp
+                                                <input type="hidden" name="equipment_images[]" id="equipment_images" value="{{$pathsString ?? ''}}" data-default="{{json_encode($equipment_images) ?? ''}}">
                                                 <span class="star" id="equipmentmessage"></span>
                                                 @error('equipment_images')
                                                 <span class="invalid-feedback" role="alert"
@@ -500,17 +517,6 @@
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
-                                                <div id="selectedEquipmentImages" class="image-row mt-4"></div>
-                                                <div class="row">
-                                                @if(!empty($nurseryPhotos['equipment']) && !is_null($nurseryPhotos['equipment']))
-                                                    @foreach ($nurseryPhotos['equipment'] as $p)
-                                                        <div class="col-sm-2 pb-2">
-                                                            <img src="{{ asset('storage/'.$p) }}" class="Equipment Image" style="width: 50px;">
-
-                                                        </div>
-                                                    @endforeach
-                                                @endif
-                                                </div>
                                             </div>
                                             <div class="col-sm-6 mb-3 player_list" id="player_list" @if(empty($nursery->game_disp)) style="display: none;" @endif>
                                                 <label class="form-label">Attach list of players with achievement <span class='star'>File Type (.jpg, .png, .jpeg, .csv only) Max Upload Size (100 KB) *</span></label>
@@ -519,7 +525,7 @@
                                                       <span>Drop file here or click to upload.</span>
                                                     </div>
                                                 </div><br>
-                                                <input type="hidden" name="player_list" id="player_list_file">
+                                                <input type="hidden" name="player_list" id="player_list_file" value="{{$player_list_images['path'] ?? ''}}" data-default="{{json_encode($player_list_images) ?? ''}}">
                                                 <span class="star" id="playerlistmessage"></span>
                                                 @error('player_list')
                                                 <span class="invalid-feedback" role="alert"
@@ -527,45 +533,46 @@
                                                     <strong>{{ $message }}</strong>
                                                 </span>
                                                 @enderror
-                                                <div class="row">
-                                                @if(!empty($nurseryPhotos['player_list']))
-                                                        <div class="col-sm-4 pb-2">
-                                                            <img src="{{ asset('storage/'.$nurseryPhotos['player_list']) }}" class="Player list" style="width: 50px;">
-
-                                                        </div>
-                                                @endif
-                                                </div>
                                             </div>
-                                                <div class="col-sm-6 mb-3 coach_certificate" @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display: none;" @endif>
-                                                    <label class="form-label">Coach Qualification Certificate <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB) *</span></label>
-                                                    <div id="coachCertificateDropzone" class="dropzone">
-                                                        <div class="dz-message" data-dz-message>
-                                                          <span>Drop file here or click to upload.</span>
-                                                        </div>
-                                                    </div><br>
-                                                    <input type="hidden" name="coach_certificate" id="coach_certificate">
-                                                    <span class="star" id="coachcertificatemessage"></span>
-                                                    @error('coach_certificate')
-                                                    <span class="invaalid-feedback" role="alert"
-                                                        style="display : block;">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
-                                                    <div class="row">
-                                                    @if(!empty($nurseryPhotos['coach_certificate']))
-                                                        <div class="col-sm-4 pb-2">
-                                                            <img src="{{asset('storage/'.$nurseryPhotos['coach_certificate']) }}" class="Coach Certificate Image" style="width: 50px;">
-
-                                                        </div>
-                                                    @endif
+                                            <div class="col-sm-6 mb-3 coach_certificate" @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display: none;" @endif>
+                                                <label class="form-label">Coach Qualification Certificate <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB) *</span></label>
+                                                <div id="coachCertificateDropzone" class="dropzone">
+                                                    <div class="dz-message" data-dz-message>
+                                                      <span>Drop file here or click to upload.</span>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-12 text-right mb-2">
-                                                <button type="button" class="btn btn-primary"
-                                                    onclick="prevStep()">Previous</button>
-                                                <button type="button" class="btn btn-danger" id="final_submit"
-                                                    onclick="saveNurseryDetails('step4')">Submit</button>
-                                                </div>
+                                                </div><br>
+                                                <input type="hidden" name="coach_certificate" id="coach_certificate" value="{{$coach_certificate_images['path'] ?? ''}}" data-default="{{json_encode($coach_certificate_images) ?? ''}}">
+                                                <span class="star" id="coachcertificatemessage"></span>
+                                                @error('coach_certificate')
+                                                <span class="invaalid-feedback" role="alert"
+                                                    style="display : block;">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
+                                            <div class="col-sm-6 mb-3 panchayat_media" @if($nursery->type_of_nursery != 'panchayat') style="display: none;" @endif>
+                                                <label class="form-label">Panchayat Certificate <span class='star'>File Type (.jpg, .png, .jpeg only) Max Upload Size (100 KB)</span></label>
+                                                <div id="panchayatDropzone" class="dropzone">
+                                                    <div class="dz-message" data-dz-message>
+                                                      <span>Drop file here or click to upload.</span>
+                                                    </div>
+                                                </div><br>
+                                                <input type="hidden" name="panchayat_certificate" id="panchayat_certificate" value="{{$panchayat_certificate_images['path'] ?? ''}}" data-default="{{json_encode($panchayat_certificate_images) ?? ''}}">
+                                               
+                                                <span class="star" id="panchayatcertificatemessage"></span>
+                                                @error('panchayat_certificate')
+                                                <span class="invaalid-feedback" role="alert"
+                                                    style="display : block;">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
+                                            </div>
+                                            <div class="col-sm-12 text-right mb-2">
+                                            <button type="button" class="btn btn-primary"
+                                                onclick="prevStep()">Previous</button>
+                                            <button type="button" class="btn btn-danger" id="final_submit"
+                                                onclick="saveNurseryDetails('step4')">Submit</button>
+                                            </div>
                                             </div>
                                         
                                     </div>
@@ -609,89 +616,133 @@
         dictFallbackMessage: "Your browser doesn't support drag and drop file uploads.",
     };
     $(document).ready(function() {
-    // Initialize Dropzone for playground
-    let playgroundDropzone = initDropzone("#playgroundDropzone", "playgroundfile", "#playgroundmessage", "#playground_images", 3, 0.3,'jpg', 'jpeg', 'png');
+        // Initialize Dropzone for playground
+        let playgroundDropzone = initDropzone("#playgroundDropzone", "playgroundfile", "#playgroundmessage", "#playground_images", 3, 0.3,'jpg', 'jpeg', 'png');
 
-    // Initialize Dropzone for equipment
-    let equipmentDropzone = initDropzone("#equipmentDropzone", "equipmentfile", "#equipmentmessage", "#equipment_images", 3, 0.3, 'jpg', 'jpeg', 'png');
+        // Initialize Dropzone for equipment
+        let equipmentDropzone = initDropzone("#equipmentDropzone", "equipmentfile", "#equipmentmessage", "#equipment_images", 3, 0.3, 'jpg', 'jpeg', 'png');
 
-    // Initialize Dropzone for player list
-    let playerListDropzone = initDropzone("#playerListDropzonee", "playerListFile", "#playerlistmessage", "#player_list_file", 1, 0.1, 'jpg', 'jpeg', 'png', 'csv');
-    
-    // Initialize Dropzone for player list
-    let coachCertificateDropzone = initDropzone("#coachCertificateDropzone", "coachCertificateFile", "#coachcertificatemessage", "#coach_certificate", 1, 0.1, 'jpg', 'jpeg', 'png');
+        // Initialize Dropzone for player list
+        let playerListDropzone = initDropzone("#playerListDropzonee", "playerListFile", "#playerlistmessage", "#player_list_file", 1, 0.1, 'jpg', 'jpeg', 'png', 'csv');
+        
+        // Initialize Dropzone for player list
+        let coachCertificateDropzone = initDropzone("#coachCertificateDropzone", "coachCertificateFile", "#coachcertificatemessage", "#coach_certificate", 1, 0.1, 'jpg', 'jpeg', 'png');
 
+         // Initialize Dropzone for Panchayat
+        let panchayatDropzone = initDropzone("#panchayatDropzone", "panchayatCertificateFile", "#panchayatcertificatemessage", "#panchayat_certificate", 1, 0.1, 'jpg', 'jpeg', 'png');
 
-    // Function to initialize Dropzone
-    function initDropzone(dropzoneId, paramName, messageSelector, imagesInputSelector, maxFiles, maxFileSize, ...validFiles) {
-        console.log(dropzoneId,"sdad")
-        let acceptedFiles = validFiles.map(element => '.'+element);
-        let validationError = false
+        // Function to initialize Dropzone
+        function initDropzone(dropzoneId, paramName, messageSelector, imagesInputSelector, maxFiles, maxFileSize, ...validFiles) {
+            console.log(dropzoneId,"sdad")
+            let acceptedFiles = validFiles.map(element => '.'+element);
+            let validationError = false
 
-        return new Dropzone(dropzoneId, {
-            ...commonOptions,
-            maxFilesize: maxFileSize, // MB
-            maxFiles: maxFiles,
-            paramName: paramName,
-            acceptedFiles: acceptedFiles.toString(),
-            dictFileTooBig: "File is too big. Max filesize: "+maxFileSize* 1000+"KB.",
-            dictMaxFilesExceeded: "You can only upload up to " + maxFiles + " files.",
-            dictInvalidFileType: "Invalid file type. Only "+validFiles.toString()+" files are allowed.",
-            sending: function (file, xhr, formData) {
-                $(messageSelector).text('File Uploading...');
-            },
-            success: function (file, response) {
-                $(messageSelector).text('File Uploaded');
-                $(imagesInputSelector).val(function (index, value) {
-                    return value + (value ? ',' : '') + response;
-                });
-                file.filePath = response;
-            },
-            error: function (file, response) {
-                if (file.size > this.options.maxFilesize * 1024 * 1024 || response.includes('jpeg') || response.includes('jpg') || response.includes('png') || response.includes('csv') || this.files.length > this.options.maxFiles) {
-                    validationError = true
-                    this.removeFile(file);
-                }
-                $(messageSelector).text(response);
-                return false;
-            },
-            init: function () {
-                this.on("removedfile", function (file) {
-                    if(!validationError){
-                        $(messageSelector).text('File Removing...');
-                        $.ajax({
-                            url: "{{route('updatefileRemove')}}",
-                            method: 'POST',
-                            headers: {
-                                'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                            },
-                            data: {filePath: file.filePath},
-                            success: function (response) {
-                                let images = $(imagesInputSelector).val().split(",");
-                                let index = images.indexOf(file.filePath);
-                                if (index !== -1) {
-                                    images.splice(index, 1);
-                                    $(imagesInputSelector).val(images.toString());
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                            }
-                        });
-                        $(messageSelector).text('File Removed');
-                    }else{
-                        validationError =  false
+            return new Dropzone(dropzoneId, {
+                ...commonOptions,
+                maxFilesize: maxFileSize, // MB
+                maxFiles: maxFiles,
+                paramName: paramName,
+                acceptedFiles: acceptedFiles.toString(),
+                dictFileTooBig: "File is too big. Max filesize: "+maxFileSize* 1000+"KB.",
+                dictMaxFilesExceeded: "You can only upload up to " + maxFiles + " files.",
+                dictInvalidFileType: "Invalid file type. Only "+validFiles.toString()+" files are allowed.",
+                sending: function (file, xhr, formData) {
+                    $(messageSelector).text('File Uploading...');
+                },
+                success: function (file, response) {
+                    $(messageSelector).text('File Uploaded');
+                    $(imagesInputSelector).val(function (index, value) {
+                        return value + (value ? ',' : '') + response;
+                    });
+                    file.filePath = response;
+                },
+                error: function (file, response) {
+                    if (file.size > this.options.maxFilesize * 1024 * 1024 || response.includes('jpeg') || response.includes('jpg') || response.includes('png') || response.includes('csv') || this.files.length > this.options.maxFiles) {
+                        validationError = true
+                        this.removeFile(file);
                     }
-                });
-            }
-        });
-    }
-});
+                    $(messageSelector).text(response);
+                    return false;
+                },
+                init: function () {
+                    this.on("removedfile", function (file) {
+                        if(!validationError){
+                            $(messageSelector).text('File Removing...');
+                            $.ajax({
+                                url: "{{route('updatefileRemove')}}",
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                                },
+                                data: {filePath: file.filePath},
+                                success: function (response) {
+                                    let images = $(imagesInputSelector).val().split(",");
+                                    let index = images.indexOf(file.filePath);
+                                    if (index !== -1) {
+                                        images.splice(index, 1);
+                                        $(imagesInputSelector).val(images.toString());
+                                    }
+                                },
+                                error: function (xhr, status, error) {
+                                }
+                            });
+                            $(messageSelector).text('File Removed');
+                        }else{
+                            validationError =  false
+                        }
+                    });
+                }
+            });
+        }
+        var playground_images = JSON.parse(document.getElementById("playground_images").getAttribute("data-default"))
+        for (var playground_image of playground_images) {
+            var mockFile = { name: playground_image.path, size: 10, filePath: playground_image.path };
+            // if (!playgroundDropzone.files.some(file => file.filePath === mockFile.filePath)) {
+                playgroundDropzone.files.push(mockFile);
+                playgroundDropzone.emit("addedfile", mockFile);
+                playgroundDropzone.emit("thumbnail", mockFile, playground_image.complete_path);
+                playgroundDropzone.emit("complete", mockFile);
+                // playgroundDropzone.enqueueFile(mockFile);
+            // }
+        }
+        var equipment_images = JSON.parse(document.getElementById("equipment_images").getAttribute("data-default"))
+        for (var equipment_image of equipment_images) {
+            var equipmentFile = { name: equipment_image.path, size: 10, filePath: equipment_image.path };
+            equipmentDropzone.files.push(equipmentFile);
+            equipmentDropzone.emit("addedfile", equipmentFile);
+            equipmentDropzone.emit("thumbnail", equipmentFile, equipment_image.complete_path);
+            equipmentDropzone.emit("complete", equipmentFile);
+            // equipmentDropzone.enqueueFile(equipmentFile);
+        }
+        var player_list_images = JSON.parse(document.getElementById("player_list_file").getAttribute("data-default"))
+        var player_list_image_file = { name: player_list_images.path, size: 10, filePath: player_list_images.path };
+        playerListDropzone.files.push(player_list_image_file);
+        playerListDropzone.emit("addedfile", player_list_image_file);
+        playerListDropzone.emit("thumbnail", player_list_image_file, player_list_images.complete_path);
+        playerListDropzone.emit("complete", player_list_image_file);
+        // playgroundDropzone.enqueueFile(player_list_image_file);
+
+        var coach_certificate_images = JSON.parse(document.getElementById("coach_certificate").getAttribute("data-default"))
+        var coach_certificate_image_file = { name: coach_certificate_images.path, size: 10, filePath: coach_certificate_images.path };
+        coachCertificateDropzone.files.push(coach_certificate_image_file);
+        coachCertificateDropzone.emit("addedfile", coach_certificate_image_file);
+        coachCertificateDropzone.emit("thumbnail", coach_certificate_image_file, coach_certificate_images.complete_path);
+        coachCertificateDropzone.emit("complete", coach_certificate_image_file);
+        // coachCertificateDropzone.enqueueFile(coach_certificate_image_file);
+
+        var panchayat_certificate_images = JSON.parse(document.getElementById("panchayat_certificate").getAttribute("data-default"))
+        var panchayat_certificate_image_file = { name: panchayat_certificate_images.path, size: 10, filePath: panchayat_certificate_images.path };
+        panchayatDropzone.files.push(panchayat_certificate_image_file);
+        panchayatDropzone.emit("addedfile", panchayat_certificate_image_file);
+        panchayatDropzone.emit("thumbnail", panchayat_certificate_image_file, panchayat_certificate_images.complete_path);
+        panchayatDropzone.emit("complete", panchayat_certificate_image_file);
+    });
 </script>
 <script>
     $(document).ready(function() {
 
         populateTypeOfNursery();
-
+        populateGameDisp();
         function populateTypeOfNursery() {
             var selectedCat = $('#cat_of_nursery').val();
             var typeCatCategory = $('.type_of_nursery');
@@ -700,9 +751,9 @@
             var selectedType = "{{ $nursery->type_of_nursery }}";
 
             if (selectedCat === 'govt') {
-                    typeCatCategory.append('<option value="">-----Select-----</option>');
-                    typeCatCategory.append('<option value="govt_school">Govt. School</option>');
-                    typeCatCategory.append('<option value="panchayat">Panchayat</option>');
+                typeCatCategory.append('<option value="">-----Select-----</option>');
+                typeCatCategory.append('<option value="govt_school">Govt. School</option>');
+                typeCatCategory.append('<option value="panchayat">Panchayat</option>');
             } else if (selectedCat === 'private') {
                 typeCatCategory.append('<option value="">-----Select-----</option>');
                 typeCatCategory.append('<option value="pvt_school">Private School</option>');
@@ -711,14 +762,9 @@
 
             typeCatCategory.val(selectedType);
         }
-        $('.cat_of_nursery').on('change', function() {
-            populateTypeOfNursery();
-        });
 
-        $('.game_discipline').change(function(){
-            var selectedOption = $(this).val();
-            // alert(selectedOption);
-            $('.gender, .player_list').show();
+        function populateGameDisp() {
+           var selectedOption = $("#game_disp").val();
             if(selectedOption === "mix") {
                 $(".boys, .girls").show();
             }else if(selectedOption === "girls"){
@@ -728,6 +774,14 @@
                  $(".girls").hide();
                  $(".boys").show();
             }
+        }
+        $('.cat_of_nursery').on('change', function() {
+            populateTypeOfNursery();
+        });
+
+        $('.game_discipline').change(function(){
+            $('.gender, .player_list').show();
+           populateGameDisp();
         });
         $('.playground_nursery').change(function(){
               
@@ -773,7 +827,15 @@
                 }else{
                     $(".game_previous, .discipline_previous, .year_allotment").hide();
                 }
-        });           
+        });   
+         $('.type_of_nursery').change(function(){
+                var selectedOption = $(this).val();
+                if(selectedOption === 'panchayat'){
+                    $(".panchayat_media").show();
+                }else{
+                    $(".panchayat_media").hide();
+                }
+          })        
            
 
   
@@ -847,15 +909,15 @@
                             return false;
                         }
                     }else if (step == "step3") {
-                            if(response.status == 'success'){
-                                $(".loader").hide();
-                                $("#step3").hide();
-                                $("#step4").show();
-                              
-                            }else{
-                                Swal.fire(response.message, '', 'error');
-                                return false;
-                            }
+                        if(response.status == 'success'){
+                            $(".loader").hide();
+                            $("#step3").hide();
+                            $("#step4").show();
+                        }else{
+                            Swal.fire(response.message, '', 'error');
+                            return false;
+                        }
+                        
 
                     }else if(step == "step4"){
                       
@@ -867,7 +929,7 @@
 
                                 if (result.isConfirmed) {
 
-                                   window.location.href = '/';
+                                   window.location.reload();
                                 }
                             });
                             return false;
