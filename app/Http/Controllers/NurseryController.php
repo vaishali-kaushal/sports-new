@@ -408,6 +408,18 @@ class NurseryController extends Controller
     public function saveNurseryDetails(Request $request)
     {
 
+        // // Retrieve the last application number from the database
+        // $last_application_number = Nursery::latest()->first();
+        // // Extract the last number part from the application number
+        // $last_number = 0;
+        // if ($last_application_number) {
+        //     $last_number = (int)substr($last_application_number->application_number, -6);
+        // }
+
+        // // Increment the last number by 1 and pad it with leading zeros to ensure it's 6 digits long
+        // $new_number = str_pad($last_number + 1, 6, "0", STR_PAD_LEFT);
+        // // dd($new_number);
+
         // dd($request->all());
 
         $secure_id = bin2hex(random_bytes(16));

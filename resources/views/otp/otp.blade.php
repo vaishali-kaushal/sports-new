@@ -52,10 +52,10 @@
                                 </div>
                                 <div class="d-flex width-100 justify-content-end">
                                     <a class="btn btn-danger mr-2 ml-2"
-                                        href="{{ url('login/otp/resendotp') . '/' . $token }}">Rsend OTP</a>
+                                        href="{{ url('login/otp/resendotp') . '/' . $token }}">Resend OTP</a>
                                     &nbsp;
                                     &nbsp;
-                                    <button type="submit" class="btn btn-danger ">verify OTP</button>
+                                    <button type="submit" class="btn btn-danger ">Verify OTP</button>
 
                                 </div>
                                 <div class="text-center">

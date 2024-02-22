@@ -80,7 +80,7 @@ class NurseryUserController extends Controller
     public function viewNursery()
     {
         $user_mobile = Auth::user()->mobile;
-        $nursery = Nursery::with(['nurseryMedias','CoachQualification'])->where('mobile_number', $user_mobile)->where('final_status',1)->first();
+        $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('mobile_number', $user_mobile)->where('final_status',1)->first();
         $playground_images = []; 
         $equipment_images = []; 
         $player_list_images = []; 
@@ -232,7 +232,8 @@ class NurseryUserController extends Controller
             }
 
             if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
-                $nursery = NurseryMedia::updateOrInsert(
+                // dd($request->playground_images);
+                $playground_images = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
                     ],
@@ -245,7 +246,7 @@ class NurseryUserController extends Controller
                 // dd($currentsavedNursery->id);
             }
             if(!empty($equipmentfiles) && count($equipmentfiles) === 3 && $request->equipment_related_to_selected_games_available == 'yes'){
-                $nursery = NurseryMedia::updateOrInsert(
+                $equipment_images = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
                     ],
@@ -259,7 +260,7 @@ class NurseryUserController extends Controller
             }
 
             if(!empty($request->player_list)){
-                 $nursery = NurseryMedia::updateOrInsert(
+                 $player_list = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
                     ],
@@ -273,7 +274,7 @@ class NurseryUserController extends Controller
             }
 
             if(!empty($request->coach_certificate)  && $request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
-                $nursery = NurseryMedia::updateOrInsert(
+                $coach_certificate = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
                     ],
@@ -285,7 +286,7 @@ class NurseryUserController extends Controller
                 );
             }
             if(!empty($request->panchayat_certificate)  && $request->type_of_nursery == 'panchayat'){
-                $nursery = NurseryMedia::updateOrInsert(
+                $panchayat_certificate = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
                     ],

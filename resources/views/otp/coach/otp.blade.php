@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="d-flex width-100 justify-content-end">
                                     <a class="btn btn-danger mr-2 ml-2"
-                                        href="{{ url('login/coach/otp/resendotp') . '/'. $mobile->secure_id  }}">Rsend OTP</a>
+                                        href="{{ url('login/coach/otp/resendotp') . '/'. $mobile->secure_id  }}">Resend OTP</a>
                                     &nbsp;
                                     &nbsp;
                                     <button type="submit" class="btn btn-danger ">verify OTP</button>

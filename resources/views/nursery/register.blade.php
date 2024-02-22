@@ -1477,12 +1477,12 @@ dd($errors);
                                 Swal.fire('Percentage number should be less than 100', '', 'error');
                                 return false;
                             }
-                        var boys = parseInt($("#boys").val());
-                        var girls = parseInt($("#girls").val());
-                        if(boys + girls > 25 || boys > 25 || girls > 25){
-                            Swal.fire('Boys and girls total count should be less than or equal to 25', '', 'error');
-                            return false;
-                        }
+                        // var boys = parseInt($("#boys").val());
+                        // var girls = parseInt($("#girls").val());
+                        // if(boys + girls > 25 || boys > 25 || girls > 25){
+                        //     Swal.fire('Boys and girls total count should be less than or equal to 25', '', 'error');
+                        //     return false;
+                        // }
 
                     }
                         if(step == "step4"){

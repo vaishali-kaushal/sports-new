@@ -44,12 +44,24 @@
                             <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Application Id</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->application_number ?? '' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
                                         <label for="exampleInputEmail1">District</label>
                                     </div>
                                     <div class="col-sm-6">
                                         <div>{{ $nursery->district->name }}</div>
                                     </div>
                                 </div>
+                               
+                            </div>
+
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Category of Nursery</label>
@@ -58,17 +70,24 @@
                                         <div>{{ ucfirst($nursery->cat_of_nursery) }}</div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Type of Nursery</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div>{{ ucfirst($nursery->type_of_nursery) }}</div>
+                                        @if($nursery->cat_of_nursery == 'private')
+                                            @if($nursery->type_of_nursery == 'pvt_institute')
+                                                <div>Private Institute</div>
+                                            @elseif($nursery->type_of_nursery == 'pvt_school')
+                                                <div>Private School</div>
+                                            @endif
+                                        @else
+                                        <div> {{ ucfirst($nursery->type_of_nursery)}}</div>
+                                        @endif
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label for="exampleInputEmail1">Educational  Center</label>
@@ -77,8 +96,6 @@
                                         <div>{{ $nursery->name_of_nursery ?? '' }}</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Name of Head/Principal</label>
@@ -87,6 +104,8 @@
                                         <div>{{ $nursery->head_pricipal ?? '' }}</div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Email</label>
@@ -95,8 +114,6 @@
                                         <div>{{ $nursery->email ?? '' }}</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Registration No.</label>
@@ -105,6 +122,8 @@
                                         <div>{{ $nursery->reg_no_running_nursery ?? '' }}</div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Pin Code</label>
@@ -113,8 +132,6 @@
                                         <div>{{ $nursery->pin_code ?? '' }}</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
 
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">

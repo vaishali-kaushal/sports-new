@@ -380,7 +380,7 @@
                                                     <select class="form-control" name="game_previous_id" id="game_previous_id">
                                                     <option value="">-----Select-----</option>
 
-                                                        @foreach ($games as $game) { ?>
+                                                        @foreach ($games as $game)
                                                         <option value="{{$game['id']}}" @if($game['id'] == $nursery->game_previous_id) selected @endif>{{$game['name']}}</option>
                                                         @endforeach
                                                     </select>
@@ -520,7 +520,7 @@
                                             </div>
                                             <div class="col-sm-6 mb-3 player_list" id="player_list" @if(empty($nursery->game_disp)) style="display: none;" @endif>
                                                 <label class="form-label">Attach list of players with achievement <span class='star'>File Type (.jpg, .png, .jpeg, .csv only) Max Upload Size (100 KB) *</span></label>
-                                                <div id="playerListDropzonee" class="dropzone">
+                                                <div id="playerListDropzone" class="dropzone">
                                                     <div class="dz-message" data-dz-message>
                                                       <span>Drop file here or click to upload.</span>
                                                     </div>
@@ -623,7 +623,7 @@
         let equipmentDropzone = initDropzone("#equipmentDropzone", "equipmentfile", "#equipmentmessage", "#equipment_images", 3, 0.3, 'jpg', 'jpeg', 'png');
 
         // Initialize Dropzone for player list
-        let playerListDropzone = initDropzone("#playerListDropzonee", "playerListFile", "#playerlistmessage", "#player_list_file", 1, 0.1, 'jpg', 'jpeg', 'png', 'csv');
+        let playerListDropzone = initDropzone("#playerListDropzone", "playerListFile", "#playerlistmessage", "#player_list_file", 1, 0.1, 'jpg', 'jpeg', 'png', 'csv');
         
         // Initialize Dropzone for player list
         let coachCertificateDropzone = initDropzone("#coachCertificateDropzone", "coachCertificateFile", "#coachcertificatemessage", "#coach_certificate", 1, 0.1, 'jpg', 'jpeg', 'png');
@@ -633,7 +633,7 @@
 
         // Function to initialize Dropzone
         function initDropzone(dropzoneId, paramName, messageSelector, imagesInputSelector, maxFiles, maxFileSize, ...validFiles) {
-            console.log(dropzoneId,"sdad")
+            console.log(dropzoneId,maxFiles,"sdad")
             let acceptedFiles = validFiles.map(element => '.'+element);
             let validationError = false
 
