@@ -23,6 +23,9 @@ use App\Http\Controllers\NurseryUserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
 
 Route::get('/', [LoginController::class, 'index'])->name('login');
 Route::get('login/otp/{id}', [LoginController::class, 'loginOtp']);
