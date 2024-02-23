@@ -135,3 +135,4 @@ Route::get('logout/', [LoginController::class, 'logout']);
 Route::get('player', [AtendanceController::class, 'index']);
 Route::get('general_instructions', [NurseryController::class, 'generalInstructions'])->name('general_instructions');
 Route::get('get-nursery-data', [NurseryController::class, 'getnurseryData'])->name('getnurseryData');
+Route::get('dashboard-mis', [NurseryController::class, 'dashboardMis'])->name('dashboardMIS');

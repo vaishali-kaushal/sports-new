@@ -21,6 +21,8 @@
                 </div>
                 <div class="col-sm-6 text-right">
                     <!-- p -->
+                            <!-- <div class="text-right"><strong>{{ $nursery['application_number'] ?? '' }}</strong></div> -->
+
                 </div>
             </div>
         </div>

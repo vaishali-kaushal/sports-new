@@ -402,14 +402,6 @@
                                         <option value="no">No</option>
                                     </select>
                                 </div> 
-                                <div class="col-sm-12">
-                                    <label class="form-label">Nursery Recommendations</label>
-                                    <select class="form-control recommended" name="recommend_status">
-                                        <option value="">-----Select-----</option>
-                                        <option value="yes">Recommended for Approval</option>
-                                        <option value="no">Not Recommended</option>
-                                    </select>
-                                </div>
                                 <div class="col-sm-12 mb-3">
                                     <label class="form-label">Upload Photographs</label>
                                     <input type="file" class="form-control" name="pics[]" multiple="multiple">
@@ -467,15 +459,23 @@
 
 
                                 </div>
-                                 <div class="col-sm-12 ml-3">
-                                    <input type="checkbox" class="form-check-input" name="">
-                                    <label class="form-label">I have checked the contents of the applications and have visited the site physically. I certified that the details and the photographs attached belongs to the site. </label>
-                                </div>
                                 <div class="col-sm-12 pb-2">
                                     <label class="form-label">Remarks </label>
                                     <textarea class="form-control" name="remarks" {{!empty($nursery['remarks'])?"disabled":"" }}>{{!empty($nursery['remarks'])?$nursery['remarks']:"" }}</textarea>
                                 </div>
 
+                                <div class="col-sm-12">
+                                    <label class="form-label">Nursery Recommendations</label>
+                                    <select class="form-control recommended" name="recommend_status">
+                                        <option value="">-----Select-----</option>
+                                        <option value="yes">Recommended for Approval</option>
+                                        <option value="no">Not Recommended</option>
+                                    </select>
+                                </div>
+                                 <div class="col-sm-12 ml-3">
+                                    <input type="checkbox" class="form-check-input" name="">
+                                    <label class="form-label">I have checked the contents of the applications and have visited the site physically. I certified that the details and the photographs attached belongs to the site. </label>
+                                </div>
 
 
                             </div>

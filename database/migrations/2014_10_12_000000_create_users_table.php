@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('district_id')->nullable();
             $table->integer('email_verified_at')->default(0);
             $table->integer('mobile_verified_at')->default(0);
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

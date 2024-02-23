@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sports Department</title>
+    <title>Department of Sports, Haryana</title>
     <link href="{{asset('forntend/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('forntend/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('forntend/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">

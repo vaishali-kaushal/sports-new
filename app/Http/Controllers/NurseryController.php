@@ -777,6 +777,11 @@ class NurseryController extends Controller
         }
     }
 
+    public function dashboardMis()
+    {
+        return view('dashboardmis');
+    }
+
 
 
 
