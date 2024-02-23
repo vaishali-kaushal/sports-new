@@ -48,7 +48,7 @@
                                     <?php
                                     $i = 1;
                                     foreach ($nurserys as $nn) {
-                                        $n = $nn['nursery'];
+                                        $n = $nn['nursery'] ?? '';
 // echo"<pre>";
 //                                         print_r($nn);
 //                                         print_r();
@@ -59,16 +59,16 @@
                                             <?= $i++ ?>
                                         </td>
                                         <td>
-                                            <?= $n['name_of_nursery'] ?>
+                                            <?= $n['name_of_nursery'] ?? '' ?>
                                         </td>
                                         <td>
-                                            <?= $n['email'] ?>
+                                            <?= $n['email'] ?? '' ?>
                                         </td>
                                         <td>
-                                            <?= $n['district']['name'] ?>
+                                            <?= $n['district']['name'] ?? '' ?>
                                         </td>
                                         <td>
-                                            <?= $n['game']['name'] ?>
+                                            <?= $n['game']['name']  ?? ''?>
                                         </td>
                                         <td>
                                             <?php if($n['nursery_status']['approved_reject_by_dso'] == 0)

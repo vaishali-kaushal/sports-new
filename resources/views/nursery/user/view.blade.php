@@ -79,8 +79,12 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <div class="card-header">
-                            <h4 class="card-title">Application Detail</h4>
+                     
+                            <div class="card-header">
+                                <h4 class="card-title">Application Detail</h4>
+                            <div class="text-right"><strong>{{ $nursery->application_number ?? '' }}</strong></div>
+
+                            
                         </div>
 
                         <div class="card-body">
@@ -375,7 +379,8 @@
                             </div>
                              <hr>
                             <div>
-                                <h3>Documents</h3>
+                                <h3>Documents Uploaded</h3>
+                                <span>Click on below links to view attached documents</span>
                             </div>
                             <div>
                                 <div class="row mt-3">
@@ -384,13 +389,13 @@
                                             <h5>Playground Images</h5>
                                         </div>
                                         <!-- <div class="image-group" id="playgroundImages"> -->
-                                            @foreach($playground_images as $p)
+                                            @foreach($playground_images as $key => $p)
                                             <div class="col-sm-12 pb-2">
                                                 <!-- <a href="{{ $p['complete_path'] }}" target="_blank"><img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;"></a> -->
-                                                 @php
+                                                @php
                                                     $path = explode('playground_images/', $p['path']);
                                                 @endphp
-                                                <a href="{{ $p['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
+                                                <a href="{{ $p['complete_path'] }}" target="_blank">Playground Image {{ $key+1}}</a>
 
                                             </div>
                                             @endforeach
@@ -407,13 +412,13 @@
                                             <h5>Equipment Images</h5>
                                         </div>
                                         <!-- <div class="image-group" id="equipmentImages"> -->
-                                            @foreach($equipment_images as $p)
+                                            @foreach($equipment_images as $key => $p)
                                             <div class="col-sm-12 pb-2">
                                                 <!-- <a href="{{ $p['complete_path'] }}" target="_blank"><img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;"></a> -->
                                                 @php
                                                     $path = explode('equipment_images/', $p['path']);
                                                 @endphp
-                                                <a href="{{ $p['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
+                                                <a href="{{ $p['complete_path'] }}" target="_blank">Equipment Image {{ $key+1}}</a>
 
                                             </div>
                                             @endforeach
@@ -435,7 +440,7 @@
                                                 @php
                                                     $path = explode('player_list_files/', $player_list_images['path']);
                                                 @endphp
-                                                <a href="{{ $player_list_images['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
+                                                <a href="{{ $player_list_images['complete_path'] }}" target="_blank">Player List</a>
                                             </div>
                                             <div class="preview-container" id="previewContainerPlayerlist">
                                                 <span class="close-preview" onclick="closePreview('Playerlist')">×</span>
@@ -455,7 +460,7 @@
                                                 @php
                                                     $path = explode('coach_certificate_files/', $coach_certificate_images['path']);
                                                 @endphp
-                                                <a href="{{ $coach_certificate_images['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
+                                                <a href="{{ $coach_certificate_images['complete_path'] }}" target="_blank">Coach Certificate</a>
                                             </div>
                                       @endif
                                 </div>
@@ -469,7 +474,7 @@
                                                 $path = explode('panchayat_certificate_files/',$panchayat_certificate_images['path']);
                                             @endphp
                                             <!-- <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank"><img src="{{ $panchayat_certificate_images['complete_path'] }}" class="" style="width: 100px;"></a> -->
-                                                <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
+                                                <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank">Panchayat Certificate</a>
                                         </div>
                                       @endif
                                 </div>

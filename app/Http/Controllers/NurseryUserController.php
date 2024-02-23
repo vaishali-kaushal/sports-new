@@ -114,7 +114,7 @@ class NurseryUserController extends Controller
             }
         }
 
-        // dd($player_list_images);
+        // dd($playground_images);
         $districts = District::get()->toArray();
         $games = Game::get()->toArray();
         $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();

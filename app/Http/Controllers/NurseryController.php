@@ -30,6 +30,7 @@ class NurseryController extends Controller
     public function index($status = 0)
     {
         $nursery  = NurseryApplicationStatus::where('district_id', Auth::user()->district_id)->where('approved_reject_by_dso', 0)->where('approved_by_admin_or_reject_by_admin', 0)->with('nursery')->get()->toArray();
+        
         return view('nursery.list', ['layout' => 'dso.layouts.app', 'nurserys' => $nursery]);
     }
     public function pendingApproval()

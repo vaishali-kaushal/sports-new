@@ -323,8 +323,8 @@
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
                                     <th scope="col">Remarks</th>
-                                    <th scope="col">Grade</th>
-                                    <th scope="col">Files</th>
+                                    <th scope="col">Photographs</th>
+                                    <!-- <th scope="col">Inspection Report</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -333,9 +333,6 @@
                                         <th scope="row">{{$key+1}}</th>
                                         <td>{{$remark['user']['name']}}</td>
                                         <td>{{ $remark['remarks']}}</td>
-                                        <td>{{ (!empty($remark['grade'])&& !is_null($remark['grade'])
-                                            )?$remark['grade']:'N/A' }}</td>
-
                                         <td>
                                             @if (!empty($remark['files']) && !is_null($remark['files']))
                                                 @php
@@ -355,6 +352,7 @@
                                                 @endif
                                             @endif
                                         </td>
+                                        <!-- <td></td> -->
                                     </tr>
                                 @endforeach
                             </tbody>fma
