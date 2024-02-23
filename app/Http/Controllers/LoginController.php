@@ -62,7 +62,7 @@ class LoginController extends Controller
         }
 
         return back()->withErrors([
-            'otp' => 'The Otp Is not valid',
+            'otp' => 'The OTP Is not valid',
         ])->onlyInput('email');
     }
     public function resendotp($id, Request $request)

@@ -114,7 +114,7 @@ class NurseryUserController extends Controller
             }
         }
 
-        // dd($coach_certificate_images);
+        // dd($player_list_images);
         $districts = District::get()->toArray();
         $games = Game::get()->toArray();
         $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
@@ -318,7 +318,7 @@ class NurseryUserController extends Controller
                 ]);
                 if($user){
                     return response()->json(['status' => 'success','message' => 'Your application is submitted successfully.     
-                            You can edit your application till 10-02-2024, after which it will be considered final.']);
+                            You can edit your application till 26-02-2024, 6:00 PM, after which it will be considered final.']);
 
                 }else{
                     // die("f");

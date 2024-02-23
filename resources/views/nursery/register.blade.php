@@ -247,15 +247,16 @@ dd($errors);
                               
                                 <form class="fontsize fw-bolder" method="post" name="form" id="nursery-registration-form"
                                     enctype="multipart/form-data">
+                                    <input type="hidden" name="application_number" id="application_number">
                                     @csrf
                                     <div class="col-sm-4">
                                     </div>
                                     <div class="row" id="step1">
                                          <div class="col-sm-12">
-                                <h2 class="heading2 text-center pt-4">
-                                Application for Sports Nursery
-                                </h2>
-                            </div>
+                                        <h2 class="heading2 text-center pt-4">
+                                        Application for Sports Nursery
+                                        </h2>
+                                    </div>
                                         <div class="col-sm-4">
                                         </div>
                                         <div class="col-sm-4">
@@ -826,7 +827,7 @@ dd($errors);
                                                     <button type="button" class="btn btn-primary"
                                                         onclick="prevStep()">Previous</button>
                                                     <button type="button" class="btn btn-danger" id="final_submit"
-                                                        onclick="saveNurseryDetails('step4')">Next</button>
+                                                        onclick="saveNurseryDetails('step4')">Submit</button>
                                                 </div>
                                             </div>
 
@@ -948,7 +949,7 @@ dd($errors);
     function initDropzone(dropzoneId, paramName, messageSelector, imagesInputSelector, maxFiles, maxFileSize, ...validFiles) {
         let acceptedFiles = validFiles.map(element => '.'+element);
         let validationError = false
-
+        let app_number = $("#application_number").val();
         return new Dropzone(dropzoneId, {
             ...commonOptions,
             maxFilesize: maxFileSize, // MB
@@ -958,6 +959,7 @@ dd($errors);
             dictFileTooBig: "File is too big. Max filesize: "+maxFileSize* 1000+"KB.",
             dictMaxFilesExceeded: "You can only upload up to " + maxFiles + " files.",
             dictInvalidFileType: "Invalid file type. Only "+validFiles.toString()+" files are allowed.",
+            application_number: app_number,
             sending: function (file, xhr, formData) {
                 $(messageSelector).text('File Uploading...');
             },
@@ -1245,6 +1247,7 @@ dd($errors);
                         // $("#step1, .btnDiv, .submit-mbtn ").hide();
                         var nursery = response.isRecordExist;
                         if (nursery != null) {
+                            // $('input[name="application_number"]').val(nursery.application_number);
                             $('select[name="district_id"]').val(nursery.district_id);
                             $('select[name="cat_of_nursery"]').val(nursery.cat_of_nursery);
                             $('#cat_of_nursery').trigger('change');
@@ -1509,7 +1512,8 @@ dd($errors);
                     // $('input, select, textarea').removeClass('is-invalid is-valid').addClass('is-valid');
                     if(step == "step2") {
                         if (response.status == 'success') {
-                        var nursery = response.isRecordExist;
+                            var nursery = response.isRecordExist;
+                            console.log(nursery,"nnnn")
                         if (nursery != null) {
                             $('input[name="head_pricipal"]').val(nursery.head_pricipal);
                             $('input[name="email"]').val(nursery.email);
@@ -1546,7 +1550,6 @@ dd($errors);
                             $('select[name="game_disp_previous"]').val(nursery.game_descipline_previous);
                             $('select[name=any_specific_achievements_of_the_institute_during_last]').val(nursery.any_specific_achievements_of_the_institute_during_last);
                             }
-
                             $("#step2").hide();
                             $("#step3").show();
                         } else {
@@ -1557,6 +1560,9 @@ dd($errors);
                         }
                     }else if(step == "step3") {
                         if(response.status == 'success'){
+                             var nursery = response.isRecordExist;
+                            $('input[name="application_number"]').val(nursery.application_number);
+
                             $("#step3").hide();
                             $("#step4").show();
                             // Swal.fire({title: response.message,

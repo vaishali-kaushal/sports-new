@@ -23,10 +23,10 @@
                             <img src="{{ url('public/forntend') }}/images/department-logo.png" alt="sports department"
                                 width="120px">
                         </div>
-                        <h1 class="text-white mt-3">NURSERY MANAGEMENT SYSTEM <span>Department of Sports & Youth
-                                Affairs,
-                                Haryana</span></h1>
+                        <h1 class="text-white mt-3">Department of Sports Haryana <span>NURSERY MANAGEMENT SYSTEM</span></h1>
                         <div class="login-form w-100 px-5 pt-4">
+                              <h1 class="text-white mt-3 text-center">Login Page</h1>
+
                             <form action="{{ url('login/otp/verify/') . '/' . $token }}" method="post">
                                 @csrf
                                 <div class="row">
@@ -35,12 +35,9 @@
                                     </div>
                                 </div>
 
-                                <div class="mb-3">
+                                <div class="mt-5">
 
-
-                                    {{--  <label class="form-label ">{{ $msg }} </label>  --}}
-
-                                    <label class="form-label ">OTP : -</label>
+                                    <label class="form-label ">Enter your OTP</label>
                                     <input type="password" pattern="[0-9]+" maxlength="6" class="form-control"
                                         name="otp">
 
@@ -50,7 +47,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="d-flex width-100 justify-content-end">
+                                <div class="d-flex width-100 mt-3 justify-content-end">
                                     <a class="btn btn-danger mr-2 ml-2"
                                         href="{{ url('login/otp/resendotp') . '/' . $token }}">Resend OTP</a>
                                     &nbsp;

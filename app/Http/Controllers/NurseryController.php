@@ -496,8 +496,7 @@ class NurseryController extends Controller
                 ]);
                 // dd($updateThirdStep);
                 if($updateThirdStep) {
-                        return response()->json(['status' => 'success', 'message' => 'Your application is submitted successfully.     
-                            You can edit your application till 10-02-2024, after which it will be considered final. To view your application or status, please login again.']);
+                        return response()->json(['status' => 'success', 'message' => 'step3 saved','isRecordExist' => $isRecordExist]);
                 }else {
                     return response()->json(['status' => 'error','message' => 'Error saving gaming Details: Unknown error']);
                 }
@@ -619,7 +618,7 @@ class NurseryController extends Controller
                     RoleType::create(['user_id'=>$user->id,'role_id'=>'5']);
 
                     return response()->json(['status' => 'success','message' => 'Your application is submitted successfully.     
-                            You can edit your application till 10-02-2024, after which it will be considered final. To view your application or status, please login again.']);
+                            You can edit your application till 26-02-2024, 6:00 PM, after which it will be considered final. To view your application or status, please login again.']);
 
                 }else{
                     // die("f");
@@ -721,6 +720,7 @@ class NurseryController extends Controller
 
     public function NurseryFileUpload(Request $request)
     {
+        dd($request->all());
         $filePath = '';
         if ($request->hasFile('playgroundfile')) {
             $file = $request->file('playgroundfile');

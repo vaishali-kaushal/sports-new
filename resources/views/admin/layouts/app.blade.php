@@ -141,7 +141,7 @@
                 <img src="{{ url('public/forntend/images/department-logo.png') }}" alt="Sports"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <br>
-                <span class="brand-text font-weight-light" style="font-size: 15px;">NURSERY MANAGEMENT SYSTEM</span>
+                <span class="brand-text font-weight-light" style="font-size: 14px;">NURSERY MANAGEMENT SYSTEM</span>
             </a>
             <!-- Sidebar -->
             <div class="sidebar">

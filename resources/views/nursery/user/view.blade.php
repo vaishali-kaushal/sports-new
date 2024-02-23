@@ -380,11 +380,17 @@
                             <div>
                                 <div class="row mt-3">
                                      @if(!empty($playground_images))
-                                        <h5>Playground Images</h5>
-                                        <div class="image-group" id="playgroundImages">
+                                        <div class="row col-12">
+                                            <h5>Playground Images</h5>
+                                        </div>
+                                        <!-- <div class="image-group" id="playgroundImages"> -->
                                             @foreach($playground_images as $p)
-                                            <div class="col-sm-2 pb-2">
-                                                <img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;">
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $p['complete_path'] }}" target="_blank"><img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;"></a> -->
+                                                 @php
+                                                    $path = explode('playground_images/', $p['path']);
+                                                @endphp
+                                                <a href="{{ $p['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
 
                                             </div>
                                             @endforeach
@@ -392,16 +398,22 @@
                                                 <span class="close-preview" onclick="closePreview('Playground')">×</span>
                                                 <img src="" alt="Preview Image" class="preview-image" id="previewImageplayground">
                                             </div>
-                                        </div>
+                                        <!-- </div> -->
                                       @endif
                                 </div>
                                 <div class="row mt-3">
                                     @if(!empty($equipment_images))
-                                    <h5>Equipment Images</h5>
-                                        <div class="image-group" id="equipmentImages">
+                                        <div class="row col-12">
+                                            <h5>Equipment Images</h5>
+                                        </div>
+                                        <!-- <div class="image-group" id="equipmentImages"> -->
                                             @foreach($equipment_images as $p)
-                                            <div class="col-sm-2 pb-2">
-                                                <img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;">
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $p['complete_path'] }}" target="_blank"><img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('equipment_images/', $p['path']);
+                                                @endphp
+                                                <a href="{{ $p['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
 
                                             </div>
                                             @endforeach
@@ -409,16 +421,21 @@
                                             <span class="close-preview" onclick="closePreview('Equipment')">×</span>
                                             <img src="" alt="Preview Image" class="preview-image" id="previewImageEquipment">
                                             </div>
-                                        </div>
+                                        <!-- </div> -->
                                       @endif
                                 </div>
                                 <div class="row mt-3">
                                      @if(!empty($player_list_images))
-                                        <h5>Player List Document</h5>
+                                        <div class="row col-12">
+                                            <h5>Player List Document</h5>
+                                        </div>
                                         <div class="image-group" id="playerListImages">
-                                            <div class="col-sm-2 pb-2">
-                                                <img src="{{ $player_list_images['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;">
-
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $player_list_images['complete_path'] }}" target="_blank"><img src="{{ $player_list_images['complete_path'] }}" class="thumbnail" data-src="{{ $player_list_images['complete_path'] }}" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('player_list_files/', $player_list_images['path']);
+                                                @endphp
+                                                <a href="{{ $player_list_images['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
                                             </div>
                                             <div class="preview-container" id="previewContainerPlayerlist">
                                                 <span class="close-preview" onclick="closePreview('Playerlist')">×</span>
@@ -430,22 +447,30 @@
                                 </div>
                                 <div class="row mt-3">
                                      @if(!empty($coach_certificate_images))
-                                        <h5>Coach Certificate</h5>
-
-                                            <div class="col-sm-2 pb-2">
-                                                <img src="{{ $coach_certificate_images['complete_path'] }}" class="Playground Image" style="width: 100px;">
-
+                                        <div class="row col-12">
+                                            <h5>Coach Certificate</h5>
+                                        </div>
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $coach_certificate_images['complete_path'] }}" target="_blank"><img src="{{ $coach_certificate_images['complete_path'] }}" class="" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('coach_certificate_files/', $coach_certificate_images['path']);
+                                                @endphp
+                                                <a href="{{ $coach_certificate_images['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
                                             </div>
                                       @endif
                                 </div>
                                 <div class="row">
                                      @if(!empty($panchayat_certificate_images))
-                                        <h5>Panchayat Certificate</h5>
-
-                                            <div class="col-sm-2 pb-2">
-                                                <img src="{{ $panchayat_certificate_images['complete_path'] }}" class="Playground Image" style="width: 100px;">
-
-                                            </div>
+                                        <div class="row col-12">
+                                            <h5>Panchayat Certificate</h5>
+                                        </div>
+                                        <div class="col-sm-12 pb-2">
+                                            @php
+                                                $path = explode('panchayat_certificate_files/',$panchayat_certificate_images['path']);
+                                            @endphp
+                                            <!-- <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank"><img src="{{ $panchayat_certificate_images['complete_path'] }}" class="" style="width: 100px;"></a> -->
+                                                <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank">{{ $path[1]}}</a>
+                                        </div>
                                       @endif
                                 </div>
                             </div>
@@ -491,7 +516,7 @@
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
- <script>
+<!--  <script>
   $(document).ready(function() {
        $(".thumbnail").click(function() {
             var imageUrl = $(this).data("src");
@@ -506,4 +531,4 @@
     function closePreview(group) {
         $("#previewContainer" + group).fadeOut();
     }
- </script>
+ </script> -->

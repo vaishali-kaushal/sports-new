@@ -22,7 +22,7 @@
             <div class="dept-logo text-center">
               <img src="{{url('public/forntend')}}/images/department-logo.png" alt="sports department" width="120px">
             </div>
-            <h1 class="text-white mt-3">NURSERY MANAGEMENT SYSTEM <span>Department of Sports Haryana</span></h1>
+            <h1 class="text-white mt-3">Department of Sports Haryana <span>NURSERY MANAGEMENT SYSTEM</span></h1>
             <div class="login-form w-100 px-5 pt-4">
               <h1 class="text-white mt-3 text-center">Login Page</h1>
               <form action="{{url('login/')}}" method="post">
