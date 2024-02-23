@@ -720,7 +720,7 @@ class NurseryController extends Controller
 
     public function NurseryFileUpload(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $filePath = '';
         if ($request->hasFile('playgroundfile')) {
             $file = $request->file('playgroundfile');
