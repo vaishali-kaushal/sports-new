@@ -6,6 +6,54 @@
     font-size: 1.1em; 
 }
 </style>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Background color */
+        }
+        .image-thumbnails {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .thumbnail {
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .thumbnail:hover {
+            transform: scale(1.1);
+        }
+        .preview-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            z-index: 999;
+            display: none;
+        }
+        .preview-image {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 10px;
+            filter: blur(5px); /* Add blur effect */
+        }
+        .close-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
 <div class="content-wrapper">
 
     <section class="content-header">
@@ -332,36 +380,52 @@
                             <div>
                                 <div class="row mt-3">
                                      @if(!empty($playground_images))
-                                    <h5>Playground Images</h5>
-
-                                       @foreach($playground_images as $p)
+                                        <h5>Playground Images</h5>
+                                        <div class="image-group" id="playgroundImages">
+                                            @foreach($playground_images as $p)
                                             <div class="col-sm-2 pb-2">
-                                                <img src="{{ $p['complete_path'] }}" class="Playground Image" style="width: 100px;">
+                                                <img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;">
 
                                             </div>
-                                        @endforeach
+                                            @endforeach
+                                            <div class="preview-container" id="previewContainerplayground">
+                                                <span class="close-preview" onclick="closePreview('Playground')">×</span>
+                                                <img src="" alt="Preview Image" class="preview-image" id="previewImageplayground">
+                                            </div>
+                                        </div>
                                       @endif
                                 </div>
                                 <div class="row mt-3">
-                                     @if(!empty($equipment_images))
+                                    @if(!empty($equipment_images))
                                     <h5>Equipment Images</h5>
-
-                                       @foreach($equipment_images as $p)
+                                        <div class="image-group" id="equipmentImages">
+                                            @foreach($equipment_images as $p)
                                             <div class="col-sm-2 pb-2">
-                                                <img src="{{ $p['complete_path'] }}" class="Playground Image" style="width: 100px;">
+                                                <img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;">
 
                                             </div>
-                                        @endforeach
+                                            @endforeach
+                                           <div class="preview-container" id="previewContainerEquipment">
+                                            <span class="close-preview" onclick="closePreview('Equipment')">×</span>
+                                            <img src="" alt="Preview Image" class="preview-image" id="previewImageEquipment">
+                                            </div>
+                                        </div>
                                       @endif
                                 </div>
                                 <div class="row mt-3">
                                      @if(!empty($player_list_images))
                                         <h5>Player List Document</h5>
-
+                                        <div class="image-group" id="playerListImages">
                                             <div class="col-sm-2 pb-2">
-                                                <img src="{{ $player_list_images['complete_path'] }}" class="Playground Image" style="width: 100px;">
+                                                <img src="{{ $player_list_images['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;">
 
                                             </div>
+                                            <div class="preview-container" id="previewContainerPlayerlist">
+                                                <span class="close-preview" onclick="closePreview('Playerlist')">×</span>
+                                                <img src="" alt="Preview Image" class="preview-image" id="previewImagePlayerlist">
+                                            </div>
+                                        </div>
+                                      
                                       @endif
                                 </div>
                                 <div class="row mt-3">
@@ -425,4 +489,21 @@
 
 
 @endsection
- 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+ <script>
+  $(document).ready(function() {
+       $(".thumbnail").click(function() {
+            var imageUrl = $(this).data("src");
+            console.log(imageUrl,"imageUrl")
+            var groupId = $(this).closest('.image-group').attr('id');
+            console.log(groupId,"erwererwe")
+            $("#" + groupId.replace("Images", "Image")).attr("src", imageUrl);
+            $("#" + groupId.replace("Images", "Container")).fadeIn();
+        });
+    });
+
+    function closePreview(group) {
+        $("#previewContainer" + group).fadeOut();
+    }
+ </script>

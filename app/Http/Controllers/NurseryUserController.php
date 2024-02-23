@@ -195,7 +195,7 @@ class NurseryUserController extends Controller
                 return response()->json(['status' => 'error', 'message' => 'Error saving gaming Details: ' . $e->getMessage()]);
             }
 
-           } else if($request->step == "step4"){
+           }elseif($request->step == "step4"){
                 $currentsavedNursery = Nursery::where('mobile_number', $request->mobile_number)->first();
                 // dd($currentsavedNursery);
 
@@ -236,6 +236,7 @@ class NurseryUserController extends Controller
                 $playground_images = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
+                        'type' => "playground",
                     ],
                     [
                         'type' => "playground",
@@ -243,12 +244,14 @@ class NurseryUserController extends Controller
                         'updated_at'=>now()
                     ]
                 );
-                // dd($currentsavedNursery->id);
+                // dump($currentsavedNursery->id);
+                // dd($playground_images);
             }
             if(!empty($equipmentfiles) && count($equipmentfiles) === 3 && $request->equipment_related_to_selected_games_available == 'yes'){
                 $equipment_images = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
+                        'type' => "equipment",
                     ],
                     [
                         'type' => "equipment",
@@ -263,6 +266,7 @@ class NurseryUserController extends Controller
                  $player_list = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
+                        'type' => "player_list",
                     ],
                     [
                         'type' => "player_list",
@@ -277,6 +281,7 @@ class NurseryUserController extends Controller
                 $coach_certificate = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
+                        'type' => "coach_certificate",
                     ],
                     [
                         'type' => "coach_certificate",
@@ -289,6 +294,7 @@ class NurseryUserController extends Controller
                 $panchayat_certificate = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
+                        'type' => "panchayat_certificate",
                     ],
                     [
                         'type' => "panchayat_certificate",

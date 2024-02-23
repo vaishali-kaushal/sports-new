@@ -125,7 +125,7 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
         <!-- Main Sidebar Container -->
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
-            <a href="{{ url('admin/dashboard') }}" class="brand-link text-center">
+            <a href="#" class="brand-link text-center">
                 <img src="{{ url('public/forntend/images/department-logo.png') }}" alt="Sports"
                     class="brand-image img-circle elevation-3" style="opacity: .8">
                 <br>
