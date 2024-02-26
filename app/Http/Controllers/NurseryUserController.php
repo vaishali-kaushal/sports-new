@@ -457,6 +457,8 @@ class NurseryUserController extends Controller
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
             $file->storeAs($application_number.'/player_list_files', $fileName, 'public');
             $filePath = 'player_list_files/'.$fileName;
+            $nursery = Nursery::where('application_number',$application_number)->first();
+            $existingPlayerList = NurseryMedia::where('nursery_id', $nursery->id)->where('type','player_list')->delete();
         }elseif($request->hasFile('coachCertificateFile') && !empty($application_number)) {
             $file = $request->file('coachCertificateFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
