@@ -22,6 +22,7 @@ use App\Models\Otp;
 use App\Models\NurseryMedia;
 use App\Models\RoleType;
 use App\Models\CoachQualification;
+use Illuminate\Support\Facades\Storage;
 
 
 class NurseryUserController extends Controller
@@ -49,29 +50,35 @@ class NurseryUserController extends Controller
             switch ($nurseryMedia->type) {
                 case 'playground':
                     foreach(explode(',', $nurseryMedia->media_path) as $path){
-                        $complete_path = asset('storage/'.$path);
+                        $complete_path = asset('storage/'.$nursery->application_number.'/'.$path);
+                        $newPath = $nursery->application_number.'/'.$path;
                         array_push( $playground_images, ["path"=> $path, "complete_path"=>$complete_path]);
                     }
                     break;
                 case 'equipment':
                     foreach(explode(',', $nurseryMedia->media_path) as $path){
-                        $complete_path = asset('storage/'.$path);
+                        $complete_path = asset('storage/'.$nursery->application_number.'/'.$path);
+                        $newPath = $nursery->application_number.'/'.$path;
                         array_push( $equipment_images, ["path"=> $path, "complete_path"=>$complete_path]);
                     }
                     break;
                 case 'player_list':
-                    $player_list_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    $newPath = $nursery->application_number.'/'.$nurseryMedia->media_path;
+                    $player_list_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nursery->application_number.'/'.$nurseryMedia->media_path)];
                     break;
                 case 'coach_certificate':
-                    $coach_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    $newPath = $nursery->application_number.'/'.$nurseryMedia->media_path;
+                    $coach_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nursery->application_number.'/'.$nurseryMedia->media_path)];
                     break;
                 case 'panchayat_certificate':
-                    $panchayat_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    $newPath = $nursery->application_number.'/'.$nurseryMedia->media_path;
+                    $panchayat_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nursery->application_number.'/'.$nurseryMedia->media_path)];
                     break;
                 default:
                     break;
             }
         }
+        // dd($equipment_images);
 
         return view('nursery.user.mynursery',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images]);
 
@@ -86,28 +93,29 @@ class NurseryUserController extends Controller
         $player_list_images = []; 
         $coach_certificate_images = []; 
         $panchayat_certificate_images = []; 
+
         foreach ($nursery['nurseryMedias'] as $nurseryMedia) {
             switch ($nurseryMedia->type) {
                 case 'playground':
                     foreach(explode(',', $nurseryMedia->media_path) as $path){
-                        $complete_path = asset('storage/'.$path);
+                        $complete_path = asset('storage/'.$nursery->application_number.'/'.$path);
                         array_push( $playground_images, ["path"=> $path, "complete_path"=>$complete_path]);
                     }
                     break;
                 case 'equipment':
                     foreach(explode(',', $nurseryMedia->media_path) as $path){
-                        $complete_path = asset('storage/'.$path);
+                        $complete_path = asset('storage/'.$nursery->application_number.'/'.$path);
                         array_push( $equipment_images, ["path"=> $path, "complete_path"=>$complete_path]);
                     }
                     break;
                 case 'player_list':
-                    $player_list_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    $player_list_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nursery->application_number.'/'.$nurseryMedia->media_path)];
                     break;
                 case 'coach_certificate':
-                    $coach_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    $coach_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nursery->application_number.'/'.$nurseryMedia->media_path)];
                     break;
                 case 'panchayat_certificate':
-                    $panchayat_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nurseryMedia->media_path)];
+                    $panchayat_certificate_images = ["path"=> $nurseryMedia->media_path, "complete_path"=> asset('storage/'.$nursery->application_number.'/'.$nurseryMedia->media_path)];
                     break;
                 default:
                     break;
@@ -231,38 +239,44 @@ class NurseryUserController extends Controller
                     return response()->json(['status' => 'error','message' => 'Upload coach certificate']);
                 }
             }
-
-            if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
-                // dd($request->playground_images);
-                $playground_images = NurseryMedia::updateOrInsert(
-                    [
-                        'nursery_id' => $currentsavedNursery->id,
-                        'type' => "playground",
-                    ],
-                    [
-                        'type' => "playground",
-                        'media_path' => $request->playground_images[0],
-                        'updated_at'=>now()
-                    ]
-                );
-                // dump($currentsavedNursery->id);
-                // dd($playground_images);
+            if($request->playground_hall_court_available == 'yes'){
+                if(!empty($playgroundfiles) && count($playgroundfiles) === 3){
+                    // dd($request->playground_images);
+                    $playground_images = NurseryMedia::updateOrInsert(
+                        [
+                            'nursery_id' => $currentsavedNursery->id,
+                            'type' => "playground",
+                        ],
+                        [
+                            'type' => "playground",
+                            'media_path' => $request->playground_images[0],
+                            'updated_at'=>now()
+                        ]
+                    );
+                    // dump($currentsavedNursery->id);
+                    // dd($playground_images);
+                }
+            }else{
+                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->where('type','playground')->delete();
             }
-            if(!empty($equipmentfiles) && count($equipmentfiles) === 3 && $request->equipment_related_to_selected_games_available == 'yes'){
-                $equipment_images = NurseryMedia::updateOrInsert(
-                    [
-                        'nursery_id' => $currentsavedNursery->id,
-                        'type' => "equipment",
-                    ],
-                    [
-                        'type' => "equipment",
-                        'media_path' => $request->equipment_images[0],
-                        'updated_at'=>now()
-                    ]
-                );
-                
+            if($request->equipment_related_to_selected_games_available == 'yes'){
+                if(!empty($equipmentfiles) && count($equipmentfiles) === 3){
+                    $equipment_images = NurseryMedia::updateOrInsert(
+                        [
+                            'nursery_id' => $currentsavedNursery->id,
+                            'type' => "equipment",
+                        ],
+                        [
+                            'type' => "equipment",
+                            'media_path' => $request->equipment_images[0],
+                            'updated_at'=>now()
+                        ]
+                    );
+                    
+                }
+            }else{
+                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->where('type','equipment')->delete();
             }
-
             if(!empty($request->player_list)){
                 $file_paths = explode(',', $request->player_list);
     
@@ -285,48 +299,56 @@ class NurseryUserController extends Controller
               
                 }
             }
+            if($request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
+                if(!empty($request->coach_certificate)){
+                    $file_paths = explode(',', $request->coach_certificate);
+        
+                    $num_files = count($file_paths);
 
-            if(!empty($request->coach_certificate)  && $request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
-                $file_paths = explode(',', $request->coach_certificate);
-    
-                $num_files = count($file_paths);
-
-                if ($num_files > 1) {
-                    return response()->json(['status' => 'error','message' => 'You can upload only one file for Coach certificate.']);
-                } else {
-                    $coach_certificate = NurseryMedia::updateOrInsert(
-                        [
-                            'nursery_id' => $currentsavedNursery->id,
-                            'type' => "coach_certificate",
-                        ],
-                        [
-                            'type' => "coach_certificate",
-                            'media_path' => $request->coach_certificate,
-                            'updated_at'=>now()
-                        ]
-                    );
+                    if ($num_files > 1) {
+                        return response()->json(['status' => 'error','message' => 'You can upload only one file for Coach certificate.']);
+                    } else {
+                        $coach_certificate = NurseryMedia::updateOrInsert(
+                            [
+                                'nursery_id' => $currentsavedNursery->id,
+                                'type' => "coach_certificate",
+                            ],
+                            [
+                                'type' => "coach_certificate",
+                                'media_path' => $request->coach_certificate,
+                                'updated_at'=>now()
+                            ]
+                        );
+                    }
                 }
+            }else{
+                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->where('type','coach_certificate')->delete();
             }
-            if(!empty($request->panchayat_certificate)  && $request->type_of_nursery == 'panchayat'){
-                $file_paths = explode(',', $request->panchayat_certificate);
-    
-                $num_files = count($file_paths);
+            if($request->type_of_nursery == 'panchayat'){
+                if(!empty($request->panchayat_certificate)  && $request->type_of_nursery == 'panchayat'){
+                    $file_paths = explode(',', $request->panchayat_certificate);
+        
+                    $num_files = count($file_paths);
 
-                if ($num_files > 1) {
-                    return response()->json(['status' => 'error','message' => 'You can upload only one file for Panchayat Certificate.']);
-                } else {
-                    $panchayat_certificate = NurseryMedia::updateOrInsert(
-                        [
-                            'nursery_id' => $currentsavedNursery->id,
-                            'type' => "panchayat_certificate",
-                        ],
-                        [
-                            'type' => "panchayat_certificate",
-                            'media_path' => $request->panchayat_certificate,
-                            'updated_at'=>now()
-                        ]
-                    );
+                    if ($num_files > 1) {
+                        return response()->json(['status' => 'error','message' => 'You can upload only one file for Panchayat Certificate.']);
+                    } else {
+                        $panchayat_certificate = NurseryMedia::updateOrInsert(
+                            [
+                                'nursery_id' => $currentsavedNursery->id,
+                                'type' => "panchayat_certificate",
+                            ],
+                            [
+                                'type' => "panchayat_certificate",
+                                'media_path' => $request->panchayat_certificate,
+                                'updated_at'=>now()
+                            ]
+                        );
+                    }
                 }
+            }else{
+                NurseryMedia::where('nursery_id',$currentsavedNursery->id)->where('type','panchayat_certificate')->delete();
+
             }
                 
             $nurseryStatus = NurseryApplicationStatus::where('nursery_id', $currentsavedNursery->id)->update([
@@ -417,34 +439,46 @@ class NurseryUserController extends Controller
 
     public function NurseryFileUpload(Request $request)
     {
+        // dd($request->all(),"lklk");
         $filePath = '';
-        if ($request->hasFile('playgroundfile')) {
+        $application_number = $request->application_number;
+        if ($request->hasFile('playgroundfile') && !empty($application_number)) {
             $file = $request->file('playgroundfile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('playground_images', $fileName, 'public');
+            $file->storeAs($application_number.'/playground_images', $fileName, 'public');
             $filePath = 'playground_images/'.$fileName;
-        }elseif($request->hasFile('equipmentfile')) {
+        }elseif($request->hasFile('equipmentfile') && !empty($application_number)) {
             $file = $request->file('equipmentfile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('equipment_images', $fileName, 'public');
+            $file->storeAs($application_number.'/equipment_images', $fileName, 'public');
             $filePath = 'equipment_images/'.$fileName;
-        }elseif($request->hasFile('playerListFile')) {
+        }elseif($request->hasFile('playerListFile') && !empty($application_number )) {
             $file = $request->file('playerListFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('player_list_files', $fileName, 'public');
+            $file->storeAs($application_number.'/player_list_files', $fileName, 'public');
             $filePath = 'player_list_files/'.$fileName;
-        }elseif($request->hasFile('coachCertificateFile')) {
+        }elseif($request->hasFile('coachCertificateFile') && !empty($application_number)) {
             $file = $request->file('coachCertificateFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('coach_certificate_files', $fileName, 'public');
+            $file->storeAs($application_number.'/coach_certificate_files', $fileName, 'public');
             $filePath = 'coach_certificate_files/'.$fileName;
-        }elseif($request->hasFile('panchayatCertificateFile')) {
+        }elseif($request->hasFile('panchayatCertificateFile') && !empty($application_number)) {
             $file = $request->file('panchayatCertificateFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('panchayat_certificate_files', $fileName, 'public');
+            $file->storeAs($application_number.'/panchayat_certificate_files', $fileName, 'public');
             $filePath = 'panchayat_certificate_files/'.$fileName;
         }
         
         return $filePath;
+    }
+
+    public function NurseryFileRemove(Request $request)
+    {     
+        if ($request->filePath) {
+            if (Storage::exists('public/'.$request->application_number.'/'.$request->filePath)) {
+                Storage::delete('public/'.$request->application_number.'/'.$request->filePath);
+            }
+        }
+
     }
 }

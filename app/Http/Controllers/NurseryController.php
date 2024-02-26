@@ -408,31 +408,31 @@ class NurseryController extends Controller
 
     public function saveNurseryDetails(Request $request)
     {
-
-        // // Retrieve the last application number from the database
-        // $last_application_number = Nursery::latest()->first();
-        // // Extract the last number part from the application number
-        // $last_number = 0;
-        // if ($last_application_number) {
-        //     $last_number = (int)substr($last_application_number->application_number, -6);
-        // }
-
-        // // Increment the last number by 1 and pad it with leading zeros to ensure it's 6 digits long
-        // $new_number = str_pad($last_number + 1, 6, "0", STR_PAD_LEFT);
-        // // dd($new_number);
-
-        // dd($request->all());
-
-        $secure_id = bin2hex(random_bytes(16));
         // $updateStatus = Otp::where('mobile', $request->mobile_number)->update(['status'=> 0]);
-        $random_number = random_int(100000, 999999);
+        $isRecordExist = Nursery::where([['mobile_number', $request->mobile_number],['final_status', 0]])->first();
         $district_code = District::where('id', $request->district_id)->first();
         $current_year = date('Y');
-        if(!empty($district_code)){
-            $application_number = $current_year.$district_code->code.$random_number;
-        }
+        $checkNurseries = Nursery::get();
+        if(empty($isRecordExist)){
+            if(empty($checkNurseries)){
+                $random_number = 000001;
+                $application_number = $current_year.$district_code->code.$random_number;
+            }else{
+                $latest_application_number = Nursery::orderBy('id', 'desc')->value('application_number');
+                $last_six_digits = intval(substr($latest_application_number, -6)) + 1;
+                // Pad the incremented number back to six digits
+                $random_number = str_pad($last_six_digits, 6, '0', STR_PAD_LEFT);
+                // dd($random_number);
+                $application_number = $current_year.$district_code->code.$random_number;
+                $secure_id = bin2hex(random_bytes(16));
+            }
+        }else{
+                $application_number = $isRecordExist->application_number;
+                $secure_id = $isRecordExist->secure_id;
+
+        }    
         $data = $request->all();
-        $isRecordExist = Nursery::where([['mobile_number', $request->mobile_number],['final_status', 0]])->first();
+       
         if($request->step == "step2"){
             $this->validateSteps($data);
             try{
@@ -663,8 +663,7 @@ class NurseryController extends Controller
                 'email.email' => 'Please enter a valid email address.',
                 'email.required' => 'The email field is required.',
             ];
-        }
-        elseif($data['step'] == "step3"){
+        }elseif($data['step'] == "step3"){
 // dd($data);
             $rules =[
                 'game_id' => 'required',
@@ -690,16 +689,18 @@ class NurseryController extends Controller
             ];
 
             $messages =[];
-        }
-        // elseif($data['step'] == "step4"){
-        //     'playground_images' => $data['playground_hall_court_available'] == 'yes' ? 'required|array|max:3' : '',
-        //     'playground_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
-        //     'equipment_images' => $data['equipment_related_to_selected_games_available'] == 'yes' ? 'required|array|max:3' : '',
-        //     'equipment_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
-        //     'player_list' => 'required',//file
-        //     'player_list' => 'required|array|max:1',
+        }elseif($data['step'] == "step4"){
+            $rules = [
+            'playground_images' => $data['playground_hall_court_available'] == 'yes' ? 'required|array|max:3' : '',
+            'playground_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
+            'equipment_images' => $data['equipment_related_to_selected_games_available'] == 'yes' ? 'required|array|max:3' : '',
+            'equipment_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
+            'player_list' => 'required|max:1',
+            'panchayat_certificate'=> $data['type_of_nursery'] == 'panchayat' ? 'required' : '',
 
-        // }
+            ];
+            $messages =[];
+        }
         $validator = Validator::make($data, $rules, $messages);
         // dd($validator->errors()->toArray());
         if ($validator->fails()) {
@@ -733,31 +734,32 @@ class NurseryController extends Controller
     public function NurseryFileUpload(Request $request)
     {
         // dd($request->all());
+        $application_number = $request->application_number;
         $filePath = '';
-        if ($request->hasFile('playgroundfile')) {
+        if ($request->hasFile('playgroundfile') && !empty($application_number)) {
             $file = $request->file('playgroundfile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('playground_images', $fileName, 'public');
+            $file->storeAs($application_number.'/playground_images', $fileName, 'public');
             $filePath = 'playground_images/'.$fileName;
-        }elseif($request->hasFile('equipmentfile')) {
+        }elseif($request->hasFile('equipmentfile') && !empty($application_number)) {
             $file = $request->file('equipmentfile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('equipment_images', $fileName, 'public');
+            $file->storeAs($application_number.'/equipment_images', $fileName, 'public');
             $filePath = 'equipment_images/'.$fileName;
-        }elseif($request->hasFile('playerListFile')) {
+        }elseif($request->hasFile('playerListFile') && !empty($application_number)) {
             $file = $request->file('playerListFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('player_list_files', $fileName, 'public');
+            $file->storeAs($application_number.'/player_list_files', $fileName, 'public');
             $filePath = 'player_list_files/'.$fileName;
-        }elseif($request->hasFile('coachCertificateFile')) {
+        }elseif($request->hasFile('coachCertificateFile') && !empty($application_number)) {
             $file = $request->file('coachCertificateFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('coach_certificate_files', $fileName, 'public');
+            $file->storeAs($application_number.'/coach_certificate_files', $fileName, 'public');
             $filePath = 'coach_certificate_files/'.$fileName;
-        }elseif($request->hasFile('panchayatCertificateFile')) {
+        }elseif($request->hasFile('panchayatCertificateFile') && !empty($application_number)) {
             $file = $request->file('panchayatCertificateFile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs('panchayat_certificate_files', $fileName, 'public');
+            $file->storeAs($application_number.'/panchayat_certificate_files', $fileName, 'public');
             $filePath = 'panchayat_certificate_files/'.$fileName;
         }
         
@@ -765,10 +767,10 @@ class NurseryController extends Controller
     }
 
     public function NurseryFileRemove(Request $request)
-    {        
+    {     
         if ($request->filePath) {
-            if (Storage::exists('public/'.$request->filePath)) {
-                Storage::delete('public/'.$request->filePath);
+            if (Storage::exists('public/'.$request->application_number.'/'.$request->filePath)) {
+                Storage::delete('public/'.$request->application_number.'/'.$request->filePath);
             }
         }
 

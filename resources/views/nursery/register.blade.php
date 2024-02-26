@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sports Department</title>
+    <title>Department of Sports</title>
     <link href="{{asset('forntend/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{asset('forntend/css/style.css')}}" rel="stylesheet">
     <link href="{{asset('forntend/fonts/font-awesome-4.7.0/css/font-awesome.min.css')}}" rel="stylesheet">
@@ -399,7 +399,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Registration No. of Society who will be running Nursery</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="15" id="reg_no_running_nursery" autocomplete="off">
+                                                    <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="20" id="reg_no_running_nursery" autocomplete="off">
                                                     @error('reg_no_running_nursery')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -510,7 +510,7 @@ dd($errors);
                                                
                                                 <div class="col-sm-6 mb-3 name_coach " style="display : none;">
                                                     <label class="form-label">Name of Coach</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="coach_name" id="coach_name" autocomplete="off">
+                                                    <input type="text" class="form-control" name="coach_name" id="coach_name" autocomplete="off" onkeypress="return /[a-zA-Z ]/i.test(event.key)" maxlength="50">
 
                                                     @error('coach_name')
                                                     <span class="invalid-feedback" role="alert"
@@ -547,7 +547,7 @@ dd($errors);
                                                         <div class="col-sm-3 boys" style="display : none;"><label class="form-label">Number of Boys</label></div>
                                                         <div class="col-sm-3 boys" style="display : none;">
                                                             <!-- <label class="form-label">Boys</label> <span class='star'>*</span> -->
-                                                            <input type="number" class="form-control" name="boys" id="boys">
+                                                            <input type="text" class="form-control" name="boys" id="boys" oninput="validateNumber(this)" maxlength="3">
 
                                                             @error('boys')
                                                             <span class="invalid-feedback" role="alert"
@@ -559,7 +559,7 @@ dd($errors);
                                                          <div class="col-sm-3 girls" style="display : none;"><label class="form-label">Number of Girls</label></div>
                                                         <div class="col-sm-3 girls" style="display : none;">
                                                            <!--  <label class="form-label">Girls</label> <span class='star'>*</span> -->
-                                                            <input type="number" class="form-control" name="girls" id="girls">
+                                                            <input type="text" class="form-control" name="girls" id="girls" oninput="validateNumber(this)" maxlength="3">
 
                                                             @error('girls')
                                                             <span class="invalid-feedback" role="alert"
@@ -691,7 +691,7 @@ dd($errors);
                                                 </div>
                                                 <div class="col-sm-6 mb-3 percentage_fee_concession" style="display: none;">
                                                     <label class="form-label">Percentage of Fee Concession</label> <span class='star'>*</span>
-                                                   <input type="number" class="form-control" name="percentage_fee" id="percentage_fee">
+                                                   <input type="text" class="form-control" name="percentage_fee" id="percentage_fee" oninput="validateNumber(this)" maxlength="3">
                                                    <!-- validation 0 to 100  -->
                                                     @error('percentage_fee')
                                                     <span class="invalid-feedback" role="alert"
@@ -949,7 +949,6 @@ dd($errors);
     function initDropzone(dropzoneId, paramName, messageSelector, imagesInputSelector, maxFiles, maxFileSize, ...validFiles) {
         let acceptedFiles = validFiles.map(element => '.'+element);
         let validationError = false
-        let app_number = $("#application_number").val();
         return new Dropzone(dropzoneId, {
             ...commonOptions,
             maxFilesize: maxFileSize, // MB
@@ -959,8 +958,9 @@ dd($errors);
             dictFileTooBig: "File is too big. Max filesize: "+maxFileSize* 1000+"KB.",
             dictMaxFilesExceeded: "You can only upload up to " + maxFiles + " files.",
             dictInvalidFileType: "Invalid file type. Only "+validFiles.toString()+" files are allowed.",
-            application_number: app_number,
             sending: function (file, xhr, formData) {
+                let app_number = $("#application_number").val();
+                formData.append('application_number', app_number);
                 $(messageSelector).text('File Uploading...');
             },
             success: function (file, response) {
@@ -981,6 +981,8 @@ dd($errors);
             init: function () {
                 this.on("removedfile", function (file) {
                     if(!validationError){
+                        let app_number = $("#application_number").val();
+
                         $(messageSelector).text('File Removing...');
                         $.ajax({
                             url: "{{route('nursery.fileRemove')}}",
@@ -988,7 +990,7 @@ dd($errors);
                             headers: {
                                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
                             },
-                            data: {filePath: file.filePath},
+                            data: {filePath: file.filePath,application_number:app_number },
                             success: function (response) {
                                 let images = $(imagesInputSelector).val().split(",");
                                 let index = images.indexOf(file.filePath);
@@ -1011,6 +1013,13 @@ dd($errors);
 </script>
 <script>
         $(document).ready(function() {
+            var nurseryType = $('#type_of_nursery').val();
+            if(nurseryType == 'panchayat'){
+                alert("sss")
+                $(".panchayat_media").show();
+            }else{
+                $(".panchayat_media").hide();
+            }
 
             $('.cat_of_nursery').on('change', function() {
                 var selectedCat = $(this).val();
@@ -1053,6 +1062,33 @@ dd($errors);
                     if(selectedOption === 'yes'){
                         $("#playground_media").show();
                     }else{
+                            // var imagesToDelete = [];
+                            // $(".dz-preview").each(function() {
+                            //     var filename = $(this).find("img").attr("alt"); // Assuming the filename is stored in the alt attribute
+                            //     imagesToDelete.push(filename);
+                            // });
+
+                            // if (imagesToDelete.length > 0) {
+                            //     var messageSelector = '#playgroundmessage';
+                            //     $(messageSelector).text('Removing Files...');
+                            //     $.ajax({
+                            //         url: "{{ route('nursery.fileRemove') }}",
+                            //         method: 'POST',
+                            //         headers: {
+                            //             'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                            //         },
+                            //         data: { files: imagesToDelete, playground_nursery : 'no' },
+                            //         success: function(response) {
+                            //             // Update input field or perform any necessary actions after successful removal
+                            //             $(imagesInputSelector).val('');
+                            //             $(messageSelector).text('Files Removed');
+                            //         },
+                            //         error: function(xhr, status, error) {
+                            //             console.error("Error removing files:", error);
+                            //         }
+                            //     });
+                            // }
+                        $("#playground_images").val('');
                         $("#playground_media").hide();
                     }
             });
@@ -1062,6 +1098,7 @@ dd($errors);
                     if(selectedOption === 'yes'){
                         $("#equipment_media").show();
                     }else{
+                        $("#equipment_images").val('');
                         $("#equipment_media").hide();
                     }
              });
@@ -1071,6 +1108,7 @@ dd($errors);
                     if(selectedOption === 'yes'){
                         $(".name_coach, .qualification_coach, .coach_certificate").show();
                     }else{
+                         $("#coach_certificate").val('');
                         $(".name_coach, .qualification_coach, .coach_certificate").hide();
                     }
              });
@@ -1098,6 +1136,7 @@ dd($errors);
                     if(selectedOption === 'panchayat'){
                         $(".panchayat_media").show();
                     }else{
+                        $("#panchayat_certificate").val('');
                         $(".panchayat_media").hide();
                     }
               })
@@ -1221,11 +1260,6 @@ dd($errors);
 
                 }
             })
-        }
-
-        function validateNumber(input) {
-            // Remove non-numeric characters
-            input.value = input.value.replace(/[^0-9]/g, '');
         }
 
         function checkTermsConditions() {
@@ -1490,6 +1524,14 @@ dd($errors);
                         //     Swal.fire('Boys and girls total count should be less than or equal to 25', '', 'error');
                         //     return false;
                         // }
+
+                        var nurseryType = $('#type_of_nursery').val();
+                            if(nurseryType == 'panchayat'){
+                                // alert("sss")
+                                $(".panchayat_media").show();
+                            }else{
+                                $(".panchayat_media").hide();
+                            }
 
                     }
                         if(step == "step4"){

@@ -54,6 +54,7 @@
                                     @csrf
                                 <div class="row"  id="step2">
                                     <input type="hidden" name="mobile_number" value="{{$nursery->mobile_number ?? ''}}" id="mobile_number">
+                                    <input type="hidden" name="application_number" value="{{$nursery->application_number ?? ''}}" id="application_number">
                                     <div class="form-group col-sm-6">
                                         <label for="exampleInputEmail1">District</label> <span class='star'>*</span>
                                         <select class="form-control" name="district_id" id="district_id">
@@ -89,7 +90,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Type of Nursery</label> <span class='star'>*</span>
-                                        <select class="form-control type_of_nursery" aria-label="Default select example" name="type_of_nursery">
+                                        <select class="form-control type_of_nursery" aria-label="Default select example" name="type_of_nursery" id="type_of_nursery">
                                             <option value="">-----Select-----</option>
                                         </select>
 
@@ -103,7 +104,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Name of School/Institute/Coaching Centre</label> <span class='star'>*</span>
-                                        <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" value="{{ $nursery->name_of_nursery ?? ''}}">
+                                        <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" value="{{ $nursery->name_of_nursery ?? ''}}" id="name_of_nursery">
                                         @error('name_of_nursery')
                                         <span class="invalid-feedback" role="alert"
                                             style="display : block;">
@@ -114,7 +115,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Name of Head/Principal</label> <span class='star'>*</span>
-                                        <input type="text" class="form-control" name="head_pricipal" value="{{ $nursery->head_pricipal ?? ''}}">
+                                        <input type="text" class="form-control" name="head_pricipal" value="{{ $nursery->head_pricipal ?? ''}}" onkeypress="return /[a-zA-Z ]/i.test(event.key)" maxlength="50" id="head_pricipal">
                                         @error('head_pricipal')
                                         <span class="invalid-feedback" role="alert"
                                             style="display : block;">
@@ -136,7 +137,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Address</label> <span class='star'>*</span>
-                                        <textarea class="form-control" name="address" onkeypress = "return !/[<>]/.test(event.key)">{{ $nursery->address ?? ''}}</textarea>
+                                        <textarea class="form-control" name="address" onkeypress = "return !/[<>]/.test(event.key)" id="address">{{ $nursery->address ?? ''}}</textarea>
                                         @error('address')
                                         <span class="invalid-feedback" role="alert"
                                             style="display : block;">
@@ -147,7 +148,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Pin Code</label> <span class='star'>*</span>
-                                        <input type="text" class="form-control" name="pin_code" pattern="[0-9]*" oninput="validateNumber(this)" maxlength="6" minlength="6" value="{{ $nursery->pin_code ?? ''}}">
+                                        <input type="text" class="form-control" name="pin_code" pattern="[0-9]*" oninput="validateNumber(this)" maxlength="6" minlength="6" value="{{ $nursery->pin_code ?? ''}}" id="pin_code">
                                         @error('pin_code')
                                         <span class="invalid-feedback" role="alert"
                                             style="display : block;">
@@ -158,7 +159,7 @@
                                     </div>
                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Registration No. of Society who will be running Nursery</label> <span class='star'>*</span>
-                                        <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="50" value="{{ $nursery->reg_no_running_nursery ?? ''}}">
+                                        <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="20" value="{{ $nursery->reg_no_running_nursery ?? ''}}" id="reg_no_running_nursery">
                                         @error('reg_no_running_nursery')
                                         <span class="invalid-feedback" role="alert"
                                             style="display : block;">
@@ -296,7 +297,7 @@
                                                         </div>
                                                         <div class="col-sm-4 boys">
                                                             <!-- <label class="form-label">Boys</label> <span class='star'>*</span> -->
-                                                            <input type="number" class="form-control" name="boys" placeholder="Number of Boys" id="boys" value="{{ $nursery->boys ?? '0' }}">
+                                                            <input type="text" class="form-control" name="boys" placeholder="Number of Boys" id="boys" value="{{ $nursery->boys ?? '0' }}" oninput="validateNumber(this)" maxlength="3">
 
                                                             @error('boys')
                                                             <span class="invalid-feedback" role="alert"
@@ -310,7 +311,7 @@
                                                         </div>
                                                         <div class="col-sm-4 girls">
                                                            <!--  <label class="form-label">Girls</label> <span class='star'>*</span> -->
-                                                            <input type="number" class="form-control" name="girls" placeholder="Number of Girls" id="girls" value="{{ $nursery->girls ?? '0' }}">
+                                                            <input type="text" class="form-control" name="girls" placeholder="Number of Girls" id="girls" value="{{ $nursery->girls ?? '0' }}" oninput="validateNumber(this)" maxlength="3">
 
                                                             @error('girls')
                                                             <span class="invalid-feedback" role="alert"
@@ -439,7 +440,7 @@
                                                 </div>
                                                 <div class="col-sm-6 mb-3 percentage_fee_concession" @if($nursery->whether_nursery_will_provide_fee_concession_to_selected_players == 'no') style="display: none;" @endif>
                                                     <label class="form-label">Percentage of Fee Concession</label> <span class='star'>*</span>
-                                                   <input type="number" class="form-control" name="percentage_fee" id="percentage_fee" value="{{ $nursery->percentage_fee ?? ''}}">
+                                                   <input type="text" class="form-control" name="percentage_fee" id="percentage_fee" value="{{ $nursery->percentage_fee ?? ''}}" oninput="validateNumber(this)" maxlength="3">
                                                    <!-- validation 0 to 100  -->
                                                     @error('percentage_fee')
                                                     <span class="invalid-feedback" role="alert"
@@ -647,6 +648,8 @@
                 dictMaxFilesExceeded: "You can only upload up to " + maxFiles + " files.",
                 dictInvalidFileType: "Invalid file type. Only "+validFiles.toString()+" files are allowed.",
                 sending: function (file, xhr, formData) {
+                    let app_number = $("#application_number").val();
+                    formData.append('application_number', app_number);
                     $(messageSelector).text('File Uploading...');
                 },
                 success: function (file, response) {
@@ -667,6 +670,7 @@
                 init: function () {
                     this.on("removedfile", function (file) {
                         if(!validationError){
+                            let app_number = $("#application_number").val();
                             $(messageSelector).text('File Removing...');
                             $.ajax({
                                 url: "{{route('updatefileRemove')}}",
@@ -674,7 +678,7 @@
                                 headers: {
                                     'X-CSRF-TOKEN': "{{ csrf_token() }}"
                                 },
-                                data: {filePath: file.filePath},
+                                data: {filePath: file.filePath, application_number:app_number},
                                 success: function (response) {
                                     let images = $(imagesInputSelector).val().split(",");
                                     let index = images.indexOf(file.filePath);
@@ -789,6 +793,9 @@
                 if(selectedOption === 'yes'){
                     $("#playground_media").show();
                 }else{
+                    $("#playground_images").val('');
+                    $("#playground_images").removeAttr("data-default");
+
                     $("#playground_media").hide();
                 }
         });
@@ -798,6 +805,9 @@
                 if(selectedOption === 'yes'){
                     $("#equipment_media").show();
                 }else{
+                    $("#equipment_images").val('');
+                    $("#equipment_images").removeAttr("data-default");
+                    
                     $("#equipment_media").hide();
                 }
         });
@@ -807,6 +817,7 @@
                 if(selectedOption === 'yes'){
                     $(".name_coach, .qualification_coach, .coach_certificate").show();
                 }else{
+                    $("#coach_certificate").val('');
                     $(".name_coach, .qualification_coach, .coach_certificate").hide();
                 }
         });
@@ -833,6 +844,7 @@
                 if(selectedOption === 'panchayat'){
                     $(".panchayat_media").show();
                 }else{
+                    $("#panchayat_certificate").val('');
                     $(".panchayat_media").hide();
                 }
           })        
@@ -872,6 +884,204 @@
             formData.append('step', step);
             // console.log(formData, "fsdfsdfsd")
             // alert(step);
+            if(step == "step2"){
+                          var district_id = $("#district_id").val();
+                        if(! district_id){
+                            Swal.fire('Select District Name', '', 'error');
+                            return false;
+                        }
+                        var cat_of_nursery = $("#cat_of_nursery").val();
+                        if(! cat_of_nursery){
+                            Swal.fire('Select Category of Nursery', '', 'error');
+                            return false;
+                        }
+                        var type_of_nursery = $("#type_of_nursery").val();
+                        if(! type_of_nursery){
+                            Swal.fire('Select Type of Nursery', '', 'error');
+                            return false;
+                        }
+                        var nurseryName = $("#name_of_nursery").val();
+                        if(! nurseryName){
+                            Swal.fire('Enter Name of the Nursery', '', 'error');
+                            return false;
+                        }
+                        var head_pricipal = $("#head_pricipal").val();
+                        if(! head_pricipal){
+                            Swal.fire('Enter Name of the Principal', '', 'error');
+                            return false;
+                        } 
+                        var address = $("#address").val();
+                        if(! address){
+                            Swal.fire('Enter Address', '', 'error');
+                            return false;
+                        }
+                        var pin_code = $("#pin_code").val();
+                        if(! pin_code){
+                            Swal.fire('Enter Pincode', '', 'error');
+                            return false;
+                        }
+                        var reg_no_running_nursery = $("#reg_no_running_nursery").val();
+                        if(! reg_no_running_nursery){
+                            Swal.fire('Enter Registration Number', '', 'error');
+                            return false;
+                        }
+                        if (!email) {
+                            Swal.fire('Enter email address', '', 'error');
+                            return false;
+                        }
+                        if (!isValidEmail(email)) {
+                            Swal.fire('Enter valid email ID', '', 'error');
+                            return false;
+                        }
+                    }
+                    if(step == "step3")
+                    {
+                        // $(".loader").show();
+                        var game_id = $("#game_id").val();
+                        if(! game_id){
+                            Swal.fire('Select Game', '', 'error');
+                            return false;
+                        }
+                        var game_disp = $("#game_disp").val();
+                        if(! game_disp){
+                            Swal.fire('Select Game Discipline', '', 'error');
+                            return false;
+                        }
+                        if(game_disp == 'boys'){
+                            if(! $("#boys").val()){
+                                Swal.fire('Select Number of Boys', '', 'error');
+                                return false;
+                            }
+                        }else if(game_disp == 'girls'){
+                            if(! $("#girls").val()){
+                                Swal.fire('Select number of Girls', '', 'error');
+                                return false;
+                            }
+                        }else{
+                            if(! $("#girls").val() && ! $("#boys").val()){
+                                Swal.fire('Select number of Girls and number of Boys', '', 'error');
+                                return false;
+                            }
+                        }
+                        var playground_hall_court_available = $("#playground_hall_court_available").val();
+                        if(! playground_hall_court_available){
+                            Swal.fire('Select Playground available or not', '', 'error');
+                            return false;
+                        }
+                        // if(playground_hall_court_available == 'yes'){
+                        //     if(! $("#playground_images").val()){
+                        //         Swal.fire('Select 3 Playground Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        //      if($("#playground_images").val() > 3){
+                        //         Swal.fire('Select maximum 3 Playground Images ', '', 'error');
+                        //         return false;
+                        //     } 
+                        //     if($("#playground_images").val() < 3){
+                        //         Swal.fire('Select minimum 3 Playground Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        // }
+                        var equipment_related_to_selected_games_available = $("#equipment_related_to_selected_games_available").val();
+                        if(! equipment_related_to_selected_games_available){
+                            Swal.fire('Select Equipment available or not', '', 'error');
+                            return false;
+                        }
+                        // if(equipment_related_to_selected_games_available == 'yes'){
+                        //     if(! $("#equipment_images").val()){
+                        //         Swal.fire('Select 3 Equipment Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        //      if($("#equipment_images").val() > 3){
+                        //         Swal.fire('Select maximum 3 Equipment Images ', '', 'error');
+                        //         return false;
+                        //     } 
+                        //     if($("#equipment_images").val() < 3){
+                        //         Swal.fire('Select minimum 3 Equipment Images ', '', 'error');
+                        //         return false;
+                        //     }
+                        // }
+                        var coach_available = $("#coach_available").val();
+                        if(! coach_available){
+                            Swal.fire('Select Coach is available or not', '', 'error');
+                            return false;
+                        }
+                        if(coach_available == 'yes'){
+                            if(! $("#coach_name").val()){
+                                Swal.fire('Enter Coach Name', '', 'error');
+                                return false;
+                            }
+                            if(! $("#coach_qualification").val()){
+                                Swal.fire('Enter Coach Qualification', '', 'error');
+                                return false;
+                            }
+                            // if(! $("#coach_certificate").val()){
+                            //     Swal.fire('Enter Coach Qualification Certificate', '', 'error');
+                            //     return false;
+                            // }
+                        }
+                        var highest_achievement = $("#highest_achievement").val();
+                        if(! highest_achievement){
+                            Swal.fire('Select highest achievement', '', 'error');
+                            return false;
+                        }
+                        var already_running_nursery = $("#already_running_nursery").val();
+                        if(! already_running_nursery){
+                            Swal.fire('Select sports nursery was allotted in earlier years?', '', 'error');
+                            return false;
+                        }
+
+                        if(already_running_nursery == 'yes'){
+                            if(! $("#year_allotment").val()){
+                                Swal.fire('Enetr Year of Allotment', '', 'error');
+                                return false;
+                            }
+                            if(! $("#game_previous_id").val()){
+                                Swal.fire('Enetr Previous Game', '', 'error');
+                                return false;
+                            }
+                            if(! $("#game_disp_previous").val()){
+                                 Swal.fire('Enetr Game (Previous)', '', 'error');
+                                return false;
+                            }
+                        }
+                        var sports_kit = $("#sports_kit").val();
+                        if(! sports_kit){
+                            Swal.fire('select whether Nursery will provide Sports kits to selected players?', '', 'error');
+                            return false;
+                        }
+                        var fee_concession = $("#fee_concession").val();
+                        if(! fee_concession){
+                            Swal.fire('select whether School/Institue/Academy will provide fee concession to selected players?', '', 'error');
+                            return false;
+                        }
+
+                        if(fee_concession == 'yes'){
+                            if(! $("#percentage_fee").val()){
+                                Swal.fire('Enter Percentage', '', 'error');
+                                return false;
+                            }
+                        }
+                            if(parseInt($("#percentage_fee").val()) > 100){
+                                Swal.fire('Percentage number should be less than 100', '', 'error');
+                                return false;
+                            }
+                        // var boys = parseInt($("#boys").val());
+                        // var girls = parseInt($("#girls").val());
+                        // if(boys + girls > 25 || boys > 25 || girls > 25){
+                        //     Swal.fire('Boys and girls total count should be less than or equal to 25', '', 'error');
+                        //     return false;
+                        // }
+
+                        var nurseryType = $('#type_of_nursery').val();
+                            if(nurseryType == 'panchayat'){
+                                // alert("sss")
+                                $(".panchayat_media").show();
+                            }else{
+                                $(".panchayat_media").hide();
+                            }
+
+                    }
             $(".loader").show();
 
             $.ajax({

@@ -126,8 +126,8 @@ Route::prefix('nursery')->middleware(['IsNursery'])->group(function () {
     Route::get('user-nursery', [NurseryUserController::class, 'userNursery'])->name('user.nursery');
     Route::get('view-nursery', [NurseryUserController::class, 'viewNursery'])->name('view.userNursery');
     Route::post('update-nursery-details', [NurseryUserController::class, 'updateNurseryDetails'])->name('update.nurseryDetails');
-    Route::post('update-file-upload', [NurseryController::class, 'NurseryFileUpload'])->name('updatefileUpload');
-    Route::post('update-remove-file', [NurseryController::class, 'NurseryFileRemove'])->name('updatefileRemove');
+    Route::post('update-file-upload', [NurseryUserController::class, 'NurseryFileUpload'])->name('updatefileUpload');
+    Route::post('update-remove-file', [NurseryUserController::class, 'NurseryFileRemove'])->name('updatefileRemove');
 });
 
 // Route::get('test/', [LoginController::class, 'index']);
