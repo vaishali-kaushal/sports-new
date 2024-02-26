@@ -545,6 +545,12 @@ class NurseryController extends Controller
                     return response()->json(['status' => 'error','message' => 'Upload coach certificate']);
                 }
             }
+            /************** panchayat validation **************/
+            if($request->type_of_nursery == 'panchayat'){
+                if(empty($request->panchayat_certificate)){
+                    return response()->json(['status' => 'error','message' => 'Upload Panchayat certificate']);
+                }
+            }
 
             if(!empty($playgroundfiles) && count($playgroundfiles) === 3 && $request->playground_hall_court_available == 'yes'){
                 
@@ -679,16 +685,21 @@ class NurseryController extends Controller
                 'whether_nursery_will_provide_sports_kits_to_selected_players' => 'required',
                 'whether_nursery_will_provide_fee_concession_to_selected_players' => 'required',
                 'percentage_fee' => ['required_if:whether_nursery_will_provide_fee_concession_to_selected_players,yes'],
-                // 'playground_images' => $data['playground_hall_court_available'] == 'yes' ? 'required|array|max:3' : '',
-                // 'playground_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
-                // 'equipment_images' => $data['equipment_related_to_selected_games_available'] == 'yes' ? 'required|array|max:3' : '',
-                // 'equipment_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
-                // 'player_list' => 'required',//file
+                
 
             ];
 
             $messages =[];
         }
+        // elseif($data['step'] == "step4"){
+        //     'playground_images' => $data['playground_hall_court_available'] == 'yes' ? 'required|array|max:3' : '',
+        //     'playground_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
+        //     'equipment_images' => $data['equipment_related_to_selected_games_available'] == 'yes' ? 'required|array|max:3' : '',
+        //     'equipment_images.*' => 'image|mimes:jpeg,png,jpg|max:300',//file
+        //     'player_list' => 'required',//file
+        //     'player_list' => 'required|array|max:1',
+
+        // }
         $validator = Validator::make($data, $rules, $messages);
         // dd($validator->errors()->toArray());
         if ($validator->fails()) {

@@ -357,9 +357,9 @@ dd($errors);
                                                     </span>
                                                     @enderror
                                                 </div>
-                                                    <div class="col-sm-6 mt-2">
+                                                <div class="col-sm-6 mt-2">
                                                     <label class="form-label">Name of Head/Principal</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="head_pricipal" id="head_pricipal" autocomplete="off">
+                                                    <input type="text" class="form-control" name="head_pricipal" id="head_pricipal" autocomplete="off" onkeypress="return /[a-zA-Z ]/i.test(event.key)" maxlength="50">
                                                     @error('head_pricipal')
                                                     <span class="invalid-feedback" role="alert"
                                                         style="display : block;">
@@ -1032,15 +1032,19 @@ dd($errors);
             $('.game_discipline').change(function(){
                 var selectedOption = $(this).val();
                 // alert(selectedOption);
-                $('.gender, .player_list').show();
-                if(selectedOption === "mix") {
-                    $(".boys, .girls").show();
-                }else if(selectedOption === "girls"){
-                     $(".boys").hide();
-                     $(".girls").show();
-                }else if(selectedOption === "boys"){
-                     $(".girls").hide();
-                     $(".boys").show();
+                if(selectedOption != ""){
+                    $('.gender, .player_list').show();
+                    if(selectedOption === "mix") {
+                        $(".boys, .girls").show();
+                    }else if(selectedOption === "girls"){
+                         $(".boys").hide();
+                         $(".girls").show();
+                    }else if(selectedOption === "boys"){
+                         $(".girls").hide();
+                         $(".boys").show();
+                    }
+                }else{
+                    $('.gender, .player_list, .boys, .girls').hide();
                 }
             });
             $('.playground_nursery').change(function(){

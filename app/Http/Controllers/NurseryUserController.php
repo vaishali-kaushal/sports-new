@@ -220,6 +220,7 @@ class NurseryUserController extends Controller
                 } 
             }
             /************** player_list validation **************/
+            // dd($request->player_list);
             if(empty($request->player_list)){
                 return response()->json(['status' => 'error','message' => 'Upload player list file']);
             }
@@ -263,7 +264,14 @@ class NurseryUserController extends Controller
             }
 
             if(!empty($request->player_list)){
-                 $player_list = NurseryMedia::updateOrInsert(
+                $file_paths = explode(',', $request->player_list);
+    
+                $num_files = count($file_paths);
+
+                if ($num_files > 1) {
+                    return response()->json(['status' => 'error','message' => 'You can upload only one file for player list.']);
+                } else {
+                    $player_list = NurseryMedia::updateOrInsert(
                     [
                         'nursery_id' => $currentsavedNursery->id,
                         'type' => "player_list",
@@ -275,33 +283,50 @@ class NurseryUserController extends Controller
                     ]
                 );
               
+                }
             }
 
             if(!empty($request->coach_certificate)  && $request->whether_qualified_coach_is_available_for_the_concerned_game == 'yes'){
-                $coach_certificate = NurseryMedia::updateOrInsert(
-                    [
-                        'nursery_id' => $currentsavedNursery->id,
-                        'type' => "coach_certificate",
-                    ],
-                    [
-                        'type' => "coach_certificate",
-                        'media_path' => $request->coach_certificate,
-                        'updated_at'=>now()
-                    ]
-                );
+                $file_paths = explode(',', $request->coach_certificate);
+    
+                $num_files = count($file_paths);
+
+                if ($num_files > 1) {
+                    return response()->json(['status' => 'error','message' => 'You can upload only one file for Coach certificate.']);
+                } else {
+                    $coach_certificate = NurseryMedia::updateOrInsert(
+                        [
+                            'nursery_id' => $currentsavedNursery->id,
+                            'type' => "coach_certificate",
+                        ],
+                        [
+                            'type' => "coach_certificate",
+                            'media_path' => $request->coach_certificate,
+                            'updated_at'=>now()
+                        ]
+                    );
+                }
             }
             if(!empty($request->panchayat_certificate)  && $request->type_of_nursery == 'panchayat'){
-                $panchayat_certificate = NurseryMedia::updateOrInsert(
-                    [
-                        'nursery_id' => $currentsavedNursery->id,
-                        'type' => "panchayat_certificate",
-                    ],
-                    [
-                        'type' => "panchayat_certificate",
-                        'media_path' => $request->panchayat_certificate,
-                        'updated_at'=>now()
-                    ]
-                );
+                $file_paths = explode(',', $request->panchayat_certificate);
+    
+                $num_files = count($file_paths);
+
+                if ($num_files > 1) {
+                    return response()->json(['status' => 'error','message' => 'You can upload only one file for Panchayat Certificate.']);
+                } else {
+                    $panchayat_certificate = NurseryMedia::updateOrInsert(
+                        [
+                            'nursery_id' => $currentsavedNursery->id,
+                            'type' => "panchayat_certificate",
+                        ],
+                        [
+                            'type' => "panchayat_certificate",
+                            'media_path' => $request->panchayat_certificate,
+                            'updated_at'=>now()
+                        ]
+                    );
+                }
             }
                 
             $nurseryStatus = NurseryApplicationStatus::where('nursery_id', $currentsavedNursery->id)->update([
