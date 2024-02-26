@@ -261,7 +261,7 @@
                                                
                                                 <div class="col-sm-6 mb-3 name_coach"  @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display: none;" @endif>
                                                     <label class="form-label">Name of Coach</label> <span class='star'>*</span>
-                                                    <input type="text" class="form-control" name="coach_name" id="coach_name" value="{{ $nursery->coach_name ?? ''}}">
+                                                    <input type="text" class="form-control" name="coach_name" id="coach_name" value="{{ $nursery->coach_name ?? ''}}" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)">
 
                                                     @error('coach_name')
                                                     <span class="invalid-feedback" role="alert"

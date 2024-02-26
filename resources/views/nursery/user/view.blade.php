@@ -82,7 +82,7 @@
                      
                             <div class="card-header">
                                 <h4 class="card-title">Application Detail</h4>
-                            <div class="text-right"><strong>{{ $nursery->application_number ?? '' }}</strong></div>
+                            <div class="text-right"><strong>Application ID: {{ $nursery->application_number ?? '' }}</strong></div>
 
                             
                         </div>
@@ -96,10 +96,10 @@
                             <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
-                                        <label for="exampleInputEmail1">Application Id</label>
+                                        <label for="exampleInputEmail1">Application Date</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div>{{ $nursery->application_number ?? '' }}</div>
+                                        <div>{{ date('d-M-Y', $nursery->created_at) ?? '' }}</div>
                                     </div>
                                 </div>
                                 <div class="row col-sm-6">

@@ -365,7 +365,7 @@ class NurseryUserController extends Controller
                 ]);
                 if($user){
                     return response()->json(['status' => 'success','message' => 'Your application is submitted successfully.     
-                            You can edit your application till 26-02-2024, 6:00 PM, after which it will be considered final.']);
+                            You can edit your application till 12-03-2024, after which it will be considered final.']);
 
                 }else{
                     // die("f");

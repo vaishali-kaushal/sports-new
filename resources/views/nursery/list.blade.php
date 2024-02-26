@@ -37,10 +37,11 @@
                                 <thead>
                                     <tr>
                                         <th>Sr.no</th>
-                                        <th>Nursery Name</th>
-                                        <th>Email</th>
-                                        <th>District</th>
+                                        <th>Application ID</th>
+                                        <th>Received On</th>
                                         <th>Games</th>
+                                        <th>Nursery Name</th>
+                                        <!-- <th>District</th> -->
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -60,16 +61,16 @@
                                             <?= $i++ ?>
                                         </td>
                                         <td>
-                                            <?= $n['name_of_nursery'] ?? '' ?>
+                                            <?= $n['application_number'] ?? '' ?>
                                         </td>
-                                        <td>
-                                            <?= $n['email'] ?? '' ?>
-                                        </td>
-                                        <td>
-                                            <?= $n['district']['name'] ?? '' ?>
+                                       <td>
+                                            <?= date('d-M-Y',$n['created_at']) ?? '' ?>
                                         </td>
                                         <td>
                                             <?= $n['game']['name']  ?? ''?>
+                                        </td>
+                                        <td>
+                                            <?= $n['name_of_nursery'] ?? '' ?>
                                         </td>
                                         <td>
                                             <?php if($n['nursery_status']['approved_reject_by_dso'] == 0)
@@ -91,11 +92,13 @@
                                             <a href="{{url('dso/nursery/view/').'/'.$n['secure_id']}}"
                                                 class="btn btn-primary">View</a>
                                             <?php
-                                                if ($n['nursery_status']['approved_reject_by_dso'] == 0) { ?>
+
+                                            if(env('REG_LAST_DATE') < date('Y-m-d')){
+                                            if ($n['nursery_status']['approved_reject_by_dso'] == 0) { ?>
                                             <a href="{{url('dso/nursery/report/').'/'.$n['secure_id']}}"
                                                 class="btn btn-primary">Proceed</a>
 
-                                            <?php  }  ?>
+                                            <?php  } }  ?>
 
                                         </td>
                                     </tr>

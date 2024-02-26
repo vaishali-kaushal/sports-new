@@ -185,7 +185,7 @@ dd($errors);
                                 <div class="col-sm-8 adjust-width">
                                     <ul class="select-box text-left">
                                         <li><a href="javascript:void(0)"> <i class="fa fa-envelope"></i>
-                                                <span>nurserysports@gmail.com</span></a></li>
+                                                <span>sportshry@gmail.com</span></a></li>
 
                                     </ul>
 
@@ -193,7 +193,7 @@ dd($errors);
                                 <div class="col-sm-4 no-padding-left adjust-width">
                                     <ul class="select-box text-end">
                                         <!-- <li> <a href="{{ route('general_instructions')}}">General Instructions</a></li> -->
-                                        <li> <i class="fa fa-phone"></i> <span>9999378678</span></li>
+                                        <li> <i class="fa fa-phone"></i> <span>0172-2992868</span></li>
                                     </ul>
 
                                 </div>
@@ -1518,8 +1518,12 @@ dd($errors);
                                 Swal.fire('Percentage number should be less than 100', '', 'error');
                                 return false;
                             }
-                        // var boys = parseInt($("#boys").val());
-                        // var girls = parseInt($("#girls").val());
+                        var boys = parseInt($("#boys").val());
+                        var girls = parseInt($("#girls").val());
+                        if(boys == 0 || girls == 0){
+                            Swal.fire('Enter valid Number of players', '', 'error');
+                            return false;
+                        }
                         // if(boys + girls > 25 || boys > 25 || girls > 25){
                         //     Swal.fire('Boys and girls total count should be less than or equal to 25', '', 'error');
                         //     return false;

@@ -413,11 +413,9 @@ class NurseryController extends Controller
         $district_code = District::where('id', $request->district_id)->first();
         $current_year = date('Y');
         $checkNurseries = Nursery::get();
+                // dd($checkNurseries);
         if(empty($isRecordExist)){
-            if(empty($checkNurseries)){
-                $random_number = 000001;
-                $application_number = $current_year.$district_code->code.$random_number;
-            }else{
+            
                 $latest_application_number = Nursery::orderBy('id', 'desc')->value('application_number');
                 $last_six_digits = intval(substr($latest_application_number, -6)) + 1;
                 // Pad the incremented number back to six digits
@@ -425,7 +423,7 @@ class NurseryController extends Controller
                 // dd($random_number);
                 $application_number = $current_year.$district_code->code.$random_number;
                 $secure_id = bin2hex(random_bytes(16));
-            }
+            
         }else{
                 $application_number = $isRecordExist->application_number;
                 $secure_id = $isRecordExist->secure_id;
@@ -625,7 +623,7 @@ class NurseryController extends Controller
                     RoleType::create(['user_id'=>$user->id,'role_id'=>'5']);
 
                     return response()->json(['status' => 'success','message' => 'Your application is submitted successfully.     
-                            You can edit your application till 26-02-2024, 6:00 PM, after which it will be considered final. To view your application or status, please login again.']);
+                            You can edit your application till 12-03-2024, after which it will be considered final. To view your application or status, please login again.']);
 
                 }else{
                     // die("f");
