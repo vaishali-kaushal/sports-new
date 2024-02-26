@@ -105,11 +105,11 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
 
                 <!-- Notifications Dropdown Menu -->
 
-                <li class="nav-item mr-2">
+                <!-- <li class="nav-item mr-2">
                     <a class="btn btn-primary" href="#" role="button">
                         Change Password
                     </a>
-                </li>
+                </li> -->
                 <li class="nav-item">
 
                     <a class="btn btn-primary" href="{{url('logout')}}" role="button">

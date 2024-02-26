@@ -105,9 +105,9 @@
                             Mobile : {{ Auth::user()->mobile }}
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="{{ url('admin/changepassword') }}" class="dropdown-item">
+                       <!--  <a href="{{ url('admin/changepassword') }}" class="dropdown-item">
                             <i class="fas fa-key mr-2"></i> Change Password
-                        </a>
+                        </a> -->
 
                     </div>
                 </li>
