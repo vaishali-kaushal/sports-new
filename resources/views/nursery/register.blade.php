@@ -252,7 +252,7 @@ dd($errors);
                                     <div class="col-sm-4">
                                     </div>
                                     <div class="row" id="step1">
-                                         <div class="col-sm-12">
+                                        <div class="col-sm-12">
                                         <h2 class="heading2 text-center pt-4">
                                         Application for Sports Nursery
                                         </h2>

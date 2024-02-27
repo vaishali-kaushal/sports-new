@@ -9,6 +9,13 @@ class NurseryApplicationTransaction extends Model
 {
     use HasFactory;
 
-    // protected $guarded =[];
+	public $timestamps = false;
+
+    protected $fillable = [
+        'nursery_id',
+        'transaction_date',
+        'action_by',
+        'remarks'
+    ];
     
 }
