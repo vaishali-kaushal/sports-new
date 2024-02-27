@@ -27,14 +27,14 @@
                             <!-- small box -->
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>10</h3>
+                                    <h3>{{$data['total_applications']}}</h3>
 
-                                    <p>Active Nursery</p>
+                                    <p>Total Applications</p>
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-bag"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('dso.nurseryReport','total_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -42,16 +42,14 @@
                             <!-- small box -->
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <h3>5
-                                        <!-- <sup style="font-size: 20px">%</sup> -->
-                                    </h3>
+                                    <h3>{{$data['pending_applications']}}</h3>
                                     <p>Pending for inspection </p>
 
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-stats-bars"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('dso.nurseryReport','pending_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -59,14 +57,14 @@
                             <!-- small box -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>225</h3>
+                                    <h3>{{ $data['approved']}}</h3>
 
-                                    <p>Players</p>
+                                    <p>Approved Applications</p>
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-person-add"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('dso.nurseryReport','approved_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -74,14 +72,14 @@
                             <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <h3>34</h3>
+                                    <h3>{{$data['rejected']}}</h3>
 
-                                    <p>Game</p>
+                                    <p>Rejected Applications</p>
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-pie-graph"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{route('dso.nurseryReport','rejected_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->

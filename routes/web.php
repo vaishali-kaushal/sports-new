@@ -34,6 +34,7 @@ Route::get('login/otp/resendotp/{id}', [LoginController::class, 'resendotp']);
 Route::prefix('dso')->name('dso.')->middleware(['IsDso'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/view-nurseries-report/{status}', [DashboardController::class, 'dsoNurseryReport'])->name('nurseryReport');
     Route::get('/nursery', [NurseryController::class, 'index']);
     Route::get('/nursery/pendingapproval', [NurseryController::class, 'pendingApproval']);
     Route::get('/nursery/approvedList/', [NurseryController::class, 'approvedListbyadmin']);
@@ -42,6 +43,7 @@ Route::prefix('dso')->name('dso.')->middleware(['IsDso'])->group(function () {
     Route::get('/nursery/view/{id}', [NurseryController::class, 'viewNursery'])->name('viewNursery');
     Route::get('/nursery/report/{id}', [NurseryController::class, 'nurseryReport']);
     Route::post('/nursery/report/store/{id}', [NurseryController::class, 'nurseryReportStore']);
+
 });
 Route::get('nursery/registration', [LoginController::class, 'nurseryRegistration']);
 Route::post('nursery/store', [NurseryController::class, 'nurseryStore']);
