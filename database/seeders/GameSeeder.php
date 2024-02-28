@@ -15,7 +15,7 @@ class GameSeeder extends Seeder
     {
         //
 
-        DB::table('games')->delete();
+        DB::table('games')->truncate();
 
         DB::table('games')->insert([
              [ 

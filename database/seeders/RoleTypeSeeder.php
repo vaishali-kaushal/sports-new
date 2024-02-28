@@ -15,7 +15,7 @@ class RoleTypeSeeder extends Seeder
     {
         //
 
-        DB::table('role_types')->delete();
+        DB::table('role_types')->truncate();
 
         DB::table('role_types')->insert([
             0 =>['user_id' => '1','role_id' => '2'],

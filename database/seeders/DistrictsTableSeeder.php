@@ -16,7 +16,7 @@ class DistrictsTableSeeder extends Seeder
     {
         
 
-        \DB::table('districts')->delete();
+        \DB::table('districts')->truncate();
         
         \DB::table('districts')->insert(array (
             0 => 

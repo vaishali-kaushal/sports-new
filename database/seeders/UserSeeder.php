@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
 
-        DB::table('users')->delete();
+        // DB::table('users')->truncate();
 
         $name = ['user','admin','Narang','HQ Admin','Ram Niwas','Dhurender','Basti Ram','Devender Singh','Raj Bala','Sandhu Bala','Jagdeep','Lalita','Kuldeep Singh','Suman Malik','Sudha Bhasin','Satinder Kumar','Ved Parkash','Manoj Kumar','Anil Kumar','Neel Kamal','Satender','Madan Lal','Anoop','Shamsher Singh','Sharmila','Shilpa Gupta'];
         $email = ['dso@gmail.com','admin@gmail.com','narang@gmail.com','sports@gmail.com','dsoamb@gmail.com','dsobhw@gmail.com','dsochdadri@gmail.com','dsofbd@gmail.com','dsofhb@gmail.com','dsoggn7@gmail.com','dsohsr@gmail.com','dsojjr@gmail.com','dsojnd@gmail.com','dsokth@gmail.com','dsoknl@gmail.com','dsokkr@gmail.com','dsomwt@gmail.com','dsonrnl@gmail.com','dsopwl@gmail.com','dsopkl0@gmail.com','dsopnt@gmail.com','dsorwr@gmail.com','dsortk@gmail.com','dsosirsa@gmail.com','dsosnp@gmail.com','dsoynagar@gmail.com'];

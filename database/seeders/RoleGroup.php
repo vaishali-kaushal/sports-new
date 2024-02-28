@@ -15,7 +15,7 @@ class RoleGroup extends Seeder
     {
 
 
-        DB::table('role_groups')->delete();
+        DB::table('role_groups')->truncate();
 
         DB::table('role_groups')->insert(array(
             0 =>

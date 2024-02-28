@@ -13,16 +13,15 @@ class CoachQualificationSeeder extends Seeder
      */
     public function run(): void
     {
+        DB::table('coach_qualifications')->truncate();
         $qualifications = [
-            'Diploma Holders from NIS Patiala or any institute recognised by the Ministry of Affairs & Sports as equivalent to NIS Patiala',
-            'Senior International Player',
-            'NIS Certificate Course',
-            'M.P.Ed.',
-            'M.A. (Physical Education)',
-            'D.P.Ed.',
-            'Junior International Player in the concerned Game',
-            'National Player in the concerned Game',
-            'All India Inter-University player in the concerned Game',
+            'Diploma holders from NIS Patiala or any Institute recognised by the Ministry of Youth Affairs and Sports as equivalent to NIS Patiala in the concerned game',
+            'Senior International Medalist in the concerned game',
+            'NIS Certificate Course in the concerned game',
+            'M.P.Ed. In this case, the person must also be a National/All India University Player in the concerned game',
+            'B.P.Ed. In this case, the person must also be a National/All India University Player in the concerned game',
+            'D.P.Ed. In this case, the person must also be a National/All India University Player in the concerned game',
+            'Junior INternational Medallist in the concerned game with minimum qualification 10+2'
         ];
 
         // Coach fees data
