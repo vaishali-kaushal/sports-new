@@ -22,10 +22,15 @@ class DashboardController extends Controller
     }
     public function admin()
     {
-        $data['game_cont'] =  Game::get()->count();
-        $data['active_nursery'] =  NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 1)->get()->count();
-        $data['pending'] =  NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 0)->get()->count();
-        $data['players'] = 0;
+        // $data['game_cont'] =  Game::get()->count();
+        // $data['active_nursery'] =  NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 1)->get()->count();
+        // $data['pending'] =  NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 0)->get()->count();
+        // $data['players'] = 0;
+
+        $data['total_applications'] = Nursery::where('final_status', 1)->get()->count();
+        $data['pending_applications'] = NurseryApplicationStatus::where('approved_reject_by_dso', 0)->get()->count();
+        $data['approved'] = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->get()->count();
+        $data['rejected'] = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 2)->get()->count();
 
         return view('admin.dashboard',['data'=> $data]);
     }
@@ -41,13 +46,41 @@ class DashboardController extends Controller
                     $query->where('approved_reject_by_dso', 0);
                 }])->get();
         }elseif($status == "approved_applications"){
-
+            $applications = Nursery::where([['district_id', auth()->user()->district_id],['final_status', 1]])->with(['nurseryStatus' => function ($query) {
+                    $query->where('approved_by_admin_or_reject_by_admin', 1);
+                }])->get();
         }elseif($status == "rejected_applications"){
-            
+            $applications = Nursery::where([['district_id', auth()->user()->district_id],['final_status', 1]])->with(['nurseryStatus' => function ($query) {
+                    $query->where('approved_reject_by_dso', 2);
+                }])->get();
         }
 
         // dd($applications);
         return view('dso.report', ['applications' => $applications]);
+    }
+
+
+    public function adminNurseryReport($status)
+    {
+        if($status == "total_applications"){
+            $applications = Nursery::where('final_status', 1)->with('nurseryStatus')->get();
+
+        }elseif($status == "pending_applications"){
+            $applications = Nursery::where('final_status', 1)->with(['nurseryStatus' => function ($query) {
+                    $query->where('approved_reject_by_dso', 0);
+                }])->get();
+        }elseif($status == "approved_applications"){
+            $applications = Nursery::where('final_status', 1)->with(['nurseryStatus' => function ($query) {
+                    $query->where('approved_by_admin_or_reject_by_admin', 1);
+                }])->get();
+        }elseif($status == "rejected_applications"){
+            $applications = Nursery::where('final_status', 1)->with(['nurseryStatus' => function ($query) {
+                    $query->where('approved_by_admin_or_reject_by_admin', 2);
+                }])->get();
+        }
+
+        // dd($applications);
+        return view('admin.report', ['applications' => $applications]);
     }
 
 

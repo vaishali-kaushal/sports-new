@@ -81,6 +81,7 @@ Route::prefix('admin')->name('admin.')->middleware(['IsAdmin'])->group(function 
 
 
     Route::get('/dashboard', [DashboardController::class, 'admin']);
+    Route::get('/view-nurseries-report/{status}', [DashboardController::class, 'adminNurseryReport'])->name('nurseryReport');
     // ==============================
     Route::get('/game', [GameController::class, 'index']);
     Route::get('add/game', [GameController::class, 'addgame']);

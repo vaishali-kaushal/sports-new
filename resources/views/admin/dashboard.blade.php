@@ -27,14 +27,14 @@
                             <!-- small box -->
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <h3>{{ $data['active_nursery'] }}</h3>
+                                    <h3>{{$data['total_applications']}}</h3>
 
-                                    <p>Active Nursery</p>
+                                    <p>Total Applications</p>
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-bag"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('admin.nurseryReport','total_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -44,7 +44,7 @@
                                 <div class="inner">
 
 
-                                        <h3>{{ $data['pending'] }}</h3>
+                                        <h3>{{$data['pending_applications']}}</h3>
 
                                         <!-- <sup style="font-size: 20px">%</sup> -->
                                   <p>Pending Application </p>
@@ -53,7 +53,7 @@
                                 <div class="icon">
                                     <!-- <i class="ion ion-stats-bars"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('admin.nurseryReport','pending_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -61,14 +61,13 @@
                             <!-- small box -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>{{ $data['players'] }}</h3>
-
-                                    <p>Players</p>
+                                    <h3>{{ $data['approved']}}</h3>
+                                    <p>Approved Applications</p>
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-person-add"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('admin.nurseryReport','approved_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
@@ -76,14 +75,13 @@
                             <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <h3>{{ $data['game_cont'] }}</h3>
-
-                                    <p>Game</p>
+                                    <h3>{{$data['rejected']}}</h3>
+                                    <p>Rejected Applications</p>
                                 </div>
                                 <div class="icon">
                                     <!-- <i class="ion ion-pie-graph"></i> -->
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{route('admin.nurseryReport','rejected_applications')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- ./col -->
