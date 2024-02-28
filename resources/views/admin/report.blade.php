@@ -45,29 +45,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @if(!empty($applications) && !empty($application->nurseryStatus))
+                                @if(!empty($applications))
                                 @foreach($applications as $key => $application)
                                 <tr>
                                     <td>
                                         {{$key+1}}
                                     </td>
                                     <td>
-                                        {{$application->name_of_nursery ?? ''}}
+                                        {{$application->nursery->name_of_nursery ?? ''}}
                                     </td> 
                                     <td>
-                                        {{$application->email ?? ''}}
+                                        {{$application->nursery->email ?? ''}}
                                     </td>
                                     <td>
-                                        {{$application->district->name ?? ''}}
+                                        {{$application->nursery->district->name ?? ''}}
                                     </td>
                                     <td>
-                                        {{$application->game->name ?? ''}}
+                                        {{$application->nursery->game->name ?? ''}}
                                     </td>
                                     <td>
-                                        @if(!empty($application->nurseryStatus))
-                                        @if($application->nurseryStatus->approved_reject_by_dso == 0)
+                                        @if(!empty($application->nursery->nurseryStatus))
+                                        @if($application->nursery->nurseryStatus->approved_reject_by_dso == 0)
                                             Pending
-                                        @elseif ($application->nurseryStatus->approved_reject_by_dso == 1)
+                                        @elseif ($application->nursery->nurseryStatus->approved_reject_by_dso == 1)
                                             Recommended
                                         @else
                                             Not Recommended

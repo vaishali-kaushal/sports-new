@@ -99,19 +99,29 @@ class LoginController extends Controller
             // $otpp=$this->generateNumericOTP(6);
             if(env('APP_ENV') == "local"){
                 $otpp='111111';
+                $otp = new Otp;
+                $otp->secure_id = $secureId;
+                $otp->mobile = $userr->mobile;
+                $otp->user_id = $userr->secure_id;
+                $otp->status = 0;
+                $otp->otp = $otpp;
+                $otp->save();
+                $message="Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $temp_id = "1407170557686704067";
+                // $this->sendSMS($userr->mobile,$message,$temp_id);
             }else{
                 $otpp=$this->generateNumericOTP(6);
+                $otp = new Otp;
+                $otp->secure_id = $secureId;
+                $otp->mobile = $userr->mobile;
+                $otp->user_id = $userr->secure_id;
+                $otp->status = 0;
+                $otp->otp = $otpp;
+                $otp->save();
+                $message="Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+                $temp_id = "1407170557686704067";
+                $this->sendSMS($userr->mobile,$message,$temp_id);
             }
-            $otp = new Otp;
-            $otp->secure_id = $secureId;
-            $otp->mobile = $userr->mobile;
-            $otp->user_id = $userr->secure_id;
-            $otp->status = 0;
-            $otp->otp = $otpp;
-            $otp->save();
-            $message="Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
-            $temp_id = "1407170557686704067";
-            $this->sendSMS($userr->mobile,$message,$temp_id);
             return redirect('login/otp' . '/' . $secureId);
         }
         return back()->withErrors([
