@@ -10,7 +10,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js" defer="defer"></script>
+
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css"> -->
+    <!-- DataTables Buttons JavaScript -->
+    <!-- <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script> -->
 
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
@@ -140,9 +147,18 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
+                         <li class="nav-item ">
+                            <!-- <a href="#" class="nav-link"> -->
+                            <a href="{{ url('dso/dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
 
-                        <li class="nav-item">
-                        <a href="" class="nav-link ">
+                        </li>
+                        <li class="nav-item {{ Request::is('dso/nursery*') ? 'menu-open' : '' }}">
+                            <a href="" class="nav-link ">
                                 <i class="nav-icon fas  fa-anchor"></i>
                                 <p>
                                     Nursery
@@ -151,7 +167,7 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{url('dso/nursery')}}" class="nav-link">
+                                    <a href="{{url('dso/nursery')}}" class="nav-link {{ Request::is('dso/nursery') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pending List</p>
                                     </a>
@@ -265,3 +281,22 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
         display: none;
     }
 </style>
+<script>
+$(document).ready(function() {
+
+     $('#datatable').DataTable({
+        // dom: 'Bfrtip',
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ],
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+    });
+
+});
+</script>

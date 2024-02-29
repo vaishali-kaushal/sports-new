@@ -7,7 +7,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Nursery</h1>
+                    <!-- <h1>Nursery</h1> -->
                 </div>
                 <div class="col-sm-6 text-right">
                     <!-- <a href="{{url('admin/add/dso')}}" class="btn btn-primary">Add DSO</a> -->
@@ -27,11 +27,18 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <!-- <h3 class="card-title">DataTable with minimal features & hover style</h3> -->
+                        @if(request()->is('*total_applications*'))
+                            <h3 class="card-title">Total Applications</h3>
+                        @elseif(request()->is('*pending_applications*'))
+                            <h3 class="card-title">Pending Applications</h3>
+                        @elseif(request()->is('*approved_applications*'))
+                            <h3 class="card-title">Approved Applications</h3>
+                        @elseif(request()->is('*rejected_applications*'))
+                            <h3 class="card-title">Rejected Applications</h3>
+                        @endif
                         </div>
-
                         <div class="card-body">
-                            <table id="example2" class="table table-bordered table-hover">
+                            <table id="datatable" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>Sr.no</th>

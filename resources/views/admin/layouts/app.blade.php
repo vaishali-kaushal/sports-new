@@ -14,13 +14,23 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <script src="https://cdn.datatables.net/1.10.8/js/jquery.dataTables.min.js" defer="defer"></script>
+
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css"> -->
+    
+    <!-- DataTables Buttons JavaScript -->
+    <!-- <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script> -->
+
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
-    <link href='{{ asset('forntend/css/theme.css') }}'>
+    <link href="{{ asset('forntend/css/theme.css') }}">
     <script src="{{ asset('assets/plugins/jquery') }}/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
@@ -28,6 +38,7 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.6/dist/sweetalert2.all.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 
 </head>
 
@@ -150,8 +161,18 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                        <li class="nav-item ">
+                            <!-- <a href="#" class="nav-link"> -->
+                            <a href="{{ url('admin/dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Dashboard
+                                </p>
+                            </a>
+
+                        </li>
+                        <li class="nav-item {{ Request::is('admin/nursery*') ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link ">
                                 <i class="nav-icon fas  fa-anchor"></i>
                                 <p>
                                     Nursery
@@ -160,19 +181,19 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/list') }}" class="nav-link">
+                                    <a href="{{ url('admin/nursery/list') }}" class="nav-link {{ Request::is('admin/nursery/list') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Pending List</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/list/r') }}" class="nav-link">
+                                    <a href="{{ url('admin/nursery/list/r') }}" class="nav-link {{ Request::is('admin/nursery/list/r*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Recommended</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/list/notr') }}" class="nav-link">
+                                    <a href="{{ url('admin/nursery/list/notr') }}" class="nav-link {{ Request::is('admin/nursery/list/notr*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Not Recommended</p>
                                     </a>
@@ -205,7 +226,7 @@
                             </ul>
                         </li>
                         {{--  ========================================  --}}
-                        <li class="nav-item">
+                        <li class="nav-item {{ Request::is('admin/dso*') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
@@ -215,7 +236,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/dso') }}" class="nav-link">
+                                    <a href="{{ url('admin/dso') }}" class="nav-link  {{ Request::is('admin/dso') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>DSO List</p>
                                     </a>
@@ -306,28 +327,27 @@
     <!-- ./wrapper -->
     <!-- jQuery -->
 
-
-    <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            });
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
-            });
-        });
-    </script>
 </body>
 
 
 
 </html>
+<script>
+$(document).ready(function() {
+
+     $('#datatable').DataTable({
+        // dom: 'Bfrtip',
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ],
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+    });
+
+});
+</script>

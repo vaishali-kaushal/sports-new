@@ -84,7 +84,6 @@ class LoginController extends Controller
 
     public function nurseryRegistration()
     {
-
         return view('nursery.register', ['districts' => District::get()->toArray(), 'games' => Game::get()->toArray(), 'coach_qualification' => CoachQualification::where('is_active', 1)->get()->toArray()]);
     }
     public function loginVerify(Request $request)

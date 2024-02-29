@@ -453,6 +453,7 @@ class NurseryController extends Controller
                         'head_pricipal' =>$request->head_pricipal,
                         'email' =>$request->email,
                         'pin_code' =>$request->pin_code,
+                        'created_at' =>now(),
 
                     ]
                 );

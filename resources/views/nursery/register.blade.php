@@ -846,7 +846,7 @@ dd($errors);
                             <div class="gen-instr">
                                 <h4>Guidelines</h4>
                                 <ul>
-                                    <li><a href="{{ env('APP_URL')}}/sports_guidelines_2024.pdf" target="_blank">Click here</a> to view and download detailed guidelines published by Department of Sports</li>
+                                    <li><a href="{{ env('APP_URL')}}/nursery_policy_document_2024-25.pdf" target="_blank">Click here</a> to view and download detailed guidelines published by Department of Sports</li>
                                    
                                 </ul>
                             </div>
