@@ -85,10 +85,24 @@ class NurseryUserController extends Controller
 
     }
 
-    public function viewNursery()
+    public function viewNursery($secure_id=null)
     {
-        $user_mobile = Auth::user()->mobile;
-        $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('mobile_number', $user_mobile)->where('final_status',1)->first();
+        $user = Auth::user()->role;
+        if(!empty($user)){
+            $roleId = $user->role_id;
+            if($roleId == 5){
+                $user_mobile = Auth::user()->mobile;
+                $layout = 'nursery.user.layouts.app';
+                $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('mobile_number', $user_mobile)->where('final_status',1)->first();
+            }else if($roleId == 2){
+                $layout = 'dso.layouts.app';
+                $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('secure_id', $secure_id)->where('final_status',1)->first();
+                // dd($nursery);
+            }else if($roleId == 1){
+                $layout = 'admin.layouts.app';
+                $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('secure_id', $secure_id)->where('final_status',1)->first();
+            }
+        }
         $playground_images = []; 
         $equipment_images = []; 
         $player_list_images = []; 
@@ -127,7 +141,7 @@ class NurseryUserController extends Controller
         $districts = District::get()->toArray();
         $games = Game::get()->toArray();
         $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
-        return view('nursery.user.view',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images ]);
+        return view('nursery.user.view',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images,'layout'=>$layout ]);
 
     }
 

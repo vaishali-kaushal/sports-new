@@ -1,4 +1,4 @@
-@extends('nursery.user.layouts.app')
+@extends($layout)
 
 @section('content')
 <style>
