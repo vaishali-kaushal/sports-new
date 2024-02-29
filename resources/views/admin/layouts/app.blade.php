@@ -163,7 +163,7 @@
                         data-accordion="false">
                         <li class="nav-item ">
                             <!-- <a href="#" class="nav-link"> -->
-                            <a href="{{ url('admin/dashboard') }}" class="nav-link">
+                            <a href="{{ url('admin/dashboard') }}" class="nav-link {{ Request::is('admin/dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     Dashboard
