@@ -242,13 +242,13 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ url('admin/dashboard') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Coach List</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="#" class="nav-link">
+                                    <a href="{{ url('admin/dashboard') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Players List</p>
                                     </a>
@@ -261,7 +261,7 @@
                         {{--  ========================================  --}}
                         <li class="nav-item ">
                             <!-- <a href="#" class="nav-link"> -->
-                            <a href="{{ url('admin/game') }}" class="nav-link">
+                            <a href="{{ url('admin/game') }}" class="nav-link {{ Request::is('admin/game') ? 'active' : '' }}">
                                 <i class="nav-icon fas  fa-gamepad"></i>
                                 {{--  <i class="fa-solid fa-gamepad"></i>  --}}
                                 <p>
@@ -272,7 +272,7 @@
                         </li>
                         <li class="nav-item">
                             <!-- <a href="#" class="nav-link"> -->
-                            <a href="{{ url('admin/district') }}" class="nav-link">
+                            <a href="{{ url('admin/district') }}" class="nav-link {{ Request::is('admin/district') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
                                     District

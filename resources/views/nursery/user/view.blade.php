@@ -99,7 +99,7 @@
                                         <label for="exampleInputEmail1">Application Date</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div>{{ date('d-M-Y', $nursery->created_at) ?? '' }}</div>
+                                        <div>{{ date('d-M-Y', strtotime($nursery->created_at)) ?? '' }}</div>
                                     </div>
                                 </div>
                                 <div class="row col-sm-6">
@@ -483,7 +483,7 @@
                             <div class="col-sm-3">
                                 <!-- <div class="timeline">
                                     <div class="time-label">
-                                        <span class="bg-red">{{ date('d M, Y', $nursery->created_at)}}</span>
+                                        <span class="bg-red">{{ date('d M, Y', strtotime($nursery->created_at))}}</span>
                                     </div>
                                     <div>
                                         @php

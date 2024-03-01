@@ -289,7 +289,7 @@
         </div>
 
     </section>
-
+@if(!empty($remarks))
     <section class="content">
         <div class="container-fluid">
             <h2>DSO Report </h2>
@@ -337,7 +337,7 @@
                                         <!-- <td></td> -->
                                     </tr>
                                 @endforeach
-                            </tbody>fma
+                            </tbody>
                         </table>
                     </div>
 
@@ -347,6 +347,7 @@
 
 
     </section>
+    @endif
 </div>
 
 <!-- remarks -->

@@ -369,8 +369,8 @@ class NurseryController extends Controller
     public function resendOTP(Request $request)
     {
         try{
-              $updatestatus = Otp::where('mobile',$request->mobile)->update(['status'=>1]);
-              if(env('APP_ENV') == "local"){
+            $updatestatus = Otp::where('mobile',$request->mobile)->update(['status'=>1]);
+            if(env('APP_ENV') == "local"){
                 $otpp=$this->generateNumericOTP(6);
                 $secure_id = bin2hex(random_bytes(16));
                 $otp = Otp::create([

@@ -10,14 +10,14 @@
                 <div class="col-sm-6">
                     <!-- <h1>DSO</h1> -->
                 </div>
-                <div class="col-sm-6 text-right">
+                <!-- <div class="col-sm-6 text-right">
                     <a href="{{url('admin/add/dso')}}" class="btn btn-primary">Add DSO</a>
 
-                    <!-- <ol class="breadcrumb float-sm-right">
+                    <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Home</a></li>
                         <li class="breadcrumb-item active">DataTables</li>
-                    </ol> -->
-                </div>
+                    </ol>
+                </div> -->
             </div>
         </div>
     </section>
@@ -29,6 +29,9 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">DSO List</h3>
+                            <div class="text-right">
+                                <a href="{{url('admin/add/dso')}}" class="btn btn-primary">Add DSO</a>
+                            </div>
                         </div>
 
                         <div class="card-body">
@@ -37,7 +40,7 @@
                                     <tr>
                                         <th>Sr.no</th>
                                         <th>Name</th>
-                                        <th>District</th>
+                                        <!-- <th>District</th> -->
                                         <th>Email</th>
                                         <th>District</th>
                                         <th>Action</th>
@@ -58,9 +61,9 @@
                                         <td>
                                             <?=$user['name']?>
                                         </td>
-                                        <td>
+                                       <!--  <td>
                                             <?=$user['district']['name']?>
-                                        </td>
+                                        </td> -->
                                         <td>
                                             <?=$user['email']?>
                                         </td>

@@ -39,16 +39,16 @@
                         </div>
 
                         <div class="card-body">
-                            <table id="datatable" class="table table-bordered table-hover display" style="width:100%">
+                            <table id="datatable" class="table table-bordered table-hover display">
                                 <thead>
                                     <tr>
-                                        <th>Sr.no</th>
-                                        <th>Nursery Name</th>
-                                        <th>Email</th>
-                                        <th>District</th>
+                                        <th style="width: 35px;">Sr.no</th>
+                                        <th>Application ID</th>
+                                        <th style="width: 93px;">Received On</th>
                                         <th>Games</th>
+                                        <th>Nursery Name</th>
+                                        <th>District</th>
                                         <th>Status</th>
-
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -60,16 +60,19 @@
                                         {{$key+1}}
                                     </td>
                                     <td>
-                                        {{$application->nursery->name_of_nursery ?? ''}}
-                                    </td> 
-                                    <td>
-                                        {{$application->nursery->email ?? ''}}
+                                        {{$application->nursery->application_number ?? ''}}
                                     </td>
                                     <td>
-                                        {{$application->nursery->district->name ?? ''}}
+                                        {{ date('d-M-Y', strtotime($application->created_at)) ?? ''}}
                                     </td>
                                     <td>
                                         {{$application->nursery->game->name ?? ''}}
+                                    </td>
+                                    <td>
+                                        {{$application->nursery->name_of_nursery ?? ''}}
+                                    </td>
+                                    <td>
+                                        {{$application->nursery->district->name ?? ''}}
                                     </td>
                                     <td>
                                         @if(!empty($application->nursery->nurseryStatus))
