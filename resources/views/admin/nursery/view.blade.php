@@ -116,11 +116,6 @@
 
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <label class="form-label">PAN No. (for private only)</label>
-                                    <input type="text" class="form-control" name="pan_private"
-                                        value="{{!empty($nursery['pan_private']) ? $nursery['pan_private'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
                                     <label class="form-label">Registration No. of Society who will be running
                                         Nursery</label>
                                     <input type="text" class="form-control" name="reg_no_running_nursery"
@@ -140,21 +135,6 @@
                                     <label class="form-label">Mobile Number</label>
                                     <input type="number" class="form-control" name="mobile_number"
                                         value="{{!empty($nursery['mobile_number']) ? $nursery['mobile_number'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Bank Account Number</label>
-                                    <input type="number" class="form-control" name="bank_ac"
-                                        value="{{!empty($nursery['bank_ac']) ? $nursery['bank_ac'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Bank Name</label>
-                                    <input type="text" class="form-control" name="bank_name"
-                                        value="{{!empty($nursery['bank_name']) ? $nursery['bank_name'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Bank IFSC Code</label>
-                                    <input type="text" class="form-control" name="bank_ifc_code"
-                                        value="{{!empty($nursery['bank_ifc_code']) ? $nursery['bank_ifc_code'] : '' }}">
                                 </div>
                                 <!-- <div class="col-sm-6">
                                     <label class="form-label">Type of Nursery</label>

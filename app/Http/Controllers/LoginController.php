@@ -67,16 +67,23 @@ class LoginController extends Controller
     }
     public function resendotp($id, Request $request)
     {
-        $otpp=$this->generateNumericOTP(6);
+        if(env('APP_ENV') == "local"){
+            $otpp='111111';
+            $otp =  Otp::where('secure_id', $id)->where('status', 0)->first();
+            $otp->otp = $otpp;
+            $otp->save();
+        }
+        if(env('APP_ENV') == "production"){
+            $otpp=$this->generateNumericOTP(6);
 
-        $otp =  Otp::where('secure_id', $id)->where('status', 0)->first();
-        $otp->otp = $otpp;
-        $otp->save();
+            $otp =  Otp::where('secure_id', $id)->where('status', 0)->first();
+            $otp->otp = $otpp;
+            $otp->save();
 
-        $message="Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
-        $temp_id = "1407170557686704067";
-        $this->sendSMS($otp->mobile,$message,$temp_id);
-
+            $message="Dear User, ".$otpp. "is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
+            $temp_id = "1407170557686704067";
+            $this->sendSMS($otp->mobile,$message,$temp_id);
+        }
 
         return redirect()->back()->with('success', 'OTP send');
     }
@@ -108,7 +115,8 @@ class LoginController extends Controller
                 $message="Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
                 $temp_id = "1407170557686704067";
                 // $this->sendSMS($userr->mobile,$message,$temp_id);
-            }else{
+            }
+            if(env('APP_ENV') == "production"){
                 $otpp=$this->generateNumericOTP(6);
                 $otp = new Otp;
                 $otp->secure_id = $secureId;

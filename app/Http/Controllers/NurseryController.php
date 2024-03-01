@@ -322,7 +322,8 @@ class NurseryController extends Controller
                 $tid           = "1407170557686704067";
                 // $this->sendSMS($request->mobile,$sms_message,$tid);
 
-            }else{
+            }
+            if(env('APP_ENV') == "production"){
                 $otpp=$this->generateNumericOTP(6);
                 // $otp="111111";
                 $secure_id = bin2hex(random_bytes(16));
@@ -383,9 +384,10 @@ class NurseryController extends Controller
                 $sms_message   = "Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
                 $tid           = "1407170557686704067";
 
-                $this->sendSMS($request->mobile,$sms_message,$tid);
+                // $this->sendSMS($request->mobile,$sms_message,$tid);
 
-            }else{
+            }
+            if(env('APP_ENV') == 'production'){
                 $otpp=$this->generateNumericOTP(6);
                 $secure_id = bin2hex(random_bytes(16));
                 $sms_message   = "Dear User, ".$otpp. " is OTP for Login, Nursery Management System, Sports Department Government of Haryana";
