@@ -86,7 +86,7 @@
                                         @endif
                                     </td>
                                     <td>  
-                                        <a href="{{ route('view.userNursery',$application->nursery->secure_id)}}" class="btn btn-primary">View</a>
+                                        <a href="{{ route('view.userNursery',$application->nursery->secure_id ?? '')}}" class="btn btn-primary">View</a>
                                     </td>
                                 </tr>
                                 @endforeach

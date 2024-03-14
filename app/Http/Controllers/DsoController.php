@@ -149,7 +149,7 @@ class DsoController extends Controller
 
     public function reportFileRemove(Request $request)
     {     
-    	dd($request->filePath);
+    	// dd($request->filePath);
         if ($request->filePath) {
             if (Storage::exists('public/'.$request->application_number.'/'.$request->filePath)) {
                 Storage::delete('public/'.$request->application_number.'/'.$request->filePath);

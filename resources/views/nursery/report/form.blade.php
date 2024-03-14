@@ -327,7 +327,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @if($gameCounts->isNotEmpty())
+                                   <!--      @if($gameCounts->isNotEmpty())
                                             @foreach($gameCounts as $gameName => $count)
                                                 <tr>
                                                     <td>{{ $gameName ?? '' }}</td>
@@ -339,7 +339,7 @@
                                             <tr>
                                                 <td colspan="2">No nursery games found</td>
                                             </tr>
-                                        @endif
+                                        @endif -->
                                     </tbody>
                                 </table>
                             </div>

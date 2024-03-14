@@ -103,11 +103,11 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
- <script>
+    <script>
 
             var ctx = document.getElementById('pieChart').getContext('2d');
             var pieChart = new Chart(ctx, {
-
+                
                 type: 'pie',
                 data: {
                     labels: ['Total', 'Pending', 'Approved', 'Rejected'],
@@ -141,7 +141,7 @@
                     labels: ['Total', 'Pending', 'Approved', 'Rejected'],
                     datasets: [{
                         label: 'Bar Chart',
-
+                        
                         data: {{ collect($data)->values() }},
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         borderColor: 'rgba(75, 192, 192, 1)',
