@@ -13,6 +13,8 @@ use App\Http\Controllers\NurseryController;
 use App\Http\Controllers\CoachDashboardController;
 use App\Http\Controllers\AtendanceController;
 use App\Http\Controllers\NurseryUserController;
+use App\Http\Controllers\DsoController;
+use App\Http\Controllers\AdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,8 +43,12 @@ Route::prefix('dso')->name('dso.')->middleware(['IsDso'])->group(function () {
     Route::get('/nursery/reject/list', [NurseryController::class, 'rejectListbyadmin']);
     Route::get('nursery/objection/list', [NurseryController::class, 'objectionListbyadmin']);
     Route::get('/nursery/view/{id}', [NurseryController::class, 'viewNursery'])->name('viewNursery');
-    Route::get('/nursery/report/{id}', [NurseryController::class, 'nurseryReport']);
-    Route::post('/nursery/report/store/{id}', [NurseryController::class, 'nurseryReportStore']);
+    Route::get('/nursery/report/{id}', [DsoController::class, 'nurseryReport']);
+    Route::post('/nursery/report/store/{id}', [DsoController::class, 'nurseryReportStore']);
+    Route::post('/nursery/file_upload', [DsoController::class, 'reportFileUpload'])->name('applicationreport');
+    Route::post('/nursery/remove_file', [DsoController::class, 'reportFileRemove'])->name('fileRemove');
+
+
 
 });
 Route::get('nursery/registration', [LoginController::class, 'nurseryRegistration']);
@@ -101,15 +107,19 @@ Route::prefix('admin')->name('admin.')->middleware(['IsAdmin'])->group(function 
     Route::post('store/dso', [UserController::class, 'storeDso']);
     Route::post('update/dso/{id}', [UserController::class, 'updateDso']);
     //================================================
-    Route::get('/nursery/list', [NurseryController::class, 'AdminList']);
+    Route::get('/nursery/list', [AdminController::class, 'AdminList'])->name('pendingList');
+    Route::get('/nursery/approved_list', [AdminController::class, 'approvedList'])->name('approved_list');
+    Route::get('/nursery/reject_list', [AdminController::class, 'rejectList'])->name('reject_list');
+    Route::get('/nursery/objection_list', [AdminController::class, 'objectionList'])->name('objection_list');
     Route::get('/nursery/list/r', [NurseryController::class, 'AdminListRecomanded']);
     Route::get('/nursery/list/notr', [NurseryController::class, 'AdminListNotRecomanded']);
     Route::get('/nursery/{status}', [NurseryController::class, 'AdminListApprovedorReject']);
     Route::get('/nursery/view/{id}', [NurseryController::class, 'viewNursery']);
     Route::post('/nursery/print', [NurseryController::class, 'printNursery'])->name('printNursery');
     Route::get('/nursery/status/update/{status}/{id}', [NurseryController::class, 'statusUpdate']);
-    Route::get('/nursery/approve_reject/{id}', [NurseryController::class, 'ApprovedRejectForm']);
-    Route::post('/nursery/report/store/{id}', [NurseryController::class, 'AdminReportStore']);
+    Route::get('/nursery/approve_reject/{id}', [AdminController::class, 'adminProcess'])->name('adminProcess');
+    Route::post('/nursery/report/store/{id}', [AdminController::class, 'AdminReportStore'])->name('saveNurseryReport');
+    Route::get('/excel-download', [AdminController::class, 'excelDownload'])->name('excelDownload');
 });
 
 // ==================================================
@@ -125,12 +135,19 @@ Route::prefix('coach')->name('coach.')->middleware(['IsCoach'])->group(function 
 });
 
 Route::get('view-nursery/{id?}', [NurseryUserController::class, 'viewNursery'])->name('view.userNursery');
+
 Route::prefix('nursery')->middleware(['IsNursery'])->group(function () {
     Route::get('dashboard', [NurseryUserController::class, 'index']);
     Route::get('user-nursery', [NurseryUserController::class, 'userNursery'])->name('user.nursery');
     Route::post('update-nursery-details', [NurseryUserController::class, 'updateNurseryDetails'])->name('update.nurseryDetails');
     Route::post('update-file-upload', [NurseryUserController::class, 'NurseryFileUpload'])->name('updatefileUpload');
     Route::post('update-remove-file', [NurseryUserController::class, 'NurseryFileRemove'])->name('updatefileRemove');
+    Route::get('add-coach', [NurseryUserController::class, 'addCoach'])->name('add.coach');
+    Route::post('store-coach-detail', [NurseryUserController::class, 'saveCoachDetail'])->name('save.coachDetail');
+    Route::get('player-list', [NurseryUserController::class, 'playerList'])->name('player.list');
+    Route::get('add-player', [NurseryUserController::class, 'addPlayer'])->name('addPlayer');
+    Route::post('store-player-detail', [NurseryUserController::class, 'savePlayerDetail'])->name('save.playerDetail');
+
 });
 
 // Route::get('test/', [LoginController::class, 'index']);

@@ -10,12 +10,14 @@ class Coach extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+    
     public static function nurseryDetailCoach()
     {
         
         $coach = Coach::where('user_secure_id',Auth::user()->secure_id)->first();
         $nursery = Nursery::where('secure_id',$coach->nurserie_secure_id)->with('game','district')->first();
-    return $nursery;
+		return $nursery;
 
     }
 

@@ -35,21 +35,21 @@
                             <table id="datatable" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Sr.no</th>
-                                        <th>Nursery Name</th>
-                                        <th>Email</th>
-                                        <th>District</th>
+                                        <th style="width: 30px;">Sr.no</th>
+                                        <th style="width: 107px;">Application Id</th>
+                                        <th style="width: 93px;">Received On</th>
                                         <th>Games</th>
-                                        <th>DSO Action</th>
-
-                                        <th>Action</th>
+                                        <th>Nursery Name</th>
+                                        <th>District</th>
+                                        <th>Status</th>
+                                        <th style="width: 119px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     $i = 1;
-                                    foreach ($nurserys as $n) {
-                                        $n = $n['nursery'];
+                                    foreach ($nurserys as $nn) {
+                                        $n = $nn['nursery'];
                                        
                                     ?>
                                         <tr>
@@ -57,30 +57,27 @@
                                                 <?= $i++ ?>
                                             </td>
                                             <td>
-                                                <?= $n['name_of_nursery'] ?>
+                                                <?= $n['application_number'] ?>
                                             </td>
                                             <td>
-                                                <?= $n['email'] ?>
+                                                {{ date('d-M-Y', strtotime($nn['created_at'])) ?? ''}}
+                                            </td>
+                                            <td>
+                                                <?= $n['game']['name'] ?>
+                                            </td>
+                                            <td>
+                                                <?= $n['name_of_nursery'] ?>
                                             </td>
                                             <td>
                                                 <?= $n['district']['name'] ?>
                                             </td>
                                             <td>
-                                                <?= $n['game']['name'] ?>
-
-
-                                            </td>
-                                            <td>
-                                            <?php if($n['nursery_status']['approved_reject_by_dso'] == 0)
+                                            <?php if($n['nursery_status']['approved_reject_by_dso'] == 1)
                                                 {
-                                                    echo 'Pending';
-                                                }
-                                                elseif ($n['nursery_status']['approved_reject_by_dso'] == 1) {
                                                     echo 'Recommended';
                                                 }
-                                                else {
+                                                elseif ($n['nursery_status']['approved_reject_by_dso'] == 1) {
                                                     echo 'Not Recommended';
-
                                                 }
                                                 
                                                 ?>
@@ -89,7 +86,7 @@
                                                 <a href="{{url('admin/nursery/view/').'/'.$n['secure_id']}}" class="btn btn-primary">View</a>
 
                                                 <?php if ($n['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0 && $n['nursery_status']['approved_reject_by_dso'] == 1 ) { ?>
-                                                    <a href="{{url('admin/nursery/approve_reject').'/'.$n['secure_id']}}" class="btn btn-primary">Proceed</a>
+                                                    <a href="{{ route('admin.adminProcess',$n['secure_id'])}}" class="btn btn-primary">Proceed</a>
 
                                                 <?php  } ?>
 

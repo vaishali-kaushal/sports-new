@@ -12,6 +12,9 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js" integrity="sha512-JPcRR8yFa8mmCsfrw4TNte1ZvF1e3+1SdGMslZvmrzDYxS69J7J49vkFL8u6u8PlPJK+H3voElBtUCzaXj+6ig==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
@@ -181,12 +184,12 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/list') }}" class="nav-link {{ Request::is('admin/nursery/list') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.pendingList') }}" class="nav-link {{ Request::is('admin/nursery/list') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Pending List</p>
+                                        <p>Recommended by DSO</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="{{ url('admin/nursery/list/r') }}" class="nav-link {{ Request::is('admin/nursery/list/r*') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Recommended</p>
@@ -197,27 +200,22 @@
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Not Recommended</p>
                                     </a>
-                                </li>
-                                <!-- <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/list') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Pending List</p>
-                                    </a>
                                 </li> -->
+ 
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/1') }}" class="nav-link">
+                                    <a href="{{ route('admin.approved_list') }}" class="nav-link {{ Request::is('admin/nursery/approved_list') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Approved List</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/2') }}" class="nav-link">
+                                    <a href="{{ route('admin.reject_list') }}" class="nav-link {{ Request::is('admin/nursery/reject_list') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Reject List</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ url('admin/nursery/3') }}" class="nav-link">
+                                    <a href="{{ route('admin.objection_list') }}" class="nav-link {{ Request::is('admin/nursery/objection_list') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Objection List</p>
                                     </a>

@@ -284,7 +284,7 @@
     <?php
     if ($nursery['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0 && $nursery['nursery_status']['approved_reject_by_dso']== 1) {
 
-        $nurseryRemarks = $nursery['nursery_status']['remark']; ?>
+        ?>
 
 
         <section class="content">
@@ -296,37 +296,7 @@
                     <div class="col-12">
                         <h1>DSO Feasibility Report</h1>
                         <div class="card p-5">
-                            <!-- <form class="regis-form" action="{{url('dso/nursery/report/store')}}/{{$nursery['secure_id']}}" method="post" enctype="multipart/form-data">
-                            @csrf -->
                             <div class="row">
-                        <!--       <div class="col-sm-12">
-                                    <label class="form-label">Grade</label>
-                                    <select class="form-control form-select" aria-label="Default select example" name="grade" <?php if (!empty($nursery['grade'])) {
-                                                                                                                                    echo "disabled";
-                                                                                                                                } ?>>
-                                        <option value="">--Please Select Grade--</option>
-                                        <option value="A" <?php if (!empty($nurseryRemarks['grade'])) {
-                                                                if ($nurseryRemarks['grade'] == 'A') {
-                                                                    echo "selected";
-                                                                }
-                                                            } ?>>A</option>
-                                        <option value="B" <?php if (!empty($nurseryRemarks['grade'])) {
-                                                                if ($nurseryRemarks['grade'] == 'B') {
-                                                                    echo "selected";
-                                                                }
-                                                            } ?>>B</option>
-                                        <option value="C" <?php if (!empty($nurseryRemarks['grade'])) {
-                                                                if ($nurseryRemarks['grade'] == 'C') {
-                                                                    echo "selected";
-                                                                }
-                                                            } ?>>C</option>
-                                        <option value="D" <?php if (!empty($nurseryRemarks['grade'])) {
-                                                                if ($nurseryRemarks['grade'] == 'D') {
-                                                                    echo "selected";
-                                                                }
-                                                            } ?>>D</option>
-                                    </select>
-                                </div> -->
                                 <div class="col-sm-12">
                                     <label class="form-label">Site visit done?</label>
                                     <select class="form-control site_visit" name="site_visit" readonly>
@@ -339,73 +309,55 @@
                                     <label class="form-label">Nursery Recommendations</label>
                                     <select class="form-control recommended" name="recommend_status" readonly>
                                         <option value="">-----Select-----</option>
-                                        <option value="yes"  {{ !empty($nurseryRemarks['recommend_status']) && $nurseryRemarks['recommend_status'] == 'yes' ? 'selected' : '' }}>Recommended for Approval</option>
+                                        <option value="yes"{{ !empty($nurseryRemarks['recommend_status']) && $nurseryRemarks['recommend_status'] == 'yes' ? 'selected' : '' }}>Recommended for Approval</option>
                                         <option value="no"  {{ !empty($nurseryRemarks['recommend_status']) && $nurseryRemarks['recommend_status'] == 'no' ? 'selected' : '' }}>Not Recommended</option>
                                     </select>
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="form-label">Remarks</label>
-                                    <textarea class="form-control" name="remarks" {{!empty( $nurseryRemarks['remarks'])?"disabled":""
-                            }}>{{!empty( $nurseryRemarks['remarks'])? $nurseryRemarks['remarks']:"" }}</textarea>
+                                    <textarea class="form-control" name="remarks" disabled>{{ $nurseryRemarks['remarks'] ?? '' }}</textarea>
                                 </div>
                                 <div class="col-sm-12 pb-2">
                                     <label class="form-label">Nursery Photographs</label>
-                                    <!-- <input type="file" class="form-control" name="pics[]" multiple="multiple"> -->
-
                                     <div class="row">
 
-                                        <?php if (!empty($nurseryRemarks['files']) && !is_null($nurseryRemarks['files'])) {
+                                    @if (!empty($nurseryRemarks['files']))
 
-                                            $pics = json_decode($nurseryRemarks['files']);
-                                            foreach ($pics as $p) {  ?>
+                                        @php
+                                            $reportPhotographs = explode(',', $nurseryRemarks['files']);
+                                        @endphp
+                                       
+                                        @foreach($reportPhotographs as $photo)
+                                        <div class="col-sm-4 pb-2">
+                                            
+                                            <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank"><img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="20%"></a>
 
-                                                <div class="col-sm-4 pb-2">
-                                                    <img src="{{url('public/docs/').'/'.$nursery['secure_id'].'/'.$p}}" class="img-thumbnail">
+                                        </div>
 
-                                                </div>
-
-                                        <?php   }
-                                        } ?>
-
+                                        @endforeach
+                                    @endif
 
 
                                     </div>
-
-
-
-
-
                                 </div>
                                 <div class="col-sm-12 pb-2">
                                     <label class="form-label">Inspection Report</label>
-                                    <!-- <input type="file" class="form-control" name="pics[]" multiple="multiple"> -->
-
                                     <div class="row">
-
-                                        <?php if (!empty($nurseryRemarks['inspection_report']) && !is_null($nurseryRemarks['inspection_report'])) {
-
-                                            $pics = json_decode($nurseryRemarks['inspection_report']);
-                                            foreach ($pics as $p) {  ?>
+                                        @if (!empty($nurseryRemarks['inspection_report'])) 
+                                            @php
+                                                $inspectionReport = explode(',', $nurseryRemarks['inspection_report']);
+                                            @endphp
+                                            @foreach ($inspectionReport as $photo)
 
                                                 <div class="col-sm-4 pb-2">
-                                                    <img src="{{url('public/docs/').'/'.$nursery['secure_id'].'/'.$p}}" class="img-thumbnail">
+                                                    <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank"><img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="20%"></a>
 
                                                 </div>
 
-                                        <?php   }
-                                        } ?>
-
-
-
+                                            @endforeach
+                                        @endif
                                     </div>
-
-
-
-
-
                                 </div>
-
-                                <!-- </form> -->
 
                             </div>
 
@@ -457,14 +409,14 @@
                 <div class="col-12">
                     <h1>Admin / HQ Report</h1>
                     <div class="card p-5">
-                        <form class="admin-remarks-form" action="{{url('admin/nursery/report/store')}}/{{$nursery['nursery_status']['nursery_id']}}" method="post" enctype="multipart/form-data">
+                        <form class="admin-remarks-form" action="{{ route('admin.saveNurseryReport',$nursery['secure_id'])}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
 
                                 <input type="hidden" id="statuss" name="status" value="0">
                                 <div class="col-sm-12">
                                     <label class="form-label">Nursery Status</label>
-                                    <select class="form-control" name="status">
+                                    <select class="form-control" name="status" id="nursery_status">
                                         <option value="">-----Select-----</option>
                                         <option value="1">Approve</option>
                                         <option value="2">Reject</option>
@@ -473,31 +425,11 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <label class="form-label">Remarks</label>
-                                    <textarea class="form-control" name="remarks"></textarea>
+                                    <textarea class="form-control" name="remarks" id="remarks"></textarea>
                                 </div>
                                 <div class="col-sm-12 pb-2">
                                     <label class="form-label">Upload Signed Document</label>
-                                    <input type="file" class="form-control" name="pics[]" multiple="multiple">
-
-                                    <!-- <div class="row">
-
-                                        <?php if (!empty($nurseryRemarks['files']) && !is_null($nurseryRemarks['files'])) {
-
-                                            $pics = json_decode($nurseryRemarks['files']);
-                                            foreach ($pics as $p) {  ?>
-
-                                                <div class="col-sm-4 pb-2">
-                                                    <img src="{{url('public/docs/').'/'.$nursery['secure_id'].'/'.$p}}" class="img-thumbnail">
-
-                                                </div>
-
-                                        <?php   }
-                                        } ?>
-
-
-
-                                    </div>
- -->
+                                    <input type="file" class="form-control" name="admin_nursery_report[]" id="admin_nursery_report">
                                     <div class="row mt-5 pb-5">
                                         <div class="col-sm-12 text-center">
                                             <span class="btn btn-primary" id="submit_btn">Submit</span>
@@ -531,62 +463,76 @@
 
 <script>
     $(document).ready(function() {
-        $('#approve_btn').click(function() {
-            // let id = $(this).data("id");
-            Swal.fire({
-                title: 'Are you sure?',
-                // text: 'Some text.',
-                type: 'success',
-                showCancelButton: true,
-                // confirmButtonColor: '#DD6B55',
-                confirmButtonText: 'Yes!',
-                cancelButtonText: 'No.'
-            }).then((isConfirm) => {
-                if (isConfirm.isConfirmed) {
-                    $('#statuss').val('1');
-                    $('.admin-remarks-form').submit();
-                }
-            });
+        // $('#approve_btn').click(function() {
+        //     // let id = $(this).data("id");
+        //     Swal.fire({
+        //         title: 'Are you sure?',
+        //         // text: 'Some text.',
+        //         type: 'success',
+        //         showCancelButton: true,
+        //         // confirmButtonColor: '#DD6B55',
+        //         confirmButtonText: 'Yes!',
+        //         cancelButtonText: 'No.'
+        //     }).then((isConfirm) => {
+        //         if (isConfirm.isConfirmed) {
+        //             $('#statuss').val('1');
+        //             $('.admin-remarks-form').submit();
+        //         }
+        //     });
 
-        });
-        $('#reject_btn').click(function() {
-            // let id = $(this).data("id");
-            Swal.fire({
-                title: 'Are you sure?',
-                // text: 'Some text.',
-                type: 'success',
-                showCancelButton: true,
-                // confirmButtonColor: '#DD6B55',
-                confirmButtonText: 'Yes!',
-                cancelButtonText: 'No.'
-            }).then((isConfirm) => {
-                if (isConfirm.isConfirmed) {
-                    $('#statuss').val('2');
-                    $('.admin-remarks-form').submit();
-                }
-            });
+        // });
+        // $('#reject_btn').click(function() {
+        //     // let id = $(this).data("id");
+        //     Swal.fire({
+        //         title: 'Are you sure?',
+        //         // text: 'Some text.',
+        //         type: 'success',
+        //         showCancelButton: true,
+        //         // confirmButtonColor: '#DD6B55',
+        //         confirmButtonText: 'Yes!',
+        //         cancelButtonText: 'No.'
+        //     }).then((isConfirm) => {
+        //         if (isConfirm.isConfirmed) {
+        //             $('#statuss').val('2');
+        //             $('.admin-remarks-form').submit();
+        //         }
+        //     });
 
-        });
-        $('#objection_btn').click(function() {
-            // let id = $(this).data("id");
-            Swal.fire({
-                title: 'Are you sure?',
-                // text: 'Some text.',
-                type: 'success',
-                showCancelButton: true,
-                // confirmButtonColor: '#DD6B55',
-                confirmButtonText: 'Yes!',
-                cancelButtonText: 'No.'
-            }).then((isConfirm) => {
-                if (isConfirm.isConfirmed) {
-                    $('#statuss').val('3');
-                    $('.admin-remarks-form').submit();
-                }
-            });
+        // });
+        // $('#objection_btn').click(function() {
+        //     // let id = $(this).data("id");
+        //     Swal.fire({
+        //         title: 'Are you sure?',
+        //         // text: 'Some text.',
+        //         type: 'success',
+        //         showCancelButton: true,
+        //         // confirmButtonColor: '#DD6B55',
+        //         confirmButtonText: 'Yes!',
+        //         cancelButtonText: 'No.'
+        //     }).then((isConfirm) => {
+        //         if (isConfirm.isConfirmed) {
+        //             $('#statuss').val('3');
+        //             $('.admin-remarks-form').submit();
+        //         }
+        //     });
 
-        });
+        // });
          $('#submit_btn').click(function() {
-            // let id = $(this).data("id");
+            var nursery_status = $("#nursery_status").val();
+            if (!nursery_status) {
+                Swal.fire('Select Nursery Status ', '', 'error');
+                return false;
+            }
+            var remarks = $("#remarks").val();
+            if (!remarks) {
+                Swal.fire('Enter Remarks', '', 'error');
+                return false;
+            }
+            var admin_nursery_report = $("#admin_nursery_report").val();
+            if (!admin_nursery_report) {
+                Swal.fire('Upload Nursery Report ', '', 'error');
+                return false;
+            }
             Swal.fire({
                 title: 'Are you sure?',
                 // text: 'Some text.',
@@ -601,25 +547,6 @@
                     $('.admin-remarks-form').submit();
                 }
             });
-
-        });
-         $('#status').change(function() {
-            // let id = $(this).data("id");
-            alert("vvv");
-            // Swal.fire({
-            //     title: 'Are you sure?',
-            //     // text: 'Some text.',
-            //     type: 'success',
-            //     showCancelButton: true,
-            //     // confirmButtonColor: '#DD6B55',
-            //     confirmButtonText: 'Yes!',
-            //     cancelButtonText: 'No.'
-            // }).then((isConfirm) => {
-            //     if (isConfirm.isConfirmed) {
-            //         // $('#statuss').val('3');
-            //         $('.admin-remarks-form').submit();
-            //     }
-            // });
 
         });
 

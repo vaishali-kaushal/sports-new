@@ -25,6 +25,7 @@ use App\Models\RoleType;
 use App\Models\CoachQualification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Models\Coach;
 
 class NurseryUserController extends Controller
 {
@@ -512,5 +513,165 @@ class NurseryUserController extends Controller
         }
 
 
+    }
+
+    public function addCoach()
+    {
+        $user_mobile = Auth::user()->mobile;
+        $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
+        $is_coach_exist = Nursery::where([['mobile_number', $user_mobile],['whether_qualified_coach_is_available_for_the_concerned_game','yes']])->first();
+        // dd($nursery);
+        $coach_certificate =[];
+        if(!empty($is_coach_exist)){
+            $coach_certificate = NurseryMedia::where([['nursery_id',$is_coach_exist->id],['type','coach_certificate']])->get();
+        }
+        $nursery = Nursery::where('mobile_number',$user_mobile)->first();
+        $coach_detail = Coach::where('nursery_id', $nursery->id)->first();
+        // dd($user_mobile);
+        // dd($coach_certificate);
+        return view('nursery.user.addcoach', compact('coach_detail','coach_qualification','coach_certificate','is_coach_exist'));
+    }
+
+    public function saveCoachDetail(Request $request)
+    {
+        $data = $request->all();
+        $this->validateCoachForm($data);
+        try{
+
+            $user = User::where('id', Auth::user()->id)->first();
+            $nursery = Nursery::where('mobile_number', $user->mobile)->first();
+            $profile_pic = '';
+            if ($request->hasFile('profile_photo') && empty($profile_pic)) {
+                foreach ($request->file('profile_photo') as $file) {
+                    $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+                    $file->storeAs($nursery->application_number.'/coach/profile', $fileName, 'public');
+                    $profile_pic = 'coach/profile/'.$fileName;
+                }
+            }
+            $id_proof ='';
+            if ($request->hasFile('id_proof') && empty($id_proof)) {
+                foreach ($request->file('id_proof') as $file) {
+                    $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+                    $file->storeAs($nursery->application_number.'/coach/id_proof', $fileName, 'public');
+                    $id_proof = 'coach/id_proof/'.$fileName;
+                }
+            }
+            $secure_id = bin2hex(random_bytes(16));
+            $coachDetail = Coach::updateOrInsert(
+                [
+                    'mobile_number' => $request->mobile_number,
+                ],
+                [
+                    'secure_id'=>$secure_id,
+                    'nursery_id'=>$nursery->id,
+                    'coach_name'=>$request->coach_name,
+                    'father_name'=>$request->father_name,
+                    'mother_name'=>$request->mother_name,
+                    'gender'=>$request->gender,
+                    'dob'=>date('Y-m-d', strtotime($request->dob)),
+                    'mobile_number'=>$request->mobile_number,
+                    'address'=>$request->address,
+                    'pin_code'=>$request->pin_code,
+                    'coach_qualification'=>$request->coach_qualification,
+                    'bank_account_number'=>$request->bank_account_number,
+                    'bank_name'=>$request->bank_name,
+                    'bank_address'=>$request->bank_address,
+                    'ifsc_code'=>$request->ifsc_code,
+                    'profile_pic'=>$profile_pic,
+                    'id_proof'=>$id_proof,
+                    'created_at'=>now()
+                ]
+            );
+            // update detail in nursery table also
+            if ($coachDetail) {
+                return response()->json(['status' => 'success', 'message' => 'Coach added successfully.']);
+            } else {
+                return response()->json(['status' => 'error','message' => 'Error saving coach Details: Unknown error']);
+            }
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => 'error', 'message' => 'Error Found: ' . $e->getMessage()]);
+        }
+
+
+    }
+
+    public function validateCoachForm($data)
+    {
+        $rules = [
+            'coach_name' => 'required',
+            'father_name' => 'required',
+            'mother_name' => 'required'
+
+        ];
+
+        $messages = [ ];
+        
+        $validator = Validator::make($data, $rules, $messages);
+        // dd($validator->errors()->toArray());
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+    }
+
+    public function playerList()
+    {
+        return view('nursery.user.player.index');
+    }
+
+    public function addPlayer()
+    {
+        return view('nursery.user.player.addplayer');
+    }
+
+    public function savePlayerDetail(Request $request)
+    {
+        dd($request->all());
+        $secure_id = bin2hex(random_bytes(16));
+        $nursery = Nursery::where('mobile_number', $user->mobile)->first();
+        try{
+                $id_proof ='';
+                if ($request->hasFile('id_proof') && empty($id_proof)) {
+                    foreach ($request->file('id_proof') as $file) {
+                        $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
+                        $file->storeAs($nursery->application_number.'/player/id_proof', $fileName, 'public');
+                        $id_proof = 'player/id_proof/'.$fileName;
+                    }
+                }
+
+                $playerDetail = Player::updateOrInsert(
+                [
+                    'mobile_number' => $request->mobile_number,
+                ],
+                [
+                    'secure_id'=>$secure_id,
+                    'nursery_id'=>$nursery->id,
+                    'coach_name'=>$request->coach_name,
+                    'father_name'=>$request->father_name,
+                    'mother_name'=>$request->mother_name,
+                    'gender'=>$request->gender,
+                    'dob'=>date('Y-m-d', strtotime($request->dob)),
+                    'mobile_number'=>$request->mobile_number,
+                    'address'=>$request->address,
+                    'pin_code'=>$request->pin_code,
+                    'bank_account_number'=>$request->bank_account_number,
+                    'bank_name'=>$request->bank_name,
+                    'bank_address'=>$request->bank_address,
+                    'ifsc_code'=>$request->ifsc_code,
+                    'profile_pic'=>$profile_pic,
+                    'id_proof'=>$id_proof,
+                    'created_at'=>now()
+                ]
+            );
+            // update detail in nursery table also
+            if ($playerDetail) {
+                return response()->json(['status' => 'success', 'message' => 'Coach added successfully.']);
+            } else {
+                return response()->json(['status' => 'error','message' => 'Error saving coach Details: Unknown error']);
+            }
+        }catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => 'error', 'message' => 'Error Found: ' . $e->getMessage()]);
+        }
     }
 }

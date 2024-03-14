@@ -315,22 +315,23 @@
                                         <th scope="row">{{$key+1}}</th>
                                         <td>{{$remark['user']['name']}}</td>
                                         <td>{{ $remark['remarks']}}</td>
-                                        <td>
+                                        <td style="width: 30%;">
                                             @if (!empty($remark['files']) && !is_null($remark['files']))
                                                 @php
-                                                    $picss = json_decode($remark['files']);
+                                                    $reportPhotographs = explode(',', $remark['files']);
                                                 @endphp
-                                                @if(!empty($picss))
-                                                    @foreach ($picss as $p)
-                                                        <a href="{{url('public/docs/').'/'.$nursery['secure_id'].'/'.$p}}"
-                                                            target="_blank">
+                                                @if(!empty($reportPhotographs))
+                                                 
+                                                    @foreach($reportPhotographs as $photo)
+                                                    
+                                                    <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
+                                                        <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
+                                                    </a>
 
-                                                            <img src="{{url('public/docs/').'/'.$nursery['secure_id'].'/'.$p}}"
-                                                                class="img-thumbnail" width="50px" height="50px">
-                                                        </a>
+
                                                     @endforeach
                                                 @else
-                                                    echo"N/A";
+                                                    "N/A";
                                                 @endif
                                             @endif
                                         </td>

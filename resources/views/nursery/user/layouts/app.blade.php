@@ -64,7 +64,9 @@
         <!-- Navbar -->
         <?php 
 
-$profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
+$profile = App\Models\User::where('secure_id', Auth::user()->secure_id)->first();
+$nursery = App\Models\Nursery::where('mobile_number', $profile->mobile)->first();
+$nurseryStatus = App\Models\NurseryApplicationStatus::where('nursery_id', $nursery->id)->first();
 // dd($profile->name);
 
 ?>
@@ -155,6 +157,26 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Edit Application
+                                    <!-- <i class="right fas fa-angle-left"></i> -->
+                                </p>
+                            </a>
+                        </li>
+                        @if($nurseryStatus->approved_by_admin_or_reject_by_admin == 1)
+                        @endif
+                        <li class="nav-item">
+                            <a href="{{ route('add.coach')}}" class="nav-link ">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Add Coach
+                                    <!-- <i class="right fas fa-angle-left"></i> -->
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('player.list') }}" class="nav-link ">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>
+                                    Player List
                                     <!-- <i class="right fas fa-angle-left"></i> -->
                                 </p>
                             </a>
@@ -267,3 +289,22 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
 </body>
 
 </html>
+<script>
+    $(document).ready(function() {
+
+    $('#datatable').DataTable({
+        // dom: 'Bfrtip',
+        // buttons: [
+        //     'copy', 'csv', 'excel', 'pdf', 'print'
+        // ],
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+    });
+
+    });
+</script>

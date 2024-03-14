@@ -175,7 +175,7 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
                                 <li class="nav-item">
                                 <a href="{{url('dso/nursery/pendingapproval')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Pending Approval</p>
+                                        <p>Recommended for Approval</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">

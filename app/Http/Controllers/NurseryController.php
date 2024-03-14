@@ -126,6 +126,7 @@ class NurseryController extends Controller
     }
     public function nurseryReportStore(Request $request, $secure_id)
     {
+        dd($request->all());
         $nurseryReport = $request->validate([
             'remarks' => '',
             'recommend_status' => '',
@@ -133,7 +134,6 @@ class NurseryController extends Controller
         ]);
         // dd($nurseryReport);
         $nursery = Nursery::where('secure_id', $secure_id)->first();
-        if (is_null($nursery->grade)) {
             if (empty($nurseryReport['remarks'])) {
                 return redirect()->back()->with('error', 'Please add the remarks');
             }
@@ -172,7 +172,7 @@ class NurseryController extends Controller
             $applicationStatus = NurseryApplicationStatus::find($nursery->nurseryStatus->id);
             $applicationStatus->approved_reject_by_dso = 1;
             $applicationStatus->save();
-        }
+        
 
         if($applicationStatus->approved_reject_by_dso == 1){
             return redirect('dso/nursery/pendingapproval')->with('success', 'The application has been successfully sent to concerned official in Head Office for necessary action.');
@@ -194,28 +194,7 @@ class NurseryController extends Controller
         $nursery  = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', $status)->with('nursery')->get()->toArray();
         return view('admin.nursery.list', ['layout' => 'admin.layouts.app', 'nurserys' => $nursery]);
     }
-    public function ApprovedRejectForm($id)
-    {
-
-
-
-
-
-        $nursery = Nursery::where('secure_id', $id)->with(['district', 'game'])->get()->toArray()[0];
-        
-        $TotalnurseryApproved = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->with('nursery')->get()->count();
-        $TotalnurseryApprovedinDistrict = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->where('district_id', $nursery['district']['id'])->get()->count();
-        $PendingForApproval = NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 0)->where('district_id', $nursery['district']['id'])->get()->count();
-
-        $count = [
-            'totalapprovednursery' => $TotalnurseryApproved,
-            'totalapprovednurserydistrict' => $TotalnurseryApprovedinDistrict,
-            'pendingapproval' => $PendingForApproval,
-        ];
-        $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery['nursery_status']['id'])->get()->toArray();
-        
-        return view('admin.nursery.report.form', ['layout' => 'admin.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'count' =>$count,'remarks'=>$nurserRemarks]);
-    }
+  
     public function AdminReportStore(Request $request, $id)
     {
         // dd($request->all());
@@ -371,13 +350,13 @@ class NurseryController extends Controller
         try{
             $updatestatus = Otp::where('mobile',$request->mobile)->update(['status'=>1]);
             if(env('APP_ENV') == "local"){
-                $otpp=$this->generateNumericOTP(6);
+                $otpp='111111';
                 $secure_id = bin2hex(random_bytes(16));
                 $otp = Otp::create([
                     'secure_id' => $secure_id,
                     'mobile' => $request->mobile,
                     'user_id'=> 'null',
-                    'otp'=> $otp,
+                    'otp'=> $otpp,
                     'status'=> 0,
                     'created_at' => now()
                 ]);
@@ -396,7 +375,7 @@ class NurseryController extends Controller
                         'secure_id' => $secure_id,
                         'mobile' => $request->mobile,
                         'user_id'=> 'null',
-                        'otp'=> $otp,
+                        'otp'=> $otpp,
                         'status'=> 0,
                         'created_at' => now()
                     ]);

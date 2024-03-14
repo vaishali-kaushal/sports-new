@@ -88,6 +88,14 @@
                     </div>
                     <!-- /.row -->
                     <!-- Main row -->
+                     <div class="row">
+                        <div class="col-sm-3">
+                            <canvas id="pieChart" width="200" height="100"></canvas>
+                        </div>
+                        <div class="col-sm-9">
+                            <canvas id="barChart" width="200" height="100"></canvas>
+                        </div>
+                    </div>
 
                     <!-- /.row (main row) -->
                 </div><!-- /.container-fluid -->
@@ -95,5 +103,61 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+ <script>
+
+            var ctx = document.getElementById('pieChart').getContext('2d');
+            var pieChart = new Chart(ctx, {
+
+                type: 'pie',
+                data: {
+                    labels: ['Total', 'Pending', 'Approved', 'Rejected'],
+                    datasets: [{
+                        data: {{ collect($data)->values() }},
+                        backgroundColor: ['red', 'orange', 'green', 'blue']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Pie Chart'
+                        },
+                        legend: {
+                            position: 'left',
+                            labels: {
+                                boxWidth: 10
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            var ctx = document.getElementById('barChart').getContext('2d');
+            var barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Total', 'Pending', 'Approved', 'Rejected'],
+                    datasets: [{
+                        label: 'Bar Chart',
+
+                        data: {{ collect($data)->values() }},
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+
+        </script>
 
 @endsection
