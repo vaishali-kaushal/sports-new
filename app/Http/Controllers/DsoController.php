@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use  App\Models\ApplicationRemark;
 use  App\Models\NurseryApplicationTransaction;
+use Illuminate\Support\Facades\Storage;
 
 class DsoController extends Controller
 {
@@ -140,8 +141,8 @@ class DsoController extends Controller
         }elseif($request->hasFile('inspectionreportfile') && !empty($application_number)) {
             $file = $request->file('inspectionreportfile');
             $fileName = date('Ymd_His') . '_' . $file->getClientOriginalName();
-            $file->storeAs($application_number.'/dso_report', $fileName, 'public');
-            $filePath = 'dso_report/'.$fileName;
+            $file->storeAs($application_number.'/dso_inspection_report', $fileName, 'public');
+            $filePath = 'dso_inspection_report/'.$fileName;
         }
         
         return $filePath;
