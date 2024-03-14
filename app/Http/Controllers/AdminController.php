@@ -149,4 +149,11 @@ class AdminController extends Controller
     	$nursery  = NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 3)->with('nursery')->get()->toArray();
         return view('admin.nursery.list', ['layout' => 'admin.layouts.app', 'nurserys' => $nursery]);
     }
+
+    public function excelDownload()
+    {
+        $applications  = NurseryApplicationStatus::with('nursery')->orderBy('created_at', 'asc')->get();
+        // dd($nursery);
+        return view('admin.excel',compact('applications'));
+    }
 }

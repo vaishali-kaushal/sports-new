@@ -278,6 +278,16 @@
                             </a>
 
                         </li>
+                         <li class="nav-item">
+                            <!-- <a href="#" class="nav-link"> -->
+                            <a href="{{ route('admin.excelDownload') }}" class="nav-link {{ Request::is('admin/excel-download') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    All Applications
+                                </p>
+                            </a>
+
+                        </li>
                         {{--  <li class="nav-item">
                             <a href="{{ url('admin/dso') }}" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -333,7 +343,7 @@
 <script>
 $(document).ready(function() {
 
-     $('#datatable').DataTable({
+    $('#datatable').DataTable({
         // dom: 'Bfrtip',
         // buttons: [
         //     'copy', 'csv', 'excel', 'pdf', 'print'

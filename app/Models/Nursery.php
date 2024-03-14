@@ -34,4 +34,8 @@ class Nursery extends Model
     {
         return $this->belongsTo(CoachQualification::class,'coach_qualification', 'id');
     }
+     public function previousGame()
+    {
+        return $this->belongsTo(Game::class,'game_previous_id','id');
+    }
 }

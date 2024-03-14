@@ -163,12 +163,11 @@ $nurseryStatus = App\Models\NurseryApplicationStatus::where('nursery_id', $nurse
                         </li>
                         @if($nurseryStatus->approved_by_admin_or_reject_by_admin == 1)
                         @endif
-                        <li class="nav-item">
+                      <!--   <li class="nav-item">
                             <a href="{{ route('add.coach')}}" class="nav-link ">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Add Coach
-                                    <!-- <i class="right fas fa-angle-left"></i> -->
                                 </p>
                             </a>
                         </li>
@@ -177,10 +176,9 @@ $nurseryStatus = App\Models\NurseryApplicationStatus::where('nursery_id', $nurse
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
                                     Player List
-                                    <!-- <i class="right fas fa-angle-left"></i> -->
                                 </p>
                             </a>
-                        </li>
+                        </li> -->
                         <!--     <ul class="nav nav-treeview">
                                 <li class="nav-item">
                                     <a href="{{route('user.nursery')}}" class="nav-link">
