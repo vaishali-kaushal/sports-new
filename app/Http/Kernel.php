@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'IsAdmin' => \App\Http\Middleware\IsAdmin::class,
         'IsCoach' => \App\Http\Middleware\IsCoach::class,
         'IsNursery' => \App\Http\Middleware\IsNursery::class,
+        'check.date' => \App\Http\Middleware\CheckDate::class,
     ];
 }

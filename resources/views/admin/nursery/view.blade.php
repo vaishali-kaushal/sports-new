@@ -1,28 +1,74 @@
 @extends($layout)
 
 @section('content')
-<script>
-    $(document).ready(function () {
-        $("input").prop("disabled", true);
-        $("select").prop("disabled", true);
-        $("textarea").prop("disabled", true);
-
-    });
-</script>
-
-
+<style>
+    .fs-5 {
+    font-size: 1.1em; 
+}
+</style>
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Background color */
+        }
+        .image-thumbnails {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        .thumbnail {
+            margin: 0 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .thumbnail:hover {
+            transform: scale(1.1);
+        }
+        .preview-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+            z-index: 999;
+            display: none;
+        }
+        .preview-image {
+            max-width: 80%;
+            max-height: 80%;
+            border-radius: 10px;
+            filter: blur(5px); /* Add blur effect */
+        }
+        .close-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
 <div class="content-wrapper">
 
     <section class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1>Nursery</h1>
+                    <!-- <h1>rtert</h1> -->
                 </div>
                 <div class="col-sm-6 text-right">
-                    <!-- p -->
-                            <!-- <div class="text-right"><strong>{{ $nursery['application_number'] ?? '' }}</strong></div> -->
+                    <!-- <a href="" class="btn btn-primary">Add DSO</a> -->
 
+                    <!-- <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">DataTables</li>
+                    </ol> -->
                 </div>
             </div>
         </div>
@@ -32,262 +78,441 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card p-5">
-                        <ul class="navbar-nav ml-auto">
-                            @if($role == 'admin')
-                            <li class="nav-item mr-2">
-                                <a class="btn btn-primary"
-                                    href="javascript:void(0)"
-                                    onClick="downloadPdf()"
-                                    role="button">
-                                    Download Complete Application
-                                </a>
-                            </li>
-                            @endif
-                        </ul>
-                        <form class="regis-form" method="post">
+                    <div class="card">
+                     
+                            <div class="card-header">
+                                <h4 class="card-title">Application Detail</h4>
+                            <div class="text-right"><strong>Application ID: {{ $nursery->application_number ?? '' }}</strong></div>
 
-                            <div class="row">
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Category of Nursery</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="cat_of_nursery">
-                                        <option <?php if (empty($nursery['cat_of_nursery'])) { echo "selected" ; } ?>
-                                            >Open this select menu</option>
-                                        <option value="1" <?php if (!empty($nursery['cat_of_nursery'])) { if
-                                            ($nursery['cat_of_nursery']="1" ) { echo "selected" ; } } ?>>Private
-                                        </option>
-                                        <option value="2" <?php if (!empty($nursery['cat_of_nursery'])) { if
-                                            ($nursery['cat_of_nursery']="2" ) { echo "selected" ; } } ?>>Government
-                                        </option>
-                                    </select>
-                                </div>
+                            
+                        </div>
 
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Games</label>
-                                    <div class="form-control">
-                                        <span class="">
-                                            {{ $nursery['game']['name']}}
-                                        </span>
-
-
-                                    </div>
-
-
-                                </div>
-                                <!-- </div> -->
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">District</label>
-                                    <select class="form-control" name="district_id">
-                                        <option value="">-----Select District------</option>
-                                        <?php foreach ($districts as $district) { ?>
-
-                                        <option value="{{$district['id']}}" <?php if (!empty($nursery['district_id'])) {
-                                            if ($nursery['district_id']==$district['id']) { echo "selected" ; } } ?>
-                                            >{{$district['name']}}</option>
-
-
-                                        <?php } ?>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Type of Nursery</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="type_of_nursery">
-                                        <option <?php if (empty($nursery['type_of_nursery'])) { echo "selected" ; } ?>
-                                            >Open this select menu</option>
-                                        <option value="1" <?php if (!empty($nursery['type_of_nursery'])) { if
-                                            ($nursery['type_of_nursery']="1" ) { echo "selected" ; } } ?>>School
-                                        </option>
-                                        <option value="2" <?php if (!empty($nursery['type_of_nursery'])) { if
-                                            ($nursery['type_of_nursery']="2" ) { echo "selected" ; } } ?>>Institute
-                                        </option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Name of Nursery</label>
-                                    <input type="text" class="form-control" name="name_of_nursery"
-                                        value="{{!empty($nursery['name_of_nursery']) ? $nursery['name_of_nursery'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Address</label>
-                                    <textarea class="form-control"
-                                        name="address">{{!empty($nursery['address']) ? $nursery['address'] : '' }}</textarea>
-
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Registration No. of Society who will be running
-                                        Nursery</label>
-                                    <input type="text" class="form-control" name="reg_no_running_nursery"
-                                        value="{{!empty($nursery['reg_no_running_nursery']) ? $nursery['reg_no_running_nursery'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Name of Head/Principal</label>
-                                    <input type="text" class="form-control" name="head_pricipal"
-                                        value="{{!empty($nursery['head_pricipal']) ? $nursery['head_pricipal'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email"
-                                        value="{{!empty($nursery['email']) ? $nursery['email'] : '' }}">
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Mobile Number</label>
-                                    <input type="number" class="form-control" name="mobile_number"
-                                        value="{{!empty($nursery['mobile_number']) ? $nursery['mobile_number'] : '' }}">
-                                </div>
-                                <!-- <div class="col-sm-6">
-                                    <label class="form-label">Type of Nursery</label>
-                                     <select class="form-control form-select" aria-label="Default select example" name="typr_of_nursery">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">School</option>
-                                         <option value="2"<?php  //if(!empty($nursery['game_disp)){ if($nursery['game_disp ="2"){  echo"selected";   }} 
-                                                            ?>   >Institute</option>
-                                    </select>
-                                </div> -->
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Select Games/Disciplines</label>
-                                    <!--  <select class="form-control selectpicker form-control" multiple>
-                                        <option value="1">One</option>
-                                         <option value="2"<?php // if(!empty($nursery['game_disp)){ if($nursery['game_disp ="2"){  echo"selected";   }} 
-                                                            ?>   >Two</option>
-                                        <option value="3">Three</option>
-                                        <option value="4">Four</option>
-                                    </select> -->
-                                    <select class="form-control form-control" name="game_disp">
-                                        <option value="1" <?php if (!empty($nursery['game_disp'])) { if
-                                            ($nursery['game_disp']="1" ) { echo "selected" ; } } ?>>One</option>
-                                        <option value="2" <?php if (!empty($nursery['game_disp'])) { if
-                                            ($nursery['game_disp']="2" ) { echo "selected" ; } } ?>>Two</option>
-                                        <option value="3" <?php if (!empty($nursery['game_disp'])) { if
-                                            ($nursery['game_disp']="3" ) { echo "selected" ; } } ?>>Three</option>
-                                        <option value="4" <?php if (!empty($nursery['game_disp'])) { if
-                                            ($nursery['game_disp']="4" ) { echo "selected" ; } } ?>>Four</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Playground/Hall/Court available</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="playground_hall_court_available">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1" <?php if (!empty($nursery['playground_hall_court_available']))
-                                            { if ($nursery['playground_hall_court_available']="1" ) { echo "selected" ;
-                                            } } ?>>Yes</option>
-                                        <option value="2" <?php if (!empty($nursery['playground_hall_court_available']))
-                                            { if ($nursery['playground_hall_court_available']="2" ) { echo "selected" ;
-                                            } } ?>>No</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Equipment related to selected Games
-                                        available</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="equipment_related_to_selected_games_available">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1" <?php if
-                                            (!empty($nursery['equipment_related_to_selected_games_available'])) { if
-                                            ($nursery['equipment_related_to_selected_games_available']="1" ) {
-                                            echo "selected" ; } } ?>>Yes</option>
-                                        <option value="2" <?php if
-                                            (!empty($nursery['equipment_related_to_selected_games_available'])) { if
-                                            ($nursery['equipment_related_to_selected_games_available']="2" ) {
-                                            echo "selected" ; } } ?>>No</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Whether Nursery will provide Sports kits to
-                                        selected players?</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="whether_nursery_will_provide_sports_kits_to_selected_players">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1" <?php if
-                                            (!empty($nursery['whether_nursery_will_provide_sports_kits_to_selected_players']))
-                                            { if
-                                            ($nursery['whether_nursery_will_provide_sports_kits_to_selected_players']="1"
-                                            ) { echo "selected" ; } } ?>>Yes</option>
-                                        <option value="2" <?php if
-                                            (!empty($nursery['whether_nursery_will_provide_sports_kits_to_selected_players']))
-                                            { if
-                                            ($nursery['whether_nursery_will_provide_sports_kits_to_selected_players']="2"
-                                            ) { echo "selected" ; } } ?>>No</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Whether Nursery will provide fee concession to
-                                        selected players?</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="whether_nursery_will_provide_fee_concession_to_selected_players">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1" <?php if
-                                            (!empty($nursery['whether_nursery_will_provide_fee_concession_to_selected_players']))
-                                            { if
-                                            ($nursery['whether_nursery_will_provide_fee_concession_to_selected_players']="1"
-                                            ) { echo "selected" ; } } ?>>Yes</option>
-                                        <option value="2" <?php if
-                                            (!empty($nursery['whether_nursery_will_provide_fee_concession_to_selected_players']))
-                                            { if
-                                            ($nursery['whether_nursery_will_provide_fee_concession_to_selected_players']="2"
-                                            ) { echo "selected" ; } } ?>>No</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Whether qualified coach is available for the
-                                        concerned game?</label>
-                                    <select class="form-control form-select" aria-label="Default select example"
-                                        name="whether_qualified_coach_is_available_for_the_concerned_game">
-                                        <option selected>Open this select menu</option>
-                                        <option value="1" <?php if
-                                            (!empty($nursery['whether_qualified_coach_is_available_for_the_concerned_game']))
-                                            { if
-                                            ($nursery['whether_qualified_coach_is_available_for_the_concerned_game']="1"
-                                            ) { echo "selected" ; } } ?>>Yes</option>
-                                        <option value="1" <?php if
-                                            (!empty($nursery['whether_qualified_coach_is_available_for_the_concerned_game']))
-                                            { if
-                                            ($nursery['whether_qualified_coach_is_available_for_the_concerned_game']="2"
-                                            ) { echo "selected" ; } } ?>>No</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">No. of students playing concerned games</label>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label class="form-label">Boys</label>
-                                            <input type="text" class="form-control" name="boys"
-                                                value="{{!empty($nursery['boys']) ? $nursery['boys'] : '' }}">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label class="form-label">Girls</label>
-                                            <input type="text" class="form-control" name="girls"
-                                                value="{{!empty($nursery['girls']) ? $nursery['girls'] : '' }}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 mb-3">
-                                    <label class="form-label">Any specific achievements of the Institute during
-                                        last 5 years</label>
-                                    <textarea class="form-control"
-                                        name="any_specific_achievements_of_the_institute_during_last">{{!empty($nursery["any_specific_achievements_of_the_institute_during_last"]) ? $nursery["any_specific_achievements_of_the_institute_during_last"] : '' }}
-                                    </textarea>
-
-                                </div>
-                                <!-- <div class="col-sm-12 text-end pt-4">
-                                    <button type="submit" class="btn btn-danger">Submit</button>
-                                </div> -->
-
+                        <div class="card-body">
+                            <div>
+                                <h3>Nursery details</h3>
                             </div>
-                        </form>
+                            <div class="row">
+                            <div class="col-sm-12">
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Application Date</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ date('d-M-Y', strtotime($nursery->created_at)) ?? '' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">District</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->district->name }}</div>
+                                    </div>
+                                </div>
+                               
+                            </div>
 
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Category of Nursery</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->cat_of_nursery) }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Type of Nursery</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        @if($nursery->cat_of_nursery == 'private')
+                                            @if($nursery->type_of_nursery == 'pvt_institute')
+                                                <div>Private Institute</div>
+                                            @elseif($nursery->type_of_nursery == 'pvt_school')
+                                                <div>Private School</div>
+                                            @endif
+                                        @else
+                                        <div> {{ ucfirst($nursery->type_of_nursery)}}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Educational  Center</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->name_of_nursery ?? '' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Name of Head/Principal</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->head_pricipal ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Email</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->email ?? '' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Registration No.</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->reg_no_running_nursery ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Pin Code</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->pin_code ?? '' }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Address</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->address ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div>
+                                <h3>Game Details</h3>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Game Applying For</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div> {{$nursery->game->name}}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Sports Game Discipline</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->game_disp) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Playground available</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->playground_hall_court_available ?? '') }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Equipment Available</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div> {{$nursery->equipment_related_to_selected_games_available ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Number of students playing concerned games</label>
+                                    </div>
+                                    @if($nursery->game_disp == 'boys')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->boys ?? '0' }} Boys</div>
+                                    </div>
+                                    @endif
+                                    @if($nursery->game_disp == 'girls')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->girls ?? '' }} Girls</div>
+                                    </div>
+                                    @endif
+                                    @if($nursery->game_disp == 'mix')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->girls ?? '' }} Girls and {{ $nursery->girls ?? '' }} Boys</div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether qualified coach is available for the concerned game</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->whether_qualified_coach_is_available_for_the_concerned_game)  ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Name of Coach</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->coach_name)  ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="row mt-3" @if($nursery->whether_qualified_coach_is_available_for_the_concerned_game == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Highest Qualification of Coach</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->coachQualification->name  ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Whether Nursery will provide fee concession to selected players</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div> {{$nursery->whether_nursery_will_provide_fee_concession_to_selected_players ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12" @if($nursery->whether_nursery_will_provide_fee_concession_to_selected_players == 'no') style="display:none;" @endif>
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Percentage of Fee Concession</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->percentage_fee ?? ''}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Highest Achievement of Players</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->any_specific_achievements_of_the_institute_during_last) ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether sports nursery was allotted in earlier years?</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->already_running_nursery) ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->already_running_nursery == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Year of Allotment</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->year_allotment ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->already_running_nursery == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Game (Previous)</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->game_previous_id ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3" @if($nursery->already_running_nursery == 'no') style="display:none;" @endif>
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Sports Game Discipline (Previous)</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->game_descipline_previous ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether Nursery will provide Sports kits to selected players</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->whether_nursery_will_provide_sports_kits_to_selected_players ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Whether School/Institue/Academy will provide fee concession to selected players</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->whether_nursery_will_provide_fee_concession_to_selected_players ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                             <hr>
+                            <div>
+                                <h3>Documents Uploaded</h3>
+                                <span>Click on below links to view attached documents</span>
+                            </div>
+                            <div>
+                                <div class="row mt-3">
+                                     @if(!empty($playground_images))
+                                        <div class="row col-12">
+                                            <h5>Playground Images</h5>
+                                        </div>
+                                        <!-- <div class="image-group" id="playgroundImages"> -->
+                                            @foreach($playground_images as $key => $p)
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $p['complete_path'] }}" target="_blank"><img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('playground_images/', $p['path']);
+                                                @endphp
+                                                <a href="{{ $p['complete_path'] }}" target="_blank">Playground Image {{ $key+1}}</a>
+
+                                            </div>
+                                            @endforeach
+                                            <div class="preview-container" id="previewContainerplayground">
+                                                <span class="close-preview" onclick="closePreview('Playground')">×</span>
+                                                <img src="" alt="Preview Image" class="preview-image" id="previewImageplayground">
+                                            </div>
+                                        <!-- </div> -->
+                                      @endif
+                                </div>
+                                <div class="row mt-3">
+                                    @if(!empty($equipment_images))
+                                        <div class="row col-12">
+                                            <h5>Equipment Images</h5>
+                                        </div>
+                                        <!-- <div class="image-group" id="equipmentImages"> -->
+                                            @foreach($equipment_images as $key => $p)
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $p['complete_path'] }}" target="_blank"><img src="{{ $p['complete_path'] }}" class="thumbnail" data-src="{{ $p['complete_path'] }}" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('equipment_images/', $p['path']);
+                                                @endphp
+                                                <a href="{{ $p['complete_path'] }}" target="_blank">Equipment Image {{ $key+1}}</a>
+
+                                            </div>
+                                            @endforeach
+                                           <div class="preview-container" id="previewContainerEquipment">
+                                            <span class="close-preview" onclick="closePreview('Equipment')">×</span>
+                                            <img src="" alt="Preview Image" class="preview-image" id="previewImageEquipment">
+                                            </div>
+                                        <!-- </div> -->
+                                      @endif
+                                </div>
+                                <div class="row mt-3">
+                                     @if(!empty($player_list_images))
+                                        <div class="row col-12">
+                                            <h5>Player List Document</h5>
+                                        </div>
+                                        <div class="image-group" id="playerListImages">
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $player_list_images['complete_path'] }}" target="_blank"><img src="{{ $player_list_images['complete_path'] }}" class="thumbnail" data-src="{{ $player_list_images['complete_path'] }}" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('player_list_files/', $player_list_images['path']);
+                                                @endphp
+                                                <a href="{{ $player_list_images['complete_path'] }}" target="_blank">Player List</a>
+                                            </div>
+                                            <div class="preview-container" id="previewContainerPlayerlist">
+                                                <span class="close-preview" onclick="closePreview('Playerlist')">×</span>
+                                                <img src="" alt="Preview Image" class="preview-image" id="previewImagePlayerlist">
+                                            </div>
+                                        </div>
+                                      
+                                      @endif
+                                </div>
+                                <div class="row mt-3">
+                                     @if(!empty($coach_certificate_images))
+                                        <div class="row col-12">
+                                            <h5>Coach Certificate</h5>
+                                        </div>
+                                            <div class="col-sm-12 pb-2">
+                                                <!-- <a href="{{ $coach_certificate_images['complete_path'] }}" target="_blank"><img src="{{ $coach_certificate_images['complete_path'] }}" class="" style="width: 100px;"></a> -->
+                                                @php
+                                                    $path = explode('coach_certificate_files/', $coach_certificate_images['path']);
+                                                @endphp
+                                                <a href="{{ $coach_certificate_images['complete_path'] }}" target="_blank">Coach Certificate</a>
+                                            </div>
+                                      @endif
+                                </div>
+                                <div class="row">
+                                     @if(!empty($panchayat_certificate_images))
+                                        <div class="row col-12">
+                                            <h5>Panchayat Certificate</h5>
+                                        </div>
+                                        <div class="col-sm-12 pb-2">
+                                            @php
+                                                $path = explode('panchayat_certificate_files/',$panchayat_certificate_images['path']);
+                                            @endphp
+                                            <!-- <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank"><img src="{{ $panchayat_certificate_images['complete_path'] }}" class="" style="width: 100px;"></a> -->
+                                                <a href="{{ $panchayat_certificate_images['complete_path'] }}" target="_blank">Panchayat Certificate</a>
+                                        </div>
+                                      @endif
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <!-- <div class="timeline">
+                                    <div class="time-label">
+                                        <span class="bg-red">{{ date('d M, Y', strtotime($nursery->created_at))}}</span>
+                                    </div>
+                                    <div>
+                                        @php
+                                            $createdAt = \Carbon\Carbon::parse($nursery->created_at);
+                                            $now = \Carbon\Carbon::now();
+                                            $diff = $createdAt->diff($now);
+                                        @endphp
+                                        <i class="fas fa-user bg-green"></i>
+                                        <div class="timeline-item">
+                                        <span class="time"><i class="fas fa-clock"></i> {{ $diff->days }} days {{ $diff->h }} hours {{ $diff->i }} minutes
+                                        </span>
+                                        <h3 class="timeline-header no-border"><a href="#">You</a> created nursery</h3>
+                                        </div>
+                                    </div>
+                                    <div class="time-label">
+                                        <span class="bg-green">3 Jan. 2014</span>
+                                    </div>
+                                    <div>
+                                        <i class="fas fa-clock bg-gray"></i>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                        </div>
                     </div>
-
-
-
                 </div>
 
             </div>
-
         </div>
-
     </section>
 @if(!empty($remarks))
     <section class="content">
@@ -351,41 +576,23 @@
     @endif
 </div>
 
-<!-- remarks -->
 
-<script>
-
-        function downloadPdf() {
-            var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken
-                }
-            });
-            $.ajax({
-                url: '{{ route("admin.printNursery") }}',
-                type: 'POST',
-                data: {nursery: {!! json_encode($nursery) !!}, remarks: {!! json_encode($remarks) !!}},
-                xhrFields: {
-                responseType: 'blob'
-            },
-                success: function(response) {
-                    var blobUrl = URL.createObjectURL(response);
-                    var a = document.createElement('a');
-                    a.href = blobUrl;
-                    a.download = 'nursery.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    URL.revokeObjectURL(blobUrl);
-                    $(a).remove();
-                    },
-                error: function(xhr, status, error) {
-            console.error(error);
-            // Handle error here
-        }
-            });
-        }
-
-</script>
 @endsection
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!--  <script>
+  $(document).ready(function() {
+       $(".thumbnail").click(function() {
+            var imageUrl = $(this).data("src");
+            console.log(imageUrl,"imageUrl")
+            var groupId = $(this).closest('.image-group').attr('id');
+            console.log(groupId,"erwererwe")
+            $("#" + groupId.replace("Images", "Image")).attr("src", imageUrl);
+            $("#" + groupId.replace("Images", "Container")).fadeIn();
+        });
+    });
+
+    function closePreview(group) {
+        $("#previewContainer" + group).fadeOut();
+    }
+ </script> -->

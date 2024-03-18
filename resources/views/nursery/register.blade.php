@@ -164,7 +164,6 @@
 </script>
 @endif
  @if (count($errors) > 0)
-dd($errors);
     <div class="alert alert-danger">
         <ul>
             @foreach ($errors->all() as $error)

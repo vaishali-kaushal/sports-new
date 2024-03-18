@@ -65,13 +65,15 @@ class NurseryController extends Controller
     {
         $role = $this->checkRole(Auth::user()->id);
         if ($role == 'admin') {
-            $nursery = Nursery::where('secure_id', $id)->get()->toArray()[0];
-            $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery['nursery_status']['id'])->get()->toArray();
+            $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('secure_id', $id)->where('final_status',1)->first();
+            // $nursery = Nursery::where('secure_id', $id)->get()->toArray()[0];
+            $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery->nurseryStatus->id)->get()->toArray();
             return view('admin.nursery.view', ['layout' => 'admin.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(), 'remarks' => $nurserRemarks, 'role' => $role]);
         } else {
-
-            $nursery = Nursery::where('secure_id', $id)->get()->toArray()[0];
-            $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery['nursery_status']['id'])->get()->toArray();
+            $nursery = Nursery::with(['nurseryMedias','CoachQualification','game'])->where('secure_id', $id)->where('final_status',1)->first();
+            // $nursery = Nursery::where('secure_id', $id)->get()->toArray()[0];
+            // dd($nurserys);
+            $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery->nurseryStatus->id)->get()->toArray();
             return view('admin.nursery.view', ['layout' => 'dso.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(), 'remarks' => $nurserRemarks, 'role' => $role]);
             // $nursery = Nursery::where('secure_id', $id)->where('district_id', Auth::user()->district_id)->with(['district', 'game'])->get()->toArray()[0];
             // return view('nursery.view', ['layout' => 'dso.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray()]);

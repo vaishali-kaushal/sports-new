@@ -142,7 +142,9 @@ class NurseryUserController extends Controller
         $districts = District::get()->toArray();
         $games = Game::get()->toArray();
         $coach_qualification = CoachQualification::where('is_active', 1)->get()->toArray();
-        return view('nursery.user.view',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images,'layout'=>$layout ]);
+        $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery->nurseryStatus->id)->get()->toArray();
+        // dd($nurserRemarks);
+        return view('nursery.user.view',['nursery' => $nursery,'districts'=> $districts, 'games'=>$games, 'coach_qualification'=>$coach_qualification, 'playground_images' => $playground_images, 'equipment_images' => $equipment_images, 'player_list_images' => $player_list_images, 'coach_certificate_images' => $coach_certificate_images ,'panchayat_certificate_images' => $panchayat_certificate_images,'layout'=>$layout,'remarks' => $nurserRemarks ]);
 
     }
 

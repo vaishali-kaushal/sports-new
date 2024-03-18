@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label class="form-label">Address</label>
-                                    <textarea class="form-control" name="address">{{!empty($nursery['address']) ? $nursery['address'] : '' }}</textarea>
+                                    <textarea class="form-control" name="address" readonly>{{!empty($nursery['address']) ? $nursery['address'] : '' }}</textarea>
 
                                 </div>
                              <!--    <div class="col-sm-6">
@@ -284,7 +284,7 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title"><b>Present Status of Pending/Approved Nurseries ({{strtoupper($nurseryStatus['district'])}})</b></h3>
+                            <h3 class="card-title"><b>Present Status of Pending/Approved Nurseries (District-wise)</b></h3>
                         </div>
 
                         <div class="card-body">
@@ -292,7 +292,7 @@
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <th>Total</th>
+                                        <th>Total (in {{strtoupper($nurseryStatus['district'])}})</th>
                                         <th>Approved</th>
                                         <th>Pending </th>
                                         
@@ -321,7 +321,7 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Game</th>
+                                            <th>Total (in {{strtoupper($nursery['game']['name']) ?? ''}})</th>
                                             <th>Approved</th>
                                             <th>Pending</th>
                                         </tr>

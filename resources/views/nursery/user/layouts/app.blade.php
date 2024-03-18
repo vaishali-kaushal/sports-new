@@ -152,6 +152,7 @@ $nurseryStatus = App\Models\NurseryApplicationStatus::where('nursery_id', $nurse
                                 </p>
                             </a>
                         </li>
+                        @if(strtotime(env('REG_LAST_DATE')) >= strtotime(date('Y-m-d')))
                         <li class="nav-item">
                             <a href="{{ route('user.nursery')}}" class="nav-link ">
                                 <i class="far fa-circle nav-icon"></i>
@@ -161,6 +162,7 @@ $nurseryStatus = App\Models\NurseryApplicationStatus::where('nursery_id', $nurse
                                 </p>
                             </a>
                         </li>
+                        @endif
                         @if($nurseryStatus->approved_by_admin_or_reject_by_admin == 1)
                         @endif
                       <!--   <li class="nav-item">

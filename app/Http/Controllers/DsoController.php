@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use  App\Models\ApplicationRemark;
 use  App\Models\NurseryApplicationTransaction;
+use  App\Models\Game;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class DsoController extends Controller
 {
@@ -38,7 +41,18 @@ class DsoController extends Controller
         $district_id = Nursery::where('district_id', Auth::user()->district_id)->with(['district'])->first();
         $nurseryStatus['district'] = $district_id->district->name;
         // dd($district_id->district->name);
-
+        $games = NurseryApplicationStatus::where([
+            ['district_id', Auth::user()->district_id]
+        ])->with([
+            'nursery' => function ($query) {
+                $query->whereHas('game', function ($subquery) {
+                    $subquery->whereIn('game_id', Nursery::where('district_id', Auth::user()->district_id)->pluck('game_id'));
+                });
+            }
+        ])->get();
+        $approvedCount = $games->where('approved_by_admin_or_reject_by_admin', 1)->count();
+        $pendingCount = $games->where('approved_by_admin_or_reject_by_admin', 0)->count();
+        // dd($pendingCount);
         return view('nursery.report.form', ['layout' => 'dso.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'nurseryStatus' => $nurseryStatus, 'gameCounts'=>$gameCounts]);
     }
 
@@ -157,5 +171,131 @@ class DsoController extends Controller
             }
         }
 
+    }
+
+    public function nurseryList(Request $request)
+    {
+        $nursery = Nursery::where([['district_id', Auth::user()->district_id],['cat_of_nursery','departmental']])->with('game')->get();
+        // dd($nursery);
+        return view('dso.nursery.index', compact('nursery'));
+    }
+
+    public function nurseryRegistration($secure_id=null)
+    {
+        $nursery = Nursery::where('secure_id',$secure_id)->first();
+        $district = District::get()->toArray();
+        $games = Game::get()->toArray();
+        // dd($nursery);
+        return view('dso.nursery.register', compact('district','nursery','games'));
+    }
+
+    public function saveNurseryDetail(Request $request)
+    {
+        // dd($request->all());
+        $isRecordExist = Nursery::where('mobile_number', $request->mobile_number)->first();
+        $district_code = District::where('id', Auth::user()->district_id)->first();
+        $current_year = date('Y');
+        $checkNurseries = Nursery::get();
+                // dd($checkNurseries);
+        if(empty($isRecordExist)){
+            
+                $latest_application_number = Nursery::orderBy('id', 'desc')->value('application_number');
+                $last_six_digits = intval(substr($latest_application_number, -6)) + 1;
+                // Pad the incremented number back to six digits
+                $random_number = str_pad($last_six_digits, 6, '0', STR_PAD_LEFT);
+                // dd($random_number);
+                $application_number = $current_year.$district_code->code.$random_number;
+                $secure_id = bin2hex(random_bytes(16));
+            
+        }else{
+                $application_number = $isRecordExist->application_number;
+                $secure_id = $isRecordExist->secure_id;
+
+        }    
+        $data = $request->all();
+        $this->validateSaveForm($data);
+        try{
+            $nursery = Nursery::updateOrInsert(
+                [
+                    'mobile_number' => $request->mobile_number,
+                ],
+                [
+                    'secure_id' => $secure_id,
+                    'application_number' => $application_number,
+                    'mobile_number' => $request->mobile_number,
+                    'head_pricipal' => $request->head_pricipal,
+                    'district_id' =>Auth::user()->district_id,
+                    'cat_of_nursery' => $request->cat_of_nursery,
+                    'address' => $request->address,
+                    'reg_no_running_nursery' => $request->reg_no_running_nursery,
+                    'coach_name' =>$request->coach_name,
+                    'email' =>$request->email,
+                    'pin_code' =>$request->pin_code,
+                    'game_id' =>$request->game_id,
+                    'game_disp' =>$request->game_disp,
+                    'final_status' =>1,
+                    'created_at' =>now(),
+
+                ]
+            );
+            if ($nursery) {
+                $currentsavedNursery = Nursery::where('mobile_number', $request->mobile_number)->first();
+                $nurseryStatus = NurseryApplicationStatus::create([
+                    'nursery_id'=>$currentsavedNursery->id,
+                    'district_id'=>$currentsavedNursery->district_id,
+                    'approved_reject_by_dso'=>1,
+                    'created_at'=>now()
+                ]);
+                $nurseryTransaction = NurseryApplicationTransaction::create([
+                    'nursery_id'=>$currentsavedNursery->id,
+                    'transaction_date'=>date('Y-m-d'),
+                    'action_by'=> Auth::user()->id
+                ]);
+                return redirect(route('dso.nurseryList'))->with('success','Nursery created Successfully');
+            } else {
+                return redirect(route('dso.nursery.register'))->with('error','Error saving Nursery Details: Unknown error');
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect(route('dso.nursery.register'))->with('error' . $e->getMessage());
+        }
+
+    }
+
+    public function validateSaveForm($data)
+    {
+        
+        $rules = [
+            'district_id' => 'required',
+            'cat_of_nursery' => 'required',
+            'head_pricipal' => 'required|string|max:100|min:5',
+            'address' => 'required|string|max:255',
+            'reg_no_running_nursery' => 'required',
+            'coach_name' => 'required|string|max:100',
+            'email' => 'required|email|max:100|unique:users,email',
+            'pin_code' => 'required|digits:6'
+
+
+        ];
+
+        $messages = [
+            'head_pricipal.max' => 'The name must not exceed 100 characters.',
+            'email.email' => 'Please enter a valid email address.',
+            'email.required' => 'The email field is required.',
+        ];
+        
+        $validator = Validator::make($data, $rules, $messages);
+        // dd($validator->errors()->toArray());
+        if ($validator->fails()) {
+            throw ValidationException::withMessages($validator->errors()->toArray());
+        }
+    }
+
+    public function nurseryDelete($secure_id)
+    {
+        if(!empty($secure_id)){
+            $nursery = Nursery::where('secure_id',$secure_id)->first();
+            $nurseryStatus = NurseryApplicationStatus::where('nursery_id',$nursery->id)->first();
+        }
     }
 }

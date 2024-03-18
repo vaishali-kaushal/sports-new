@@ -48,10 +48,12 @@
                 <div class="d-flex width-100 mt-3 justify-content-end">
                   <button type="submit" class="btn btn-danger ">Login</button>
                 </div>
+                @if(strtotime(env('REG_LAST_DATE')) >= strtotime(date('Y-m-d')))
                 <div class="text-center">
                   <a href="{{url('nursery/registration')}}" class="ms-2 text-white">Apply for new Nursery</a>
 
                 </div>
+                @endif
               </form>
             </div>
           </div>

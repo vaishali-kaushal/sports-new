@@ -47,11 +47,15 @@ Route::prefix('dso')->name('dso.')->middleware(['IsDso'])->group(function () {
     Route::post('/nursery/report/store/{id}', [DsoController::class, 'nurseryReportStore']);
     Route::post('/nursery/file_upload', [DsoController::class, 'reportFileUpload'])->name('applicationreport');
     Route::post('/nursery/remove_file', [DsoController::class, 'reportFileRemove'])->name('fileRemove');
+    Route::get('list-nursery', [DsoController::class, 'nurseryList'])->name('nurseryList');
+    Route::get('nursery/registration/{id?}', [DsoController::class, 'nurseryRegistration'])->name('nursery.register');
+    Route::get('nursery/delete/{id}', [DsoController::class, 'nurseryDelete'])->name('nursery.delete');
+    Route::post('store-nursery-detail', [DsoController::class, 'saveNurseryDetail'])->name('saveNurseryDetail');
 
 
 
 });
-Route::get('nursery/registration', [LoginController::class, 'nurseryRegistration']);
+Route::get('nursery/registration', [LoginController::class, 'nurseryRegistration'])->middleware('check.date');
 Route::post('nursery/store', [NurseryController::class, 'nurseryStore']);
 
 Route::post('nursery/validate-email', [NurseryController::class, 'validateEmail'])->name('nursery.email');
@@ -138,7 +142,7 @@ Route::get('view-nursery/{id?}', [NurseryUserController::class, 'viewNursery'])-
 
 Route::prefix('nursery')->middleware(['IsNursery'])->group(function () {
     Route::get('dashboard', [NurseryUserController::class, 'index']);
-    Route::get('user-nursery', [NurseryUserController::class, 'userNursery'])->name('user.nursery');
+    Route::get('user-nursery', [NurseryUserController::class, 'userNursery'])->name('user.nursery')->middleware('check.date');
     Route::post('update-nursery-details', [NurseryUserController::class, 'updateNurseryDetails'])->name('update.nurseryDetails');
     Route::post('update-file-upload', [NurseryUserController::class, 'NurseryFileUpload'])->name('updatefileUpload');
     Route::post('update-remove-file', [NurseryUserController::class, 'NurseryFileRemove'])->name('updatefileRemove');

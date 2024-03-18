@@ -514,6 +514,66 @@
             </div>
         </div>
     </section>
+    @if(!empty($remarks))
+    <section class="content">
+        <div class="container-fluid">
+            <h2>DSO Report </h2>
+
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card p-5">
+
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Remarks</th>
+                                    <th scope="col">Photographs</th>
+                                    <!-- <th scope="col">Inspection Report</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($remarks as $key => $remark)
+                                    <tr>
+                                        <th scope="row">{{$key+1}}</th>
+                                        <td>{{$remark['user']['name']}}</td>
+                                        <td>{{ $remark['remarks']}}</td>
+                                        <td style="width: 30%;">
+                                            @if (!empty($remark['files']) && !is_null($remark['files']))
+                                                @php
+                                                    $reportPhotographs = explode(',', $remark['files']);
+                                                @endphp
+                                                @if(!empty($reportPhotographs))
+                                                 
+                                                    @foreach($reportPhotographs as $photo)
+                                                    
+                                                    <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
+                                                        <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
+                                                    </a>
+
+
+                                                    @endforeach
+                                                @else
+                                                    "N/A";
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <!-- <td></td> -->
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </section>
+    @endif
 
 </div>
 
