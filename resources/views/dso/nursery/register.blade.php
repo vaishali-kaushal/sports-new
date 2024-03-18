@@ -50,7 +50,7 @@
                         <div class="card-body">
 
                            
-                            <form class="row" method="post" id="dso-nursery-registration-form" action="{{ route('dso.saveNurseryDetail',$nursery->secure_id)}}">
+                            <form class="row" method="post" id="dso-nursery-registration-form" action="{{ route('dso.saveNurseryDetail',$nursery->secure_id ?? '')}}">
                                     @csrf
                                 <div class="row"  id="step2">
                                    
