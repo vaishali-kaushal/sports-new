@@ -14,6 +14,7 @@ use  App\Models\ApplicationRemark;
 use  App\Models\NurseryApplicationTransaction;
 use  App\Models\Game;
 use  App\Models\User;
+use  App\Models\RoleType;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -274,7 +275,7 @@ class DsoController extends Controller
                         ]);
 
                         DB::commit();
-                        return redirect()->route('dso.nurseryList')->with('success','Nursery created Successfully');
+                        return redirect()->route('dso.nurseryList')->with('success','Nursery Saved Successfully');
                     
                 }
 
