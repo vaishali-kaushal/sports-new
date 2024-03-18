@@ -73,7 +73,7 @@
             </div>
         </div>
     </section>
-
+    @if(!empty($nursery) && $nursery->cat_of_nursery != 'departmental')
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -514,6 +514,171 @@
             </div>
         </div>
     </section>
+    @else
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                     
+                            <div class="card-header">
+                                <h4 class="card-title">Application Detail</h4>
+                            <div class="text-right"><strong>Application ID: {{ $nursery->application_number ?? '' }}</strong></div>
+
+                            
+                        </div>
+
+                        <div class="card-body">
+                            <div>
+                                <h3>Nursery details</h3>
+                            </div>
+                            <div class="row">
+                            <div class="col-sm-12">
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Application Date</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ date('d-M-Y', strtotime($nursery->created_at)) ?? '' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">District</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->district->name }}</div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Category of Nursery</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->cat_of_nursery) }}</div>
+                                    </div>
+                                </div>
+                         
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Venue of Nursery</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->head_pricipal ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Email</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->email ?? '' }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Registration No.</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->reg_no_running_nursery ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Pin Code</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->pin_code ?? '' }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Nursery Address</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->address ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Name of Coach</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->coach_name ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div>
+                                <h3>Game Details</h3>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Game Applying For</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div> {{$nursery->game->name}}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Sports Game Discipline</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery->game_disp) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                         
+                            <div class="row mt-3">
+                                <div class="row col-sm-12">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Number of students playing concerned games</label>
+                                    </div>
+                                    @if($nursery->game_disp == 'boys')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->boys ?? '0' }} Boys</div>
+                                    </div>
+                                    @endif
+                                    @if($nursery->game_disp == 'girls')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->girls ?? '' }} Girls</div>
+                                    </div>
+                                    @endif
+                                    @if($nursery->game_disp == 'mix')
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->girls ?? '' }} Girls and {{ $nursery->girls ?? '' }} Boys</div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                           
+                        
+                            </div>
+                          
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    @endif
     @if(!empty($remarks))
     <section class="content">
         <div class="container-fluid">

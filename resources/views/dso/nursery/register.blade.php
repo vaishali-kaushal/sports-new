@@ -50,7 +50,7 @@
                         <div class="card-body">
 
                            
-                            <form class="row" method="post" id="dso-nursery-registration-form" action="{{ route('dso.saveNurseryDetail')}}">
+                            <form class="row" method="post" id="dso-nursery-registration-form" action="{{ route('dso.saveNurseryDetail',$nursery->secure_id)}}">
                                     @csrf
                                 <div class="row"  id="step2">
                                    
@@ -340,7 +340,7 @@
                     return false;
                 }
             }
-            var nursery = "{{$nursery->id}}";
+            var nursery = "{{$nursery->id ?? ''}}";
             // alert(nursery);
             if(!nursery){
                 if (!$("#term_app").prop('checked')) {

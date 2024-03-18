@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use  App\Models\ApplicationRemark;
 use  App\Models\NurseryApplicationTransaction;
 use  App\Models\Game;
+use  App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -189,7 +190,7 @@ class DsoController extends Controller
         return view('dso.nursery.register', compact('district','nursery','games'));
     }
 
-    public function saveNurseryDetail(Request $request)
+    public function saveNurseryDetail(Request $request,$secureId=null)
     {
         // dd($request->all());
         $isRecordExist = Nursery::where('mobile_number', $request->mobile_number)->first();
@@ -215,9 +216,11 @@ class DsoController extends Controller
         $data = $request->all();
         $this->validateSaveForm($data);
         try{
+            // dd($secureId);
             $nursery = Nursery::updateOrInsert(
                 [
-                    'mobile_number' => $request->mobile_number,
+                    // 'mobile_number' => $request->mobile_number,
+                    'secure_id' => $secureId,
                 ],
                 [
                     'secure_id' => $secure_id,
@@ -234,10 +237,14 @@ class DsoController extends Controller
                     'game_id' =>$request->game_id,
                     'game_disp' =>$request->game_disp,
                     'final_status' =>1,
+                    'created_by' => Auth::user()->id,
                     'created_at' =>now(),
 
                 ]
             );
+            // dd($nursery);
+            DB::beginTransaction();
+
             if ($nursery) {
                 $currentsavedNursery = Nursery::where('mobile_number', $request->mobile_number)->first();
                 $nurseryStatus = NurseryApplicationStatus::create([
@@ -246,18 +253,37 @@ class DsoController extends Controller
                     'approved_reject_by_dso'=>1,
                     'created_at'=>now()
                 ]);
-                $nurseryTransaction = NurseryApplicationTransaction::create([
-                    'nursery_id'=>$currentsavedNursery->id,
-                    'transaction_date'=>date('Y-m-d'),
-                    'action_by'=> Auth::user()->id
-                ]);
-                return redirect(route('dso.nurseryList'))->with('success','Nursery created Successfully');
+
+                if($nurseryStatus){
+                    if($secureId == null){
+                        $user = User::create([
+                            'secure_id'=> $secure_id,
+                            'name'=> $request->head_pricipal,
+                            'email'=> $request->email,
+                            'mobile'=> $request->mobile_number,
+                            'district_id'=> Auth::user()->district_id,
+                            'password'=> bin2hex(random_bytes(16)),
+                            'created_at '=> now(),
+                        ]);
+                        RoleType::create(['user_id'=>$user->id,'role_id'=>'5']);
+                    }
+                        $nurseryTransaction = NurseryApplicationTransaction::create([
+                            'nursery_id'=>$currentsavedNursery->id,
+                            'transaction_date'=>date('Y-m-d'),
+                            'action_by'=> Auth::user()->id
+                        ]);
+
+                        DB::commit();
+                        return redirect()->route('dso.nurseryList')->with('success','Nursery created Successfully');
+                    
+                }
+
             } else {
-                return redirect(route('dso.nursery.register'))->with('error','Error saving Nursery Details: Unknown error');
+                return redirect()->route('dso.nursery.register')->with('error','Error saving Nursery Details: Unknown error');
             }
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect(route('dso.nursery.register'))->with('error' . $e->getMessage());
+            return redirect()->route('dso.nursery.register')->with('error' . $e->getMessage());
         }
 
     }

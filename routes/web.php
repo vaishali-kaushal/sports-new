@@ -50,7 +50,7 @@ Route::prefix('dso')->name('dso.')->middleware(['IsDso'])->group(function () {
     Route::get('list-nursery', [DsoController::class, 'nurseryList'])->name('nurseryList');
     Route::get('nursery/registration/{id?}', [DsoController::class, 'nurseryRegistration'])->name('nursery.register');
     Route::get('nursery/delete/{id}', [DsoController::class, 'nurseryDelete'])->name('nursery.delete');
-    Route::post('store-nursery-detail', [DsoController::class, 'saveNurseryDetail'])->name('saveNurseryDetail');
+    Route::post('store-nursery-detail/{id?}', [DsoController::class, 'saveNurseryDetail'])->name('saveNurseryDetail');
 
 
 

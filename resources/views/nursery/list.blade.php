@@ -88,7 +88,7 @@
                                         </td>
 
                                         <td>
-                                            <a href="{{url('dso/nursery/view/').'/'.$n['secure_id']}}"
+                                            <a href="{{ route('view.userNursery',$n['secure_id'] ?? '')}}"
                                                 class="btn btn-primary">View</a>
                                             <?php
 
