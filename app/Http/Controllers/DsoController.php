@@ -42,20 +42,11 @@ class DsoController extends Controller
         });
         $district_id = Nursery::where('district_id', Auth::user()->district_id)->with(['district'])->first();
         $nurseryStatus['district'] = $district_id->district->name;
-        // dd($district_id->district->name);
-        $games = NurseryApplicationStatus::where([
-            ['district_id', Auth::user()->district_id]
-        ])->with([
-            'nursery' => function ($query) {
-                $query->whereHas('game', function ($subquery) {
-                    $subquery->whereIn('game_id', Nursery::where('district_id', Auth::user()->district_id)->pluck('game_id'));
-                });
-            }
-        ])->get();
-        $approvedCount = $games->where('approved_by_admin_or_reject_by_admin', 1)->count();
-        $pendingCount = $games->where('approved_by_admin_or_reject_by_admin', 0)->count();
-        // dd($pendingCount);
-        return view('nursery.report.form', ['layout' => 'dso.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'nurseryStatus' => $nurseryStatus, 'gameCounts'=>$gameCounts]);
+        $games['total'] = Nursery::where([['game_id', $nursery['game_id']],['district_id', Auth::user()->district_id],['final_status', 1]])->get();
+        $selectedGameIds = $games['total']->pluck('id');
+        $games['totalApprovedCount'] = NurseryApplicationStatus::whereIn('nursery_id', $selectedGameIds)->where('approved_by_admin_or_reject_by_admin', 1)->count();
+        $games['totalPendingCount'] = NurseryApplicationStatus::whereIn('nursery_id', $selectedGameIds)->where('approved_by_admin_or_reject_by_admin', 0)->count();
+        return view('nursery.report.form', ['layout' => 'dso.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'nurseryStatus' => $nurseryStatus, 'games'=>$games]);
     }
 
     public function nurseryReportStore(Request $request, $secure_id)
@@ -252,7 +243,6 @@ class DsoController extends Controller
                 $nurseryStatus = NurseryApplicationStatus::create([
                     'nursery_id'=>$currentsavedNursery->id,
                     'district_id'=>$currentsavedNursery->district_id,
-                    'approved_reject_by_dso'=>1,
                     'created_at'=>now()
                 ]);
 

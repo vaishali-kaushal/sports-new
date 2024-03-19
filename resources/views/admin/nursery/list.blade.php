@@ -42,7 +42,7 @@
                                         <th>Nursery Name</th>
                                         <th>District</th>
                                         <th>Status</th>
-                                        <th style="width: 119px;">Action</th>
+                                        <th style="width: 120px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,7 +81,7 @@
                                                 }
                                                 
                                                 ?>
-                                        </td>
+                                            </td>
                                             <td>
                                                 <a href="{{url('admin/nursery/view/').'/'.$n['secure_id']}}" class="btn btn-primary">View</a>
 

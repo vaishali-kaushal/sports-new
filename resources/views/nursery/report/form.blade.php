@@ -327,19 +327,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                   <!--      @if($gameCounts->isNotEmpty())
-                                            @foreach($gameCounts as $gameName => $count)
-                                                <tr>
-                                                    <td>{{ $gameName ?? '' }}</td>
-                                                    <td>0</td>
-                                                    <td>1</td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <tr>
-                                                <td colspan="2">No nursery games found</td>
-                                            </tr>
-                                        @endif -->
+                                        <tr>
+                                            <td>{{ count($games) ?? '' }}</td>
+                                            <td>{{ $games['totalApprovedCount']}}</td>
+                                            <td>{{ $games['totalPendingCount']}}</td>
+                                        </tr>
+                                      
                                     </tbody>
                                 </table>
                             </div>
