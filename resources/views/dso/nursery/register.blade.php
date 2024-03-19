@@ -92,6 +92,17 @@
 
                                     </div>
                                     <div class="form-group col-sm-6">
+                                        <label class="form-label">Name of Nursery</label> <span class='star'>*</span>
+                                        <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="name_of_nursery" autocomplete="off" value="{{ $nursery->name_of_nursery ?? ''}}">
+                                        @error('name_of_nursery')
+                                        <span class="invalid-feedback" role="alert"
+                                            style="display : block;">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+
+                                    </div>
+                                    <div class="form-group col-sm-6">
                                         <label class="form-label">Venue of Nursery</label> <span class='star'>*</span>
                                         <input type="text" class="form-control" name="head_pricipal" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="head_pricipal" autocomplete="off" value="{{ $nursery->head_pricipal ?? ''}}">
                                         @error('head_pricipal')
@@ -285,7 +296,12 @@
                 Swal.fire('Enter Coach Name', '', 'error');
                 return false;
             }
-            var head_pricipal = $("#head_pricipal").val();
+            var name_of_nursery = $("#name_of_nursery").val();
+            if (!name_of_nursery) {
+                Swal.fire('Enter Name of Nursery', '', 'error');
+                return false;
+            }
+              var head_pricipal = $("#head_pricipal").val();
             if (!head_pricipal) {
                 Swal.fire('Enter Venue of Nursery', '', 'error');
                 return false;

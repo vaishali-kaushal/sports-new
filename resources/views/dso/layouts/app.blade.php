@@ -204,7 +204,7 @@ $profile = App\Models\User::where('secure_id',Auth::user()->secure_id)->first();
                             <a href="{{ route('dso.nurseryList') }}" class="nav-link {{ Request::is('dso/nursery/registration') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Apply Nursery
+                                    Add New Nursery
                                 </p>
                             </a>
 

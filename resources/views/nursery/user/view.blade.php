@@ -563,7 +563,18 @@
                                         <div>{{ ucfirst($nursery->cat_of_nursery) }}</div>
                                     </div>
                                 </div>
-                         
+                            
+                                <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Name of Nursery</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->name_of_nursery ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Venue of Nursery</label>
@@ -572,9 +583,6 @@
                                         <div>{{ $nursery->head_pricipal ?? '' }}</div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Email</label>
@@ -583,6 +591,8 @@
                                         <div>{{ $nursery->email ?? '' }}</div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Registration No.</label>
@@ -591,8 +601,6 @@
                                         <div>{{ $nursery->reg_no_running_nursery ?? '' }}</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label class="form-label">Pin Code</label>
@@ -602,6 +610,8 @@
                                     </div>
                                 </div>
 
+                            </div>
+                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label for="exampleInputEmail1">Nursery Address</label>
@@ -610,8 +620,6 @@
                                         <div>{{ $nursery->address ?? '' }}</div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row mt-3">
                                 <div class="row col-sm-6">
                                     <div class="col-sm-6">
                                         <label for="exampleInputEmail1">Name of Coach</label>

@@ -184,7 +184,7 @@ class DsoController extends Controller
 
     public function nurseryRegistration($secure_id=null)
     {
-        $nursery = Nursery::where('secure_id',$secure_id)->first();
+        $nursery = Nursery::where('secure_id', $secure_id)->first();
         $district = District::get()->toArray();
         $games = Game::get()->toArray();
         // dd($nursery);
@@ -228,6 +228,7 @@ class DsoController extends Controller
                     'application_number' => $application_number,
                     'mobile_number' => $request->mobile_number,
                     'head_pricipal' => $request->head_pricipal,
+                    'name_of_nursery' => $request->name_of_nursery,
                     'district_id' =>Auth::user()->district_id,
                     'cat_of_nursery' => $request->cat_of_nursery,
                     'address' => $request->address,
@@ -296,6 +297,7 @@ class DsoController extends Controller
             'district_id' => 'required',
             'cat_of_nursery' => 'required',
             'head_pricipal' => 'required|string|max:100|min:5',
+            'name_of_nursery' => 'required|string|max:100|min:5',
             'address' => 'required|string|max:255',
             'reg_no_running_nursery' => 'required',
             'coach_name' => 'required|string|max:100',
