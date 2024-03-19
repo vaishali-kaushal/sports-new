@@ -99,7 +99,7 @@
                                         <label for="exampleInputEmail1">Application Date</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div>{{ date('d-M-Y', strtotime($nursery->created_at)) ?? '' }}</div>
+                                        <div>{{ date('d-M-Y', strtotime($nursery->nurseryStatus->created_at)) ?? '' }}</div>
                                     </div>
                                 </div>
                                 <div class="row col-sm-6">
@@ -540,7 +540,7 @@
                                         <label for="exampleInputEmail1">Application Date</label>
                                     </div>
                                     <div class="col-sm-6">
-                                        <div>{{ date('d-M-Y', strtotime($nursery->created_at)) ?? '' }}</div>
+                                        <div>{{ date('d-M-Y', strtotime($nursery->nurseryStatus->created_at)) ?? '' }}</div>
                                     </div>
                                 </div>
                                 <div class="row col-sm-6">
@@ -687,6 +687,7 @@
         </div>
     </section>
     @endif
+    @if(Auth::user()->role->role_id == 2 && Auth::user()->role->role_id == 1)
     @if(!empty($remarks))
     <section class="content">
         <div class="container-fluid">
@@ -746,6 +747,7 @@
 
 
     </section>
+    @endif
     @endif
 
 </div>
