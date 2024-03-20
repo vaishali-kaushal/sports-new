@@ -26,23 +26,37 @@ class AdminController extends Controller
     {
 
         $nursery = Nursery::where('secure_id', $id)->with(['district', 'game'])->get()->toArray()[0];
-        
-        $TotalnurseryApproved = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->with('nursery')->get()->count();
-        $TotalnurseryApprovedinDistrict = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->where('district_id', $nursery['district']['id'])->get()->count();
-        $PendingForApproval = NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 0)->where('district_id', $nursery['district']['id'])->get()->count();
+        // $TotalnurseryApproved = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->with('nursery')->get()->count();
+        // $TotalnurseryApprovedinDistrict = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->where('district_id', $nursery['district']['id'])->get()->count();
+        // $PendingForApproval = NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 0)->where('district_id', $nursery['district']['id'])->get()->count();
 
-        $count = [
-            'totalapprovednursery' => $TotalnurseryApproved,
-            'totalapprovednurserydistrict' => $TotalnurseryApprovedinDistrict,
-            'pendingapproval' => $PendingForApproval,
-        ];
+        // $count = [
+        //     'totalapprovednursery' => $TotalnurseryApproved,
+        //     'totalapprovednurserydistrict' => $TotalnurseryApprovedinDistrict,
+        //     'pendingapproval' => $PendingForApproval,
+        // ];
         $nurserRemarks = ApplicationRemark::with('user')->where('application_status_id', $nursery['nursery_status']['id'])->get()->toArray();
         // dd($nursery);
 
         $nurseryRemarks = $nursery['nursery_status']['remark'];
        
             // dd(!empty($nurseryRemarks['files']));
-        return view('admin.nursery.report.form', ['layout' => 'admin.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'count' =>$count,'remarks'=>$nurserRemarks,'nurseryRemarks'=>$nurseryRemarks]);
+        $nurseryStatus = NurseryApplicationStatus::where('district_id', $nursery['district_id'])->get();
+
+        $nurseryStatus['total'] = $nurseryStatus->count();
+        $nurseryStatus['pending'] = NurseryApplicationStatus::where('district_id', $nursery['district_id'])->where('approved_by_admin_or_reject_by_admin', 0)->count();
+// dd($nurseryStatus);
+
+        $nurseryStatus['approved'] = $nurseryStatus->where('approved_by_admin_or_reject_by_admin', 1)->count();
+        $nurseryStatus['rejected'] = $nurseryStatus->where('approved_by_admin_or_reject_by_admin', 2)->count();
+        $district_id = Nursery::where('district_id', $nursery['district_id'])->with(['district'])->first();
+        $nurseryStatus['district'] = $district_id->district->name;
+
+         $games['total'] = Nursery::where([['game_id', $nursery['game_id']],['district_id', $nursery['district_id']],['final_status', 1]])->get();
+        $selectedGameIds = $games['total']->pluck('id');
+        $games['totalApprovedCount'] = NurseryApplicationStatus::whereIn('nursery_id', $selectedGameIds)->where('approved_by_admin_or_reject_by_admin', 1)->count();
+        $games['totalPendingCount'] = NurseryApplicationStatus::whereIn('nursery_id', $selectedGameIds)->where('approved_by_admin_or_reject_by_admin', 0)->count();
+        return view('admin.nursery.report.form', ['layout' => 'admin.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'remarks'=>$nurserRemarks,'nurseryRemarks'=>$nurseryRemarks,'nurseryStatus'=>$nurseryStatus,'games'=>$games]);
     }
 
     public function AdminReportStore(Request $request, $secure_id)
