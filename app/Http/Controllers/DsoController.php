@@ -243,6 +243,8 @@ class DsoController extends Controller
                 $nurseryStatus = NurseryApplicationStatus::create([
                     'nursery_id'=>$currentsavedNursery->id,
                     'district_id'=>$currentsavedNursery->district_id,
+                    'approved_reject_by_dso'=>1,
+                    'approved_by_admin_or_reject_by_admin'=>1,
                     'created_at'=>now()
                 ]);
 

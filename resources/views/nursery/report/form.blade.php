@@ -24,6 +24,33 @@
                     <div class="card p-5">
                         <form class="regis-form" method="post">
 
+                          <!--   <div class="row mt-3">
+                                <div class="row col-sm-4">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Category of Nursery</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery['cat_of_nursery']) }}</div>
+                                    </div>
+                                </div>
+                                <div class="row col-sm-4">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">District</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>dfgdfg</div>
+                                    </div>
+                                </div>
+                                 <div class="row col-sm-4">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">District</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>dfgdfg</div>
+                                    </div>
+                                </div>
+                               
+                            </div> -->
                             <div class="row">
                                 <div class="col-sm-6">
                                     <label class="form-label">Category of Nursery</label>
