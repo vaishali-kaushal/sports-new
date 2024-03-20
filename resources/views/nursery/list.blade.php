@@ -92,14 +92,14 @@
                                                 class="btn btn-primary">View</a>
                                             <?php
 
-                                            // if(env('REG_LAST_DATE') < date('Y-m-d')){
+                                            if(env('REG_LAST_DATE') < date('Y-m-d')){
                                             if ($n['nursery_status']['approved_reject_by_dso'] == 0) { ?>
                                             <a href="{{url('dso/nursery/report/').'/'.$n['secure_id']}}"
                                                 class="btn btn-primary">Proceed</a>
 
                                             <?php  } 
 
-                                        // } 
+                                        } 
 
                                          ?>
 
