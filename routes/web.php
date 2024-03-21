@@ -124,6 +124,10 @@ Route::prefix('admin')->name('admin.')->middleware(['IsAdmin'])->group(function 
     Route::get('/nursery/approve_reject/{id}', [AdminController::class, 'adminProcess'])->name('adminProcess');
     Route::post('/nursery/report/store/{id}', [AdminController::class, 'AdminReportStore'])->name('saveNurseryReport');
     Route::get('/excel-download', [AdminController::class, 'excelDownload'])->name('excelDownload');
+    Route::get('/districtReport', [DashboardController::class, 'districtReport'])->name('districtReport');
+    Route::get('/nursery-category-report/{category}', [DashboardController::class, 'nurseryCategoryReport'])->name('nurseryCategoryReport');
+    Route::get('/gamedispReport', [DashboardController::class, 'gameDispReport'])->name('gameDispReport');
+
 });
 
 // ==================================================

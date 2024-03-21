@@ -31,7 +31,30 @@ class DashboardController extends Controller
         $data['pending_applications'] = NurseryApplicationStatus::where('approved_reject_by_dso', 0)->get()->count();
         $data['approved'] = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 1)->get()->count();
         $data['rejected'] = NurseryApplicationStatus::where('approved_by_admin_or_reject_by_admin', 2)->get()->count();
+        $districtApplications = NurseryApplicationStatus::groupBy('district_id')->selectRaw('district_id, count(*) as count')
+        ->get();
+        $data['districtCount'] = $districtApplications->count();
+        $govtApp = NurseryApplicationStatus::with(['nursery.district'])
+            ->join('nurseries', 'nurseries.id', '=', 'nursery_application_statuses.nursery_id')
+            ->where('nurseries.cat_of_nursery', '=', 'govt')
+            ->get();
+        $privateApp = NurseryApplicationStatus::with(['nursery.district'])
+            ->join('nurseries', 'nurseries.id', '=', 'nursery_application_statuses.nursery_id')
+            ->where('nurseries.cat_of_nursery', '=', 'private')
+            ->get();
+        $data['govt'] = $govtApp->count();
+        $data['private'] = $privateApp->count();
+        $gameApp = NurseryApplicationStatus::with(['nursery.district'])
+        ->selectRaw('
+            SUM(nurseries.boys) as total_boys_count,
+            SUM(nurseries.girls) as total_girls_count,
+            (SUM(nurseries.boys) + SUM(nurseries.girls)) AS mix_count
+        ')
+        ->join('nurseries', 'nurseries.id', '=', 'nursery_application_statuses.nursery_id')
+        ->first();
+        $data['gameApp'] = $gameApp->mix_count;
 
+        // dd($data);
         return view('admin.dashboard',['data'=> $data]);
     }
 
@@ -79,6 +102,66 @@ class DashboardController extends Controller
 
         // dd($applications);
         return view('admin.report', ['applications' => $applications]);
+    }
+
+    public function districtReport()
+    {
+        $districtApplications = NurseryApplicationStatus::groupBy('district_id')
+        ->selectRaw('district_id, count(*) as count')
+        ->get();
+        $totalRecords = $districtApplications->sum('count');
+        $totalDistricts = $districtApplications->count();
+        // dd($totalRecords);
+        return view('admin.districtreport',compact('districtApplications','totalRecords','totalDistricts'));
+    }
+
+    public function nurseryCategoryReport($category)
+    {
+        if($category == 'private'){
+
+        $applications = NurseryApplicationStatus::with(['nursery.district'])
+            ->selectRaw('districts.name as district_name,
+                SUM(CASE WHEN nurseries.type_of_nursery = "pvt_school" THEN 1 ELSE 0 END) AS count_pvt_school,
+                SUM(CASE WHEN nurseries.type_of_nursery = "pvt_institute" THEN 1 ELSE 0 END) AS count_pvt_institute,
+                COUNT(*) as total_count')
+            ->join('nurseries', 'nurseries.id', '=', 'nursery_application_statuses.nursery_id')
+            ->join('districts', 'districts.id', '=', 'nurseries.district_id')
+            ->where('nurseries.cat_of_nursery', '=', 'private')
+            ->groupBy('district_name')
+            ->get();
+        }else{
+            $applications = NurseryApplicationStatus::with(['nursery.district'])
+            ->selectRaw('districts.name as district_name,
+                SUM(CASE WHEN nurseries.type_of_nursery = "govt_school" THEN 1 ELSE 0 END) AS count_govt_school,
+                SUM(CASE WHEN nurseries.type_of_nursery = "panchayat" THEN 1 ELSE 0 END) AS count_panchayat,
+                COUNT(*) as total_count')
+            ->join('nurseries', 'nurseries.id', '=', 'nursery_application_statuses.nursery_id')
+            ->join('districts', 'districts.id', '=', 'nurseries.district_id')
+            ->where('nurseries.cat_of_nursery', '=', 'govt')
+            ->groupBy('district_name')
+            ->get();
+        }
+        // dd($applications);
+        return view('admin.nurserycategoryreport',compact('applications'));
+        # code...
+    }
+
+    public function gameDispReport()
+    {
+       $applications = NurseryApplicationStatus::with(['nursery.district'])
+        ->selectRaw('
+            districts.name as district_name,
+            SUM(nurseries.boys) AS boys_count,
+            SUM(nurseries.girls) AS girls_count,
+            (SUM(nurseries.boys) + SUM(nurseries.girls)) AS mix_count
+        ')
+        ->join('nurseries', 'nurseries.id', '=', 'nursery_application_statuses.nursery_id')
+        ->join('districts', 'districts.id', '=', 'nurseries.district_id')
+        ->groupBy('district_name')
+        ->get();
+
+        // dd($applications);
+        return view('admin.gamedispreport',compact('applications'));
     }
 
 

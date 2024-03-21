@@ -194,6 +194,16 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row mt-3">
+                                  <div class="row col-sm-6">
+                                    <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Mobile Number</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ $nursery->mobile_number ?? '' }}</div>
+                                    </div>
+                                </div>
+                            </div>
                             <hr>
                             <div>
                                 <h3>Game Details</h3>

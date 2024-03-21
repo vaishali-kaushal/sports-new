@@ -18,4 +18,9 @@ class NurseryApplicationStatus extends Model
     {
         return $this->belongsTo(ApplicationRemark::class,'id','application_status_id');
     }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class, 'district_id');
+    }
 }

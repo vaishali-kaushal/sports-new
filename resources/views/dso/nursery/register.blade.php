@@ -91,9 +91,9 @@
                                         @enderror
 
                                     </div>
-                                    <div class="form-group col-sm-6">
+                                     <div class="form-group col-sm-6">
                                         <label class="form-label">Name of Nursery</label> <span class='star'>*</span>
-                                        <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="name_of_nursery" autocomplete="off" value="{{ $nursery->name_of_nursery ?? ''}}">
+                                        <input type="text" class="form-control" name="name_of_nursery" maxlength="50" onkeypress="return /[a-zA-Z ]/i.test(event.key)" id="name_of_nursery" autocomplete="off" value="Department Coach" readonly>
                                         @error('name_of_nursery')
                                         <span class="invalid-feedback" role="alert"
                                             style="display : block;">
@@ -128,17 +128,7 @@
                                         <label class="form-label">Mobile Number</label> <span class='star'>*</span>
                                         <input type="text" name="mobile_number" pattern="[0-9]*" oninput="validateNumber(this)" class="form-control controlDiv" autocomplete="off"  maxlength="10" minlength="10" id="mobile_number" value="{{ $nursery->mobile_number ?? ''}}">
                                     </div>
-                                       <div class="form-group col-sm-6">
-                                        <label class="form-label">Registration No. of Society who will be running Nursery</label> <span class='star'>*</span>
-                                        <input type="text" class="form-control" name="reg_no_running_nursery" maxlength="20" value="{{ $nursery->reg_no_running_nursery ?? ''}}" id="reg_no_running_nursery" autocomplete="off">
-                                        @error('reg_no_running_nursery')
-                                        <span class="invalid-feedback" role="alert"
-                                            style="display : block;">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-
-                                    </div>
+                            
                                     
                                    
                                     <div class="form-group col-sm-6">
@@ -230,7 +220,7 @@
                                     <div class="form-check mt-3">
                                       <input class="form-check-input" type="checkbox" id="term_app">
                                       <label class="form-check-label fw-normal" for="term_app">
-                                       I undertake that Sports Nursery allotted against the present application shall be operated as per terms and conditions issued by the Sports Department, Government of Haryana. In case our School/Institute/Academy is found violating any instructions, the Government shall be free to take any administrative/civil/criminal action against us.
+                                      I undertake that Sports Nursery allotted to me as Departmental Coach shall be operated as per terms and conditions issued by the Sports Department, Government of Haryana. In case my Sports Nursery is found violating any instructions, the Government shall be free to take any administrative/civil/criminal action against me. 
                                       </label>
                                     </div>
                                     @endif
@@ -296,11 +286,6 @@
                 Swal.fire('Enter Coach Name', '', 'error');
                 return false;
             }
-            var name_of_nursery = $("#name_of_nursery").val();
-            if (!name_of_nursery) {
-                Swal.fire('Enter Name of Nursery', '', 'error');
-                return false;
-            }
               var head_pricipal = $("#head_pricipal").val();
             if (!head_pricipal) {
                 Swal.fire('Enter Venue of Nursery', '', 'error');
@@ -325,11 +310,7 @@
                 Swal.fire('Enter Pincode', '', 'error');
                 return false;
             } 
-            var reg_no_running_nursery = $("#reg_no_running_nursery").val();
-            if (!reg_no_running_nursery) {
-                Swal.fire('Enter Registration Number', '', 'error');
-                return false;
-            }
+       
              var game_id = $("#game_id").val();
             if (!game_id) {
                 Swal.fire('Select Game', '', 'error');

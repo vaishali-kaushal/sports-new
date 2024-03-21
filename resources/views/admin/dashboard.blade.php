@@ -86,6 +86,64 @@
                         </div>
                         <!-- ./col -->
                     </div>
+                    <div class="row">
+                        <!-- district wise -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-info">
+                                <div class="inner">
+                                    <h3>{{ $data['districtCount'] }}</h3>
+
+                                    <p>Total Districts Received Applications</p>
+                                </div>
+                                <div class="icon">
+                                    <!-- <i class="ion ion-bag"></i> -->
+                                </div>
+                                <a href="{{ route('admin.districtReport')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!--  -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>{{ $data['govt']}}</h3>
+                                    <p>Govt. Category Applications</p>
+                                </div>
+                                <div class="icon">
+                                    <!-- <i class="ion ion-person-add"></i> -->
+                                </div>
+                                <a href="{{ route('admin.nurseryCategoryReport','govt')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>{{ $data['private']}}</h3>
+                                    <p>Private Category Applications</p>
+                                </div>
+                                <div class="icon">
+                                    <!-- <i class="ion ion-person-add"></i> -->
+                                </div>
+                                <a href="{{ route('admin.nurseryCategoryReport','private')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                         <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>{{$data['gameApp']}}</h3>
+                                    <p>Total Number of Players</p>
+                                </div>
+                                <div class="icon">
+                                    <!-- <i class="ion ion-pie-graph"></i> -->
+                                </div>
+                                <a href="{{route('admin.gameDispReport')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                      
+                    </div>
                     <!-- /.row -->
                     <!-- Main row -->
                      <div class="row">
