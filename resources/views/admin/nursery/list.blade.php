@@ -83,7 +83,7 @@
                                                 ?>
                                             </td>
                                             <td>
-                                                <a href="{{url('admin/nursery/view/').'/'.$n['secure_id']}}" class="btn btn-primary">View</a>
+                                                <a href="{{ route('view.userNursery',$n['secure_id'] ?? '')}}" class="btn btn-primary">View</a>
 
                                                 <?php if ($n['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0 && $n['nursery_status']['approved_reject_by_dso'] == 1 ) { ?>
                                                     <a href="{{ route('admin.adminProcess',$n['secure_id'])}}" class="btn btn-primary">Proceed</a>
