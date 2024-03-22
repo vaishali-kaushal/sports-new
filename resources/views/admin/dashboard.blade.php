@@ -105,7 +105,7 @@
                         <!--  -->
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
-                            <div class="small-box bg-bg-success">
+                            <div class="small-box bg-success">
                                 <div class="inner">
                                     <h3>{{ $data['govt']}}</h3>
                                     <p>Govt. Category Applications</p>
