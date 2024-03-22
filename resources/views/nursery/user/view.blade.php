@@ -697,7 +697,7 @@
         </div>
     </section>
     @endif
-    @if(Auth::user()->role->role_id == 2 && Auth::user()->role->role_id == 1)
+    @if(Auth::user()->role->role_id == 2 || Auth::user()->role->role_id == 1)
     @if(!empty($remarks))
     <section class="content">
         <div class="container-fluid">
