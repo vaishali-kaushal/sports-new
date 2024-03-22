@@ -220,7 +220,7 @@
                                     <div class="form-check mt-3">
                                       <input class="form-check-input" type="checkbox" id="term_app">
                                       <label class="form-check-label fw-normal" for="term_app">
-                                      I undertake that Sports Nursery allotted to me as Departmental Coach shall be operated as per terms and conditions issued by the Sports Department, Government of Haryana. In case my Sports Nursery is found violating any instructions, the Government shall be free to take any administrative/civil/criminal action against me. 
+                                      I undertake that Departmental Sports Nursery added by me shall be operated as per terms and conditions issued by the Sports Department, Government of Haryana. In case the Sports Nursery is found violating any instructions, the Government shall be free to take any administrative/civil/criminal action against me. 
                                       </label>
                                     </div>
                                     @endif
