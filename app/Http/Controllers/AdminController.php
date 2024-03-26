@@ -16,9 +16,15 @@ use App\Models\NurseryApplicationTransaction;
 
 class AdminController extends Controller
 {
-    public function AdminList()
+    public function AdminList($status = null)
     {
-        $nursery  = NurseryApplicationStatus::whereIn('approved_reject_by_dso', [1, 2])->where('approved_by_admin_or_reject_by_admin', 0)->with('nursery')->get()->toArray();
+        if($status == 'recommended'){
+            $nursery  = NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 0)->with('nursery')->get()->toArray();
+        }elseif($status == 'notrecommended'){
+            $nursery  = NurseryApplicationStatus::where('approved_reject_by_dso', 2)->where('approved_by_admin_or_reject_by_admin', 0)->with('nursery')->get()->toArray();
+        }else{
+            $nursery  = NurseryApplicationStatus::whereIn('approved_reject_by_dso', [1, 2])->where('approved_by_admin_or_reject_by_admin', 0)->with('nursery')->get()->toArray();
+        }
         return view('admin.nursery.list', ['layout' => 'admin.layouts.app', 'nurserys' => $nursery]);
     }
 

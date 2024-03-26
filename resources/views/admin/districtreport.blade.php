@@ -28,12 +28,12 @@
                     <div class="card">
                         <div class="card-header">
                         
-                            <h3 class="card-title">District Applications</h3>
+                            <h3 class="card-title">Total Applications (District wise)</h3>
                         
                         </div>
 
                         <div class="card-body">
-                            <table id="datatable" class="table table-bordered table-hover display">
+                            <table id="district-datatable" class="table table-bordered table-hover display">
                                 <thead>
                                     <tr>
                                         <th>Sr.no</th>
@@ -83,4 +83,24 @@
     <!-- DataTables JavaScript -->
     <!-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> -->
 
+<script>
+$(document).ready(function() {
+
+    $('#district-datatable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "pageLength": 50
+    });
+
+});
+</script>
 @endsection

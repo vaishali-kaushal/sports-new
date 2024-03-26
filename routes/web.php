@@ -111,7 +111,7 @@ Route::prefix('admin')->name('admin.')->middleware(['IsAdmin'])->group(function 
     Route::post('store/dso', [UserController::class, 'storeDso']);
     Route::post('update/dso/{id}', [UserController::class, 'updateDso']);
     //================================================
-    Route::get('/nursery/list', [AdminController::class, 'AdminList'])->name('pendingList');
+    Route::get('/nursery/list/{status?}', [AdminController::class, 'AdminList'])->name('pendingList');
     Route::get('/nursery/approved_list', [AdminController::class, 'approvedList'])->name('approved_list');
     Route::get('/nursery/reject_list', [AdminController::class, 'rejectList'])->name('reject_list');
     Route::get('/nursery/objection_list', [AdminController::class, 'objectionList'])->name('objection_list');

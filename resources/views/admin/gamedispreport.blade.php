@@ -28,19 +28,19 @@
                     <div class="card">
                         <div class="card-header">
                         
-                            <h3 class="card-title">Applications</h3>
+                            <h3 class="card-title">Total Players</h3>
                         
                         </div>
 
                         <div class="card-body">
-                            <table id="datatable" class="table table-bordered table-hover display">
+                            <table id="player-datatable" class="table table-bordered table-hover display">
                                 <thead>
                                     <tr>
                                         <th>Sr.no</th>
                                         <th>District</th>
                                         <th>Boys</th>
                                         <th>Girls</th>
-                                        <th>Mix</th>
+                                        <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,4 +96,24 @@
     <!-- DataTables JavaScript -->
     <!-- <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> -->
 
+<script>
+$(document).ready(function() {
+
+    $('#player-datatable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "paging": true,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        "pageLength": 50
+    });
+
+});
+</script>
 @endsection
