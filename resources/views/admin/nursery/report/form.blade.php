@@ -35,6 +35,13 @@
                             <div class="row mt-3">
                                 <div class="row col-sm-4">
                                     <div class="col-sm-6">
+                                        <label for="exampleInputEmail1">Application Number</label>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div>{{ ucfirst($nursery['application_number']) }}</div>
+                                    </div>
+                                </div><div class="row col-sm-4">
+                                    <div class="col-sm-6">
                                         <label for="exampleInputEmail1">Category of Nursery</label>
                                     </div>
                                     <div class="col-sm-6">
@@ -49,7 +56,7 @@
                                         <div>{{$nursery['game']['name']}}</div>
                                     </div>
                                 </div>
-                                <div class="row col-sm-4">
+                                <div class="row col-sm-4 mt-3">
                                     <div class="col-sm-6">
                                         <label for="exampleInputEmail1">District</label>
                                     </div>
@@ -215,7 +222,7 @@
 
     </section>
     <?php
-    if ($nursery['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0 && $nursery['nursery_status']['approved_reject_by_dso']== 1) {
+    if ($nursery['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0) {
 
         ?>
 
@@ -389,6 +396,7 @@
                             <div class="row">
 
                                 <input type="hidden" id="statuss" name="status" value="0">
+                                @if($nursery['nursery_status']['approved_reject_by_dso']== 1)
                                 <div class="col-sm-4">
                                     <label class="form-label">Nursery Status</label>
                                     <select class="form-control" name="status" id="nursery_status">
@@ -404,18 +412,28 @@
 
 
                                 </div>
-                                <div class="col-sm-4">
+                                @elseif($nursery['nursery_status']['approved_reject_by_dso']== 2)
+                                 <div class="col-sm-4">
+                                    <label class="form-label">Nursery Status</label>
+                                    <select class="form-control" name="status" id="nursery_status">
+                                        <option value="">-----Select-----</option>
+                                        <option value="2">Reject</option>
+                                    </select>
+                                </div>
+                                @endif
+                                <div class="col-sm-4 pb-2">
                                     <label class="form-label">Remarks</label>
                                     <textarea class="form-control" name="remarks" id="remarks"></textarea>
                                 </div>
-                                        <div class="col-sm-12 text-center">
-                                            <span class="btn btn-primary" id="submit_btn">Submit</span>
-                                           <!--  <span class="btn btn-primary" id="approve_btn">Approve</span>
-                                            <span class="btn btn-danger" id="reject_btn">Reject</span>
+                                <div class="col-sm-12 text-center">
+                                    <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
+                                    <span class="btn btn-success" id="submit_btn">Submit</span>
+                                   <!--  <span class="btn btn-primary" id="approve_btn">Approve</span>
+                                    <span class="btn btn-danger" id="reject_btn">Reject</span>
 
-                                            <span class="btn btn-danger" id="objection_btn">objection</span> -->
+                                    <span class="btn btn-danger" id="objection_btn">objection</span> -->
 
-                                        </div>
+                                </div>
 
                         </form>
 
@@ -500,10 +518,13 @@
                 Swal.fire('Enter Remarks', '', 'error');
                 return false;
             }
-            var admin_nursery_report = $("#admin_nursery_report").val();
-            if (!admin_nursery_report) {
-                Swal.fire('Upload Nursery Report ', '', 'error');
-                return false;
+            var status = "{{$nursery['nursery_status']['approved_reject_by_dso']}}";
+            if(status == 1){
+                var admin_nursery_report = $("#admin_nursery_report").val();
+                if (!admin_nursery_report) {
+                    Swal.fire('Upload Nursery Report ', '', 'error');
+                    return false;
+                }
             }
             Swal.fire({
                 title: 'Are you sure?',

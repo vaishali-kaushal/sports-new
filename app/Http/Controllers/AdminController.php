@@ -81,11 +81,16 @@ class AdminController extends Controller
 	            $filePath = 'admin_report/'.$fileName;
 		        }
 	        }
-	        // dd($filePath);
 	        $userId = Auth::user()->id;
+            if($request['status'] == 1){
+                $recommend_status = 'yes';
+            }else{
+                $recommend_status = 'no';
+            }
 	        $nurseryApplicationRemarks = ApplicationRemark::create([
 	        	'user_id' => $userId,
 	        	'application_status_id' => $nursery->nurseryStatus->id,
+                'recommend_status' => $recommend_status,
 	        	'remarks' => $request->remarks,
 	        	'files' => $filePath,
 	        	'created_at' => now()
@@ -159,7 +164,7 @@ class AdminController extends Controller
     }
     public function rejectList()
     {
-    	$nursery  = NurseryApplicationStatus::where('approved_reject_by_dso', 1)->where('approved_by_admin_or_reject_by_admin', 2)->with('nursery')->get()->toArray();
+    	$nursery  = NurseryApplicationStatus::whereIn('approved_reject_by_dso', [1, 2])->where('approved_by_admin_or_reject_by_admin', 2)->with('nursery')->get()->toArray();
         return view('admin.nursery.list', ['layout' => 'admin.layouts.app', 'nurserys' => $nursery]);
     }
     public function objectionList()

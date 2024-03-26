@@ -80,7 +80,7 @@
                 <div class="col-12">
                     <div class="card">
                      
-                            <div class="card-header">
+                        <div class="card-header">
                                 <h4 class="card-title">Application Detail</h4>
                             <div class="text-right"><strong>Application ID: {{ $nursery->application_number ?? '' }}</strong></div>
 
@@ -713,9 +713,10 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Name</th>
-                                    <th scope="col">Remarks</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Photographs</th>
-                                    <!-- <th scope="col">Inspection Report</th> -->
+                                    <th scope="col">Inspection Report</th>
+                                    <th scope="col">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -723,7 +724,11 @@
                                     <tr>
                                         <th scope="row">{{$key+1}}</th>
                                         <td>{{$remark['user']['name']}}</td>
-                                        <td>{{ $remark['remarks']}}</td>
+                                        @if($remark['recommend_status'] == 'yes')
+                                        <td>Recommended</td>
+                                        @else
+                                        <td>Not Recommended</td>
+                                        @endif
                                         <td style="width: 30%;">
                                             @if (!empty($remark['files']) && !is_null($remark['files']))
                                                 @php
@@ -744,11 +749,37 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <!-- <td></td> -->
+                                        <td>
+                                            @if (!empty($remark['inspection_report']) && !is_null($remark['inspection_report']))
+                                                @php
+                                                    $inspectionReport = explode(',', $remark['inspection_report']);
+                                                @endphp
+                                                @if(!empty($inspectionReport))
+                                                 
+                                                    @foreach($inspectionReport as $photo)
+                                                    
+                                                    <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
+                                                        <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
+                                                    </a>
+
+
+                                                    @endforeach
+                                                @else
+                                                    "N/A";
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td>{{ $remark['remarks']}}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="text-right">
+                            <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
+                            @if($nursery->nurseryStatus->approved_by_admin_or_reject_by_admin == 0)
+                            <a href="{{ route('admin.adminProcess',$nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
+                            @endif
+                        </div>
                     </div>
 
                 </div>
