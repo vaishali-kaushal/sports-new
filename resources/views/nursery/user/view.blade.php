@@ -798,12 +798,21 @@
             <div class="row">
             <div class="col-12">
             <div class="card p-2">
-            <div class="text-right">
-                <a href="{{ route('dso.index')}}" class="btn btn-primary">Back</a>
-                @if($nursery->nurseryStatus->approved_reject_by_dso == 0)
-                <a href="{{url('dso/nursery/report/').'/'.$nursery->secure_id}}" class="btn btn-primary">Proceed</a>
+                @if(Auth::user()->role->role_id == 2)
+                <div class="text-right">
+                    <a href="{{ route('dso.index')}}" class="btn btn-primary">Back</a>
+                    @if($nursery->nurseryStatus->approved_reject_by_dso == 0)
+                    <a href="{{url('dso/nursery/report/').'/'.$nursery->secure_id}}" class="btn btn-primary">Proceed</a>
+                    @endif
+                </div>
+                @elseif( Auth::user()->role->role_id == 1)
+                <div class="text-right">
+                    <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
+                    @if($nursery->nurseryStatus->approved_by_admin_or_reject_by_admin == 0)
+                    <a href="{{route('admin.adminProcess', $nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
+                    @endif
+                </div>
                 @endif
-            </div>
      </div>
      </div>
      </div>
