@@ -78,10 +78,8 @@
                                                 }
                                                 elseif ($n['nursery_status']['approved_reject_by_dso'] == 1) {
                                                     echo 'Recommended';
-                                                }
-                                                else {
+                                                }elseif($n['nursery_status']['approved_reject_by_dso'] == 2){
                                                     echo 'Not Recommended';
-
                                                 }
                                                 
                                                 ?>

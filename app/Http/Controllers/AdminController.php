@@ -53,9 +53,13 @@ class AdminController extends Controller
         $nurseryStatus['district'] = $district_id->district->name;
 
          $games['total'] = Nursery::where([['game_id', $nursery['game_id']],['district_id', $nursery['district_id']],['final_status', 1]])->get();
+         // dump($games['total']);
         $selectedGameIds = $games['total']->pluck('id');
+        // dump($selectedGameIds);
         $games['totalApprovedCount'] = NurseryApplicationStatus::whereIn('nursery_id', $selectedGameIds)->where('approved_by_admin_or_reject_by_admin', 1)->count();
+        // dump($games['totalApprovedCount']);
         $games['totalPendingCount'] = NurseryApplicationStatus::whereIn('nursery_id', $selectedGameIds)->where('approved_by_admin_or_reject_by_admin', 0)->count();
+        // dd($games['totalPendingCount']);
         return view('admin.nursery.report.form', ['layout' => 'admin.layouts.app', 'nursery' => $nursery, 'districts' => District::get()->toArray(),'remarks'=>$nurserRemarks,'nurseryRemarks'=>$nurseryRemarks,'nurseryStatus'=>$nurseryStatus,'games'=>$games]);
     }
 

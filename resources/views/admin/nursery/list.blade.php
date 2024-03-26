@@ -76,7 +76,7 @@
                                                 {
                                                     echo 'Recommended';
                                                 }
-                                                elseif ($n['nursery_status']['approved_reject_by_dso'] == 1) {
+                                                elseif ($n['nursery_status']['approved_reject_by_dso'] == 2) {
                                                     echo 'Not Recommended';
                                                 }
                                                 

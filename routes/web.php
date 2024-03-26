@@ -38,7 +38,7 @@ Route::prefix('dso')->name('dso.')->middleware(['IsDso'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/view-nurseries-report/{status}', [DashboardController::class, 'dsoNurseryReport'])->name('nurseryReport');
     Route::get('/nursery', [NurseryController::class, 'index']);
-    Route::get('/nursery/pendingapproval', [NurseryController::class, 'pendingApproval']);
+    Route::get('/nursery/pendingapproval/{status}', [NurseryController::class, 'pendingApproval']);
     Route::get('/nursery/approvedList/', [NurseryController::class, 'approvedListbyadmin']);
     Route::get('/nursery/reject/list', [NurseryController::class, 'rejectListbyadmin']);
     Route::get('nursery/objection/list', [NurseryController::class, 'objectionListbyadmin']);

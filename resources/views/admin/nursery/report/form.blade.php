@@ -359,7 +359,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ count($games) ?? '' }}</td>
+                                            <td>{{ count($games['total']) ?? '' }}</td>
                                             <td>{{ $games['totalApprovedCount']}}</td>
                                             <td>{{ $games['totalPendingCount']}}</td>
                                         </tr>
