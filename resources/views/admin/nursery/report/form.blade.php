@@ -222,7 +222,7 @@
 
     </section>
     <?php
-    if ($nursery['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0) {
+    if ($nursery['nursery_status']['approved_by_admin_or_reject_by_admin'] == 0 && !empty($nurseryRemarks)) {
 
         ?>
 
