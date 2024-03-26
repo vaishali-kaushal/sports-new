@@ -74,6 +74,7 @@
         </div>
     </section>
     @if(!empty($nursery) && $nursery->cat_of_nursery != 'departmental')
+     
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -749,7 +750,7 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="width: 30%;">
                                             @if (!empty($remark['inspection_report']) && !is_null($remark['inspection_report']))
                                                 @php
                                                     $inspectionReport = explode(',', $remark['inspection_report']);
@@ -774,12 +775,12 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <div class="text-right">
+                      <!--   <div class="text-right">
                             <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
                             @if($nursery->nurseryStatus->approved_by_admin_or_reject_by_admin == 0)
                             <a href="{{ route('admin.adminProcess',$nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
                             @endif
-                        </div>
+                        </div> -->
                     </div>
 
                 </div>
@@ -789,6 +790,25 @@
 
     </section>
     @endif
+    <section class="content">
+        <div class="container-fluid">
+            <!-- <h2>DSO Report </h2> -->
+
+
+            <div class="row">
+            <div class="col-12">
+            <div class="card p-2">
+            <div class="text-right">
+                <a href="{{ route('dso.index')}}" class="btn btn-primary">Back</a>
+                @if($nursery->nurseryStatus->approved_reject_by_dso == 0)
+                <a href="{{url('dso/nursery/report/').'/'.$nursery->secure_id}}" class="btn btn-primary">Proceed</a>
+                @endif
+            </div>
+     </div>
+     </div>
+     </div>
+     </div>
+     </section>
     @endif
 
 </div>
