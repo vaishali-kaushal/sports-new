@@ -88,10 +88,12 @@
                                         <a href="{{ route('view.userNursery',$application->nursery->secure_id ?? '')}}" class="btn btn-primary">View</a>
                                         @if(env('REG_LAST_DATE') < date('Y-m-d'))
                                             @if(request()->is('*pending_applications*'))
-                                                @if($application->nursery->nurseryStatus->approved_reject_by_dso == 0)
-                                                <a href="{{url('dso/nursery/report/').'/'.$application->nursery->secure_id}}"
-                                                    class="btn btn-primary">Proceed</a>
+                                                @if(isset($application->nursery->nurseryStatus))
+                                                    @if($application->nursery->nurseryStatus->approved_reject_by_dso == 0)
+                                                    <a href="{{url('dso/nursery/report/').'/'.$application->nursery->secure_id}}"
+                                                        class="btn btn-primary">Proceed</a>
 
+                                                    @endif
                                                 @endif
                                             @endif
                                         @endif

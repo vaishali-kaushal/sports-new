@@ -95,6 +95,7 @@ class DsoController extends Controller
            	 	$nurseryTransaction = NurseryApplicationTransaction::create([
                             'nursery_id'=>$nursery->id,
                             'transaction_date'=>date('Y-m-d'),
+                            'status'=>$request['recommend_status'] == 'yes' ? 'Recommended' : 'Not Recommended',
                             'action_by'=> $user
                         ]);
             }

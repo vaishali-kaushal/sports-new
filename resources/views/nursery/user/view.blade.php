@@ -699,125 +699,122 @@
     </section>
     @endif
     @if(Auth::user()->role->role_id == 2 || Auth::user()->role->role_id == 1)
-    @if(!empty($remarks))
+        @if(!empty($remarks))
+        <section class="content">
+            <div class="container-fluid">
+                <h2>DSO Report </h2>
+
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card p-5">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Photographs</th>
+                                        <th scope="col">Inspection Report</th>
+                                        <th scope="col">Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($remarks as $key => $remark)
+                                        <tr>
+                                            <th scope="row">{{$key+1}}</th>
+                                            <td>{{$remark['user']['name']}}</td>
+                                            @if($remark['recommend_status'] == 'yes')
+                                            <td>Recommended</td>
+                                            @else
+                                            <td>Not Recommended</td>
+                                            @endif
+                                            <td style="width: 30%;">
+                                                @if (!empty($remark['files']) && !is_null($remark['files']))
+                                                    @php
+                                                        $reportPhotographs = explode(',', $remark['files']);
+                                                    @endphp
+                                                    @if(!empty($reportPhotographs))
+                                                     
+                                                        @foreach($reportPhotographs as $photo)
+                                                        
+                                                        <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
+                                                            <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
+                                                        </a>
+
+
+                                                        @endforeach
+                                                    @else
+                                                        "N/A";
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td style="width: 30%;">
+                                                @if (!empty($remark['inspection_report']) && !is_null($remark['inspection_report']))
+                                                    @php
+                                                        $inspectionReport = explode(',', $remark['inspection_report']);
+                                                    @endphp
+                                                    @if(!empty($inspectionReport))
+                                                     
+                                                        @foreach($inspectionReport as $photo)
+                                                        
+                                                        <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
+                                                            <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
+                                                        </a>
+
+
+                                                        @endforeach
+                                                    @else
+                                                        "N/A";
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>{{ $remark['remarks']}}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                          <!--   <div class="text-right">
+                                <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
+                                @if($nursery->nurseryStatus->approved_by_admin_or_reject_by_admin == 0)
+                                <a href="{{ route('admin.adminProcess',$nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
+                                @endif
+                            </div> -->
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </section>
+        @endif
     <section class="content">
         <div class="container-fluid">
-            <h2>DSO Report </h2>
-
-
             <div class="row">
                 <div class="col-12">
-                    <div class="card p-5">
-
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Photographs</th>
-                                    <th scope="col">Inspection Report</th>
-                                    <th scope="col">Remarks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($remarks as $key => $remark)
-                                    <tr>
-                                        <th scope="row">{{$key+1}}</th>
-                                        <td>{{$remark['user']['name']}}</td>
-                                        @if($remark['recommend_status'] == 'yes')
-                                        <td>Recommended</td>
-                                        @else
-                                        <td>Not Recommended</td>
-                                        @endif
-                                        <td style="width: 30%;">
-                                            @if (!empty($remark['files']) && !is_null($remark['files']))
-                                                @php
-                                                    $reportPhotographs = explode(',', $remark['files']);
-                                                @endphp
-                                                @if(!empty($reportPhotographs))
-                                                 
-                                                    @foreach($reportPhotographs as $photo)
-                                                    
-                                                    <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
-                                                        <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
-                                                    </a>
-
-
-                                                    @endforeach
-                                                @else
-                                                    "N/A";
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td style="width: 30%;">
-                                            @if (!empty($remark['inspection_report']) && !is_null($remark['inspection_report']))
-                                                @php
-                                                    $inspectionReport = explode(',', $remark['inspection_report']);
-                                                @endphp
-                                                @if(!empty($inspectionReport))
-                                                 
-                                                    @foreach($inspectionReport as $photo)
-                                                    
-                                                    <a href="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" target="_blank">
-                                                        <img src="{{ asset('storage/'.$nursery['application_number'].'/'.$photo)}}" class="img-thumbnail" width="10%">
-                                                    </a>
-
-
-                                                    @endforeach
-                                                @else
-                                                    "N/A";
-                                                @endif
-                                            @endif
-                                        </td>
-                                        <td>{{ $remark['remarks']}}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                      <!--   <div class="text-right">
+                    <div class="card p-2">
+                        @if(Auth::user()->role->role_id == 2)
+                        <div class="text-right">
+                            <a href="{{ route('dso.index')}}" class="btn btn-primary">Back</a>
+                            @if($nursery->nurseryStatus->approved_reject_by_dso == 0)
+                            <a href="{{url('dso/nursery/report/').'/'.$nursery->secure_id}}" class="btn btn-primary">Proceed</a>
+                            @endif
+                        </div>
+                        @elseif( Auth::user()->role->role_id == 1)
+                        <div class="text-right">
                             <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
                             @if($nursery->nurseryStatus->approved_by_admin_or_reject_by_admin == 0)
-                            <a href="{{ route('admin.adminProcess',$nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
+                            <a href="{{route('admin.adminProcess', $nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
                             @endif
-                        </div> -->
+                        </div>
+                        @endif
                     </div>
-
                 </div>
             </div>
         </div>
-
-
     </section>
-    @endif
-    <section class="content">
-        <div class="container-fluid">
-            <!-- <h2>DSO Report </h2> -->
-
-
-            <div class="row">
-            <div class="col-12">
-            <div class="card p-2">
-                @if(Auth::user()->role->role_id == 2)
-                <div class="text-right">
-                    <a href="{{ route('dso.index')}}" class="btn btn-primary">Back</a>
-                    @if($nursery->nurseryStatus->approved_reject_by_dso == 0)
-                    <a href="{{url('dso/nursery/report/').'/'.$nursery->secure_id}}" class="btn btn-primary">Proceed</a>
-                    @endif
-                </div>
-                @elseif( Auth::user()->role->role_id == 1)
-                <div class="text-right">
-                    <a href="{{ route('admin.pendingList')}}" class="btn btn-primary">Back</a>
-                    @if($nursery->nurseryStatus->approved_by_admin_or_reject_by_admin == 0)
-                    <a href="{{route('admin.adminProcess', $nursery->secure_id)}}" class="btn btn-primary">Proceed</a>
-                    @endif
-                </div>
-                @endif
-     </div>
-     </div>
-     </div>
-     </div>
-     </section>
     @endif
 
 </div>

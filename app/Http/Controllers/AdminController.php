@@ -102,14 +102,25 @@ class AdminController extends Controller
 	        	'created_at' => now()
 	        ]);
 
+
 	        if($nurseryApplicationRemarks){
 	        	NurseryApplicationStatus::where('id', $nursery->nurseryStatus->id)->update(['approved_by_admin_or_reject_by_admin' => $request['status'] ]);
+                if($request['status'] == 1){
+                    $status = 'Approved';
+                }elseif($request['status'] == 2){
+                    $status = 'Reject';
+                }elseif($request['status'] == 3){
+                    $status = 'Objection';
+                }else{
+                    $status = 'error';
+                }
 
 	        	$nurseryTransaction = NurseryApplicationTransaction::create([
-                            'nursery_id'=>$nursery->id,
-                            'transaction_date'=>date('Y-m-d'),
-                            'action_by'=> $userId
-                        ]);
+                    'nursery_id'=> $nursery->id,
+                    'transaction_date'=> date('Y-m-d'),
+                    'status'=> $status,
+                    'action_by'=> $userId
+                ]);
 	        }
 
 	        
